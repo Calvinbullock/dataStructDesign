@@ -33,7 +33,6 @@ public:
       test_empty_one();
       test_empty_standard();
 
-      /*
       // Subscript operator and at
       test_subscript_read();
       test_subscript_write();
@@ -41,6 +40,7 @@ public:
       test_at_writeValid();
       test_at_readError();
       test_at_writeError();
+      /*
 
       // Front and back
       test_front_read();

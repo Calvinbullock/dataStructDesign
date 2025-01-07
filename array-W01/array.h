@@ -72,27 +72,25 @@ public:
    //
 
    // Subscript
-   int& operator [] (size_t index)
-   {
-      /*your code goes here; it should return the i-th element in the array */
-      return *(new int);
-   }
-   const int& operator [] (size_t index) const
-   {
-      /*your code goes here; it should return the i-th element in the array */
-      return *(new int);
-   }
+   int& operator [] (size_t index) { return __elems_[index]; }
+   const int& operator [] (size_t index) const { return __elems_[index]; }
 
    // At
    int& at(size_t index)
    {
-      /*your code goes here; it should return the i-th element in the array */
-      return *(new int);
+      // Perform bounds checking to ensure the index is within the valid range
+      if (index >= N) {
+         throw std::out_of_range("Index out of bounds");
+      }
+      return __elems_[index];
    }
    const int& at(size_t index) const
    {
-      /*your code goes here; it should return the i-th element in the array */
-      return *(new int);
+      // Perform bounds checking to ensure the index is within the valid range
+      if (index >= N) {
+         throw std::out_of_range("Index out of bounds");
+      }
+      return __elems_[index];
    }
 
    // Front and Back
