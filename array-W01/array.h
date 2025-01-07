@@ -14,7 +14,7 @@
  *       array             : similar to std::array
  *       array :: iterator : an iterator through the array
  * Author
- *    <your names here>
+ *    Calvin Bullock
  ************************************************************************/
 
 #pragma once
@@ -56,12 +56,14 @@ public:
    // Begin and end methods
    iterator begin()
    {
-      /* your code goes here; it should return an iterator referring to the first element in the array */
+      /* your code goes here; it should return an iterator referring to the
+       *    first element in the array */
       return iterator();
    }
    iterator end()
    {
-      /* your code goes here; it should return an iterator referring to the first element off the end of the array */
+      /* your code goes here; it should return an iterator referring to the
+       *    first element off the end of the array */
       return iterator();
    }
 
