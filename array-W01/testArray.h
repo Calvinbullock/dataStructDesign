@@ -25,14 +25,13 @@ public:
    void run()
    {
       reset();
-     
-      
+
       // Size, Empty
       test_size_one();
       test_size_standard();
       test_empty_one();
       test_empty_standard();
-      
+
       // Subscript operator and at
       test_subscript_read();
       test_subscript_write();
@@ -46,7 +45,7 @@ public:
       test_front_write();
       test_back_read();
       test_back_write();
-      
+
 
       // Iterator
       test_begin();
@@ -68,10 +67,10 @@ public:
 
       report("Array");
    }
-   
+
 
    /***************************************
-    * SIZE EMPTY 
+    * SIZE EMPTY
     ***************************************/
 
    // size of a one-element array
@@ -83,7 +82,7 @@ public:
       // verify
       assertUnit(size == 1);
    }  // teardown
-   
+
    // size of a standard fixture
    void test_size_standard()
    {  // setup
@@ -206,7 +205,7 @@ public:
       //    +----+----+----+----+
       assertStandardFixture(a);
    }  // teardown
-   
+
    // write an element
    void test_at_writeValid()
    {  // setup
@@ -258,7 +257,7 @@ public:
       //    +----+----+----+----+
       assertStandardFixture(a);
    }  // teardown
-   
+
    // write an element
    void test_at_writeError()
    {  // setup
@@ -286,11 +285,11 @@ public:
       //    +----+----+----+----+
       assertStandardFixture(a);
    }  // teardown
-   
+
    /***************************************
     * FRONT and BACK
     ***************************************/
-   
+
    // read from the front of the standard fixture
    void test_front_read()
    {  // setup
@@ -330,7 +329,7 @@ public:
       a.__elems_[0] = 26;
       assertStandardFixture(a);
    }  // teardown
-   
+
    // read from the back of the standard fixture
    void test_back_read()
    {  // setup
@@ -348,7 +347,7 @@ public:
       assertUnit(s == 89);
       assertStandardFixture(a);
    }  // teardown
-   
+
    // write to the back of the standard fixture
    void test_back_write()
    {  // setup
@@ -371,11 +370,11 @@ public:
       assertStandardFixture(a);
    }  // teardown
 
-   
+
    /***************************************
     * ITERATOR
     ***************************************/
-   
+
    // beginning of the array
    void test_begin()
    {  // setup
@@ -396,7 +395,7 @@ public:
       //      it
       assertUnit(it.p == &(a.__elems_[0]));
    }  // teardown
-  
+
    // one past the end of the array
    void test_end()
    {  // setup
@@ -470,7 +469,7 @@ public:
       custom::array<4> a;
       setupStandardFixture(a);
       custom::array<4>::iterator itRHS;
-      itRHS.p = &(a.__elems_[2]);    
+      itRHS.p = &(a.__elems_[2]);
       // exercise
       custom::array<4>::iterator itLHS(itRHS);
       // verify
@@ -566,7 +565,7 @@ public:
       //    +----+----+----+----+
       //    | 26 | 49 | 67 | 89 |
       //    +----+----+----+----+
-      //    itLHS      
+      //    itLHS
       custom::array<4> aLHS;
       setupStandardFixture(aLHS);
       custom::array<4>::iterator itLHS;
@@ -575,7 +574,7 @@ public:
       //    +----+----+----+----+
       //    | 26 | 49 | 67 | 89 |
       //    +----+----+----+----+
-      //    itRHS      
+      //    itRHS
       custom::array<4> aRHS;
       setupStandardFixture(aRHS);
       custom::array<4>::iterator itRHS;
@@ -591,8 +590,8 @@ public:
       //    +----+----+----+----+
       assertStandardFixture(aLHS);
       assertStandardFixture(aRHS);
-   }  // teardown   
-   
+   }  // teardown
+
    // Two equals iterators should be equals
    void test_iterator_notequals_equals()
    {  // setup
@@ -653,7 +652,7 @@ public:
       //    +----+----+----+----+
       //    | 26 | 49 | 67 | 89 |
       //    +----+----+----+----+
-      //    itLHS      
+      //    itLHS
       custom::array<4> aLHS;
       setupStandardFixture(aLHS);
       custom::array<4>::iterator itLHS;
@@ -662,7 +661,7 @@ public:
       //    +----+----+----+----+
       //    | 26 | 49 | 67 | 89 |
       //    +----+----+----+----+
-      //    itRHS      
+      //    itRHS
       custom::array<4> aRHS;
       setupStandardFixture(aRHS);
       custom::array<4>::iterator itRHS;
@@ -678,8 +677,8 @@ public:
       //    +----+----+----+----+
       assertStandardFixture(aLHS);
       assertStandardFixture(aRHS);
-   }  // teardown      
-   
+   }  // teardown
+
    // Dereference an iterator
    void test_iterator_dereferenceRead()
    {  // setup
@@ -818,7 +817,7 @@ public:
 
    }
 
-   
+
 };
 
 #endif // DEBUG
