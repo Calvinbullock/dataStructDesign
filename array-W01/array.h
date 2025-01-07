@@ -125,11 +125,7 @@ public:
    //
 
    // number of elements in the array
-   size_t size()  const
-   {
-      /* your code goes here, this should not always return 999 */
-      return 999;
-   }
+   size_t size()  const { return N; }
    bool empty() const
    {
       /* your code goes here; this should not always return TRUE */
@@ -141,7 +137,7 @@ public:
    //
 
    // statically allocated array of T
-   int __elems_[999];          /* your code goes here */
+   int __elems_[N];
 };
 
 

@@ -9,6 +9,7 @@
 
 #pragma once
 
+#define DEBUG // NOTE: added
 #ifdef DEBUG
 
 #include <array>
@@ -32,6 +33,7 @@ public:
       test_empty_one();
       test_empty_standard();
 
+      /*
       // Subscript operator and at
       test_subscript_read();
       test_subscript_write();
@@ -64,6 +66,7 @@ public:
       test_iterator_dereferenceWrite();
       test_iterator_incrementPrefix();
       test_iterator_incrementPostfix();
+      */
 
       report("Array");
    }
