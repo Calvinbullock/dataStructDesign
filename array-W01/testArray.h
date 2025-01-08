@@ -46,8 +46,6 @@ public:
       test_front_write();
       test_back_read();
       test_back_write();
-      /*
-
 
       // Iterator
       test_begin();
@@ -66,7 +64,6 @@ public:
       test_iterator_dereferenceWrite();
       test_iterator_incrementPrefix();
       test_iterator_incrementPostfix();
-      */
 
       report("Array");
    }

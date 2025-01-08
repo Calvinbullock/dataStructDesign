@@ -54,18 +54,8 @@ public:
    class iterator;
 
    // Begin and end methods
-   iterator begin()
-   {
-      /* your code goes here; it should return an iterator referring to the
-       *    first element in the array */
-      return iterator();
-   }
-   iterator end()
-   {
-      /* your code goes here; it should return an iterator referring to the
-       *    first element off the end of the array */
-      return iterator();
-   }
+   iterator begin() { return iterator(&__elems_[0]); }
+   iterator end() { return iterator(__elems_ + N); }
 
    //
    // Access
@@ -152,56 +142,39 @@ public:
    {
       /* your code goes here; it should initialize an iterator */
    }
-   iterator(int * p)
+   iterator(int * p) : p(p)
    {
       /* your code goes here; it should point to an element in the array */
    }
-   iterator(const iterator & rhs)
-   {
-      /* your code goes here; it should copy an iterator */
-   }
+   iterator(const iterator & rhs) { p = rhs.p; }
    iterator & operator = (const iterator & rhs)
    {
       /* your code goes here; it should copy an iterator */
+      p = rhs.p;
       return *this;
    }
 
    // equals, not equals operator
-   bool operator != (const iterator & rhs) const
-   {
-      /* your code goes here; it should not always return TRUE */
-      return true;
-   }
-   bool operator == (const iterator & rhs) const
-   {
-      /* your code goes here; it should not always return TRUE */
-      return true;
-   }
+   bool operator != (const iterator & rhs) const { return !(p == rhs.p); }
+   bool operator == (const iterator & rhs) const { return p == rhs.p; }
 
    // dereference operator
-   int & operator * ()
-   {
-      /* your code goes here; it should fetch the element referred to by p */
-      return *(new int);
-   }
-   const int & operator * () const
-   {
-      /* your code goes here; it should fetch the element referred to by p */
-      return *(new int);
-   }
+   int & operator * () { return *(p); }
+   const int & operator * () const { return *(p); }
 
    // prefix increment
    iterator & operator ++ ()
    {
-      /* your code goes here; it should advance the iterator by one */
+      p++;
       return *this;
    }
 
    // postfix increment
    iterator operator ++ (int postfix)
    {
-      /* your code goes here; it should advance the iterator by one */
-      return iterator();
+      iterator temp = *this;
+      p++;
+      return temp;
    }
 
 private:
