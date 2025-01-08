@@ -113,11 +113,7 @@ public:
 
    // number of elements in the array
    size_t size()  const { return N; }
-   bool empty() const
-   {
-      /* your code goes here; this should not always return TRUE */
-      return false;
-   }
+   bool empty() const { return N == 0; }
 
    //
    // Member Variable
