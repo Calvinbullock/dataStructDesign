@@ -72,24 +72,37 @@ public:
    //
 
    // Subscript
-   int& operator [] (size_t index) { return __elems_[index]; }
-   const int& operator [] (size_t index) const { return __elems_[index]; }
+   int& operator [] (size_t index)
+   {
+      // Perform bounds check in index
+      if (index >= N)
+         throw std::out_of_range("Index out of bounds");
 
+      return __elems_[index];
+   }
+   const int& operator [] (size_t index) const
+   {
+      // Perform bounds check in index
+      if (index >= N)
+         throw std::out_of_range("Index out of bounds");
+
+      return __elems_[index];
+   }
    // At
    int& at(size_t index)
    {
-      // Perform bounds checking to ensure the index is within the valid range
-      if (index >= N) {
+      // Perform bounds check in index
+      if (index >= N)
          throw std::out_of_range("Index out of bounds");
-      }
+
       return __elems_[index];
    }
    const int& at(size_t index) const
    {
-      // Perform bounds checking to ensure the index is within the valid range
-      if (index >= N) {
+      // Perform bounds check in index
+      if (index >= N)
          throw std::out_of_range("Index out of bounds");
-      }
+
       return __elems_[index];
    }
 
