@@ -138,14 +138,8 @@ class array <N> :: iterator
    friend class ::TestArray;
 public:
    // constructors, destructors, and assignment operator
-   iterator()
-   {
-      /* your code goes here; it should initialize an iterator */
-   }
-   iterator(int * p) : p(p)
-   {
-      /* your code goes here; it should point to an element in the array */
-   }
+   iterator() { p = nullptr; }
+   iterator(int * p) : p(p) { }
    iterator(const iterator & rhs) { p = rhs.p; }
    iterator & operator = (const iterator & rhs)
    {
