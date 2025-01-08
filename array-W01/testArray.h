@@ -40,13 +40,13 @@ public:
       test_at_writeValid();
       test_at_readError();
       test_at_writeError();
-      /*
 
       // Front and back
       test_front_read();
       test_front_write();
       test_back_read();
       test_back_write();
+      /*
 
 
       // Iterator

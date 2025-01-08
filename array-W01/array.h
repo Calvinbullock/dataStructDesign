@@ -107,26 +107,10 @@ public:
    }
 
    // Front and Back
-   int& front()
-   {
-      /* your code goes here; it should return the first element in the array */
-      return *(new int);
-   }
-   int& back()
-   {
-      /* your code goes here; it should return the last element in the array */
-      return *(new int);
-   }
-   const int& front() const
-   {
-      /* your code goes here; it should return the first element in the array */
-      return *(new int);
-   }
-   const int& back()  const
-   {
-      /* your code goes here; it should return the last element in the array */
-      return *(new int);
-   }
+   int& front() { return __elems_[0]; }
+   int& back() { return __elems_[N-1]; }
+   const int& front() const { return __elems_[0]; }
+   const int& back()  const { return __elems_[N-1]; }
 
    //
    // Remove
