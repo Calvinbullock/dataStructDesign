@@ -54,7 +54,7 @@ public:
    class iterator;
 
    // Begin and end methods
-   iterator begin() { return iterator(&__elems_[0]); }
+   iterator begin() { return iterator(__elems_); }
    iterator end() { return iterator(__elems_ + N); }
 
    //
@@ -65,42 +65,43 @@ public:
    int& operator [] (size_t index)
    {
       // Perform bounds check in index
-      if (index >= N)
-         throw std::out_of_range("Index out of bounds");
+      if (index <= N)
+         return *(__elems_ + index);
 
-      return __elems_[index];
+      throw std::out_of_range("Index out of bounds");
    }
    const int& operator [] (size_t index) const
    {
       // Perform bounds check in index
-      if (index >= N)
-         throw std::out_of_range("Index out of bounds");
+      if (index <= N)
+         return *(__elems_ + index);
 
-      return __elems_[index];
+      throw std::out_of_range("Index out of bounds");
    }
    // At
    int& at(size_t index)
    {
       // Perform bounds check in index
-      if (index >= N)
-         throw std::out_of_range("Index out of bounds");
+      if (index <= N)
+         return *(__elems_ + index);
 
-      return __elems_[index];
+      throw std::out_of_range("Index out of bounds");
    }
    const int& at(size_t index) const
    {
       // Perform bounds check in index
-      if (index >= N)
-         throw std::out_of_range("Index out of bounds");
+      if (index <= N)
+         return *(__elems_ + index);
 
-      return __elems_[index];
+      throw std::out_of_range("Index out of bounds");
+
    }
 
    // Front and Back
-   int& front() { return __elems_[0]; }
-   int& back() { return __elems_[N-1]; }
-   const int& front() const { return __elems_[0]; }
-   const int& back()  const { return __elems_[N-1]; }
+   int& front() { return *(__elems_); }
+   int& back() { return *(__elems_ + N - 1); }
+   const int& front() const { return *(__elems_); }
+   const int& back()  const { return *(__elems_ + N - 1); }
 
    //
    // Remove
