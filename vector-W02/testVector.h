@@ -75,7 +75,7 @@ public:
       // test_iterator_notEquals_same();
       // test_iterator_notEquals_different();
       //
-      // // Access
+      // Access
       // test_subscript_read();
       // test_subscript_write();
       // test_front_read();
@@ -116,8 +116,8 @@ public:
       // test_shrink_toEmpty();
       // test_shrink_standard();
       // test_shrink_twoExtraSlots();
-      //
-      // // Status
+
+      // Status
       test_size_empty();
       test_size_full();
       test_empty_empty();

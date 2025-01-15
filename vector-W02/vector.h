@@ -357,7 +357,7 @@ template <typename T, typename A>
 T & vector <T, A> :: operator [] (size_t index)
 {
    return *(new T);
-
+   //return data[index];
 }
 
 /******************************************
@@ -367,7 +367,8 @@ T & vector <T, A> :: operator [] (size_t index)
 template <typename T, typename A>
 const T & vector <T, A> :: operator [] (size_t index) const
 {
-   return *(new T);
+   return (data[index]);
+   //return *(new T);
 }
 
 /*****************************************
@@ -377,7 +378,7 @@ const T & vector <T, A> :: operator [] (size_t index) const
 template <typename T, typename A>
 T & vector <T, A> :: front ()
 {
-   return *(new T);
+   return data[0];
 }
 
 /******************************************
@@ -387,7 +388,7 @@ T & vector <T, A> :: front ()
 template <typename T, typename A>
 const T & vector <T, A> :: front () const
 {
-   return *(new T);
+   return data[0];
 }
 
 /*****************************************
