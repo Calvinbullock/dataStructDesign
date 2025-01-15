@@ -14,7 +14,7 @@
  *        vector                 : A class that represents a Vector
  *        vector::iterator       : An iterator through Vector
  * Author
- *    <your names here>
+ *    Calvin Bullock, Daniel Malasky
  ************************************************************************/
 
 #pragma once
@@ -43,7 +43,7 @@ class vector
    friend class ::TestPQueue;
    friend class ::TestHash;
 public:
-   
+
    //
    // Construct
    //
@@ -68,13 +68,13 @@ public:
    // Iterator
    //
    class iterator;
-   iterator begin() 
-   { 
-      return iterator(); 
+   iterator begin()
+   {
+      return iterator();
    }
-   iterator end() 
-   { 
-      return iterator(); 
+   iterator end()
+   {
+      return iterator();
    }
 
    //
@@ -110,12 +110,12 @@ public:
    //
    // Status
    //
-   size_t  size()          const { return 999;}
-   size_t  capacity()      const { return 999;}
-   bool empty()            const { return true;}
-  
+   size_t  size()          const { return numElements; ;}
+   size_t  capacity()      const { return numCapacity; ;}
+   bool empty()            const { return numElements == 0;;}
+
 private:
-   
+
    A    alloc;                // use allocator for memory allocation
    T *  data;                 // user data, a dynamically-allocated array
    size_t  numCapacity;       // the capacity of the array
@@ -198,9 +198,9 @@ private:
 template <typename T, typename A>
 vector <T, A> :: vector(const A & a)
 {
-   data = new T[100];
-   numElements = 19;
-   numCapacity = 29;
+   data = nullptr;
+   numElements = 0;
+   numCapacity = 0;
 }
 
 
@@ -210,11 +210,17 @@ vector <T, A> :: vector(const A & a)
  * construct each element, and copy the values over
  ****************************************/
 template <typename T, typename A>
-vector <T, A> :: vector(size_t num, const T & t, const A & a) 
+vector <T, A> :: vector(size_t num, const T & t, const A & a)
 {
-   data = new T[100];
-   numElements = 19;
-   numCapacity = 29;
+   data = new T[num];
+   numElements = num;
+   numCapacity = num;
+
+   // TODO: finish this
+   for (size_t i = 0; i < num; i++)
+   {
+      data[i] = std::move(t);
+   }
 }
 
 /*****************************************
@@ -222,7 +228,7 @@ vector <T, A> :: vector(size_t num, const T & t, const A & a)
  * Create a vector with an initialization list.
  ****************************************/
 template <typename T, typename A>
-vector <T, A> :: vector(const std::initializer_list<T> & l, const A & a) 
+vector <T, A> :: vector(const std::initializer_list<T> & l, const A & a)
 {
    data = new T[100];
    numElements = 19;
@@ -235,11 +241,14 @@ vector <T, A> :: vector(const std::initializer_list<T> & l, const A & a)
  * construct each element, and copy the values over
  ****************************************/
 template <typename T, typename A>
-vector <T, A> :: vector(size_t num, const A & a) 
+vector <T, A> :: vector(size_t num, const A & a)
 {
-   data = new T[100];
-   numElements = 19;
-   numCapacity = 29;
+   if (num < 1)
+      data = nullptr;
+   else
+      data = new T[num];
+   numElements = num;
+   numCapacity = num;
 }
 
 /*****************************************
@@ -248,19 +257,35 @@ vector <T, A> :: vector(size_t num, const A & a)
  * call the copy constructor on each element
  ****************************************/
 template <typename T, typename A>
-vector <T, A> :: vector (const vector & rhs) 
+vector <T, A> :: vector (const vector & rhs)
 {
-   data = new T[100];
-   numElements = 19;
-   numCapacity = 29;
+   if (rhs.empty())
+   {
+      data = alloc.allocate(rhs.numElements);
+      data = nullptr;
+      numElements = rhs.numElements;
+      numCapacity = rhs.numElements;
+
+      for (size_t i = 0; i < numElements; i++)
+      {
+         // BUG: this is seg faulting
+         //alloc.construct(&data[i], rhs.data[i]);
+      }
+   }
+   else
+   {
+      data = nullptr;
+      numCapacity = 0;
+      numElements = 0;
+   }
 }
-   
+
 /*****************************************
  * VECTOR :: MOVE CONSTRUCTOR
  * Steal the values from the RHS and set it to zero.
  ****************************************/
 template <typename T, typename A>
-vector <T, A> :: vector (vector && rhs) 
+vector <T, A> :: vector (vector && rhs)
 {
    data = new T[100];
    numElements = 19;
@@ -319,7 +344,7 @@ void vector <T, A> :: reserve(size_t newCapacity)
 template <typename T, typename A>
 void vector <T, A> :: shrink_to_fit()
 {
-    
+
 }
 
 
@@ -332,7 +357,7 @@ template <typename T, typename A>
 T & vector <T, A> :: operator [] (size_t index)
 {
    return *(new T);
-    
+
 }
 
 /******************************************
@@ -396,13 +421,13 @@ const T & vector <T, A> :: back() const
 template <typename T, typename A>
 void vector <T, A> :: push_back (const T & t)
 {
-    
+
 }
 
 template <typename T, typename A>
 void vector <T, A> ::push_back(T && t)
 {
-    
+
 
 }
 
@@ -416,13 +441,17 @@ void vector <T, A> ::push_back(T && t)
 template <typename T, typename A>
 vector <T, A> & vector <T, A> :: operator = (const vector & rhs)
 {
-   
+   data = rhs.data;
+   numElements = rhs.numElements;
+   numCapacity = rhs.numCapacity;
    return *this;
 }
 template <typename T, typename A>
 vector <T, A>& vector <T, A> :: operator = (vector&& rhs)
 {
-
+   data = rhs.data;
+   numElements = rhs.numElements;
+   numCapacity = rhs.numCapacity;
    return *this;
 }
 
