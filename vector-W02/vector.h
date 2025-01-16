@@ -23,6 +23,8 @@
 #include <new>      // std::bad_alloc
 #include <memory>   // for std::allocator
 
+#include <iostream> // TESTING
+
 class TestVector; // forward declaration for unit tests
 class TestStack;
 class TestPQueue;
@@ -70,11 +72,11 @@ public:
    class iterator;
    iterator begin()
    {
-      return iterator();
+      return iterator(data);
    }
    iterator end()
    {
-      return iterator();
+      return iterator(data + numElements);
    }
 
    //
@@ -110,9 +112,9 @@ public:
    //
    // Status
    //
-   size_t  size()          const { return numElements; ;}
-   size_t  capacity()      const { return numCapacity; ;}
-   bool empty()            const { return numElements == 0;;}
+   size_t  size()          const { return numElements;}
+   size_t  capacity()      const { return numCapacity;}
+   bool empty()            const { return numElements == 0;}
 
 private:
 
@@ -212,15 +214,15 @@ vector <T, A> :: vector(const A & a)
 template <typename T, typename A>
 vector <T, A> :: vector(size_t num, const T & t, const A & a)
 {
-   data = new T[num];
-   numElements = num;
-   numCapacity = num;
-
-   // TODO: finish this
+   data = alloc.allocate(num);
+   
    for (size_t i = 0; i < num; i++)
    {
-      data[i] = std::move(t);
+      alloc.construct(&data[i], t);
    }
+
+   numElements = num;
+   numCapacity = num;
 }
 
 /*****************************************
@@ -230,9 +232,17 @@ vector <T, A> :: vector(size_t num, const T & t, const A & a)
 template <typename T, typename A>
 vector <T, A> :: vector(const std::initializer_list<T> & l, const A & a)
 {
-   data = new T[100];
-   numElements = 19;
-   numCapacity = 29;
+   data = alloc.allocate(l.size());
+
+   int i = 0;
+   for (auto it = l.begin(); it != l.end(); ++it) 
+   {
+      alloc.construct(&data[i], *it);
+      i++;
+   }
+   
+   numElements = l.size();
+   numCapacity = l.size();
 }
 
 /*****************************************
@@ -259,18 +269,17 @@ vector <T, A> :: vector(size_t num, const A & a)
 template <typename T, typename A>
 vector <T, A> :: vector (const vector & rhs)
 {
-   if (rhs.empty())
+   if (!rhs.empty())
    {
       data = alloc.allocate(rhs.numElements);
-      data = nullptr;
+
+      for (size_t i = 0; i < rhs.numElements; i++)
+      {
+         alloc.construct(&data[i], rhs.data[i]);
+      }
+
       numElements = rhs.numElements;
       numCapacity = rhs.numElements;
-
-      for (size_t i = 0; i < numElements; i++)
-      {
-         // BUG: this is seg faulting
-         //alloc.construct(&data[i], rhs.data[i]);
-      }
    }
    else
    {
@@ -287,9 +296,12 @@ vector <T, A> :: vector (const vector & rhs)
 template <typename T, typename A>
 vector <T, A> :: vector (vector && rhs)
 {
-   data = new T[100];
-   numElements = 19;
-   numCapacity = 29;
+   data = rhs.data;
+   rhs.data = nullptr;
+   numElements = rhs.numElements;
+   rhs.numElements = 0;
+   numCapacity = rhs.numCapacity;
+   rhs.numCapacity = 0;
 }
 
 /*****************************************
@@ -300,6 +312,10 @@ vector <T, A> :: vector (vector && rhs)
 template <typename T, typename A>
 vector <T, A> :: ~vector()
 {
+   for (size_t i = 0; i < numElements; i++)
+   {
+      alloc.destroy(&data[i]);
+   }
 }
 
 /***************************************

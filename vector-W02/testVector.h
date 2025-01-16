@@ -31,20 +31,20 @@ public:
       test_construct_default();
       test_construct_sizeZero();
       test_construct_sizeFour();
-      // test_construct_sizeFourFill();
+      test_construct_sizeFourFill();
       test_constructCopy_empty();
-      // test_constructCopy_standard();
-      // test_constructCopy_partiallyFilled();
-      // test_constructMove_empty();
-      // test_constructMove_standard();
-      // test_constructMove_partiallyFilled();
-      // test_constructInit_empty();
-      // test_constructInit_standard();
-      // test_destructor_empty();
-      // test_destructor_standard();
-      // test_destructor_partiallyFilled();
-      //
-      // // Assign
+      test_constructCopy_standard();
+      test_constructCopy_partiallyFilled();
+      test_constructMove_empty();
+      test_constructMove_standard();
+      test_constructMove_partiallyFilled();
+      test_constructInit_empty();
+      test_constructInit_standard();
+      test_destructor_empty();
+      test_destructor_standard();
+      test_destructor_partiallyFilled();
+
+      // Assign
       test_assign_empty();
       // test_assign_sameSize();
       // test_assign_rightBigger();
@@ -61,9 +61,9 @@ public:
       // test_swap_leftBigger();
       //
       // // Iterator
-      // test_iterator_beginEmpty();
-      // test_iterator_beginFull();
-      // test_iterator_endFull();
+      test_iterator_beginEmpty();
+      //test_iterator_beginFull();
+      //test_iterator_endFull();
       // test_iterator_incrementFull();
       // test_iterator_dereferenceReadFull();
       // test_iterator_dereferenceUpdate();
@@ -208,9 +208,6 @@ public:
       assertUnit(Spy::numAlloc() == 4);       // allocate [99,99,99,99]
       assertUnit(Spy::numDelete() == 0);
       assertUnit(Spy::numDefault() == 0);
-      std::cout << "C " << Spy::numCopy() << std::endl;
-      std::cout << "D " << Spy::numDefault() << std::endl;
-      std::cout << "A " << Spy::numAssign() << std::endl;
       assertUnit(Spy::numNondefault() == 0);
       assertUnit(Spy::numCopyMove() == 0);
       assertUnit(Spy::numAssign() == 0);
@@ -340,6 +337,10 @@ public:
       assertUnit(Spy::numAlloc() == 4);    // allocate [26,49,67,89]
       assertUnit(Spy::numDelete() == 0);
       assertUnit(Spy::numDefault() == 0);
+      std::cout << "C " << Spy::numCopy() << std::endl;
+      std::cout << "A " << Spy::numAlloc() << std::endl;
+      std::cout << "D " << Spy::numDefault() << std::endl;
+      std::cout << "A " << Spy::numAssign() << std::endl;
       assertUnit(Spy::numNondefault() == 0);
       assertUnit(Spy::numCopyMove() == 0);
       assertUnit(Spy::numAssign() == 0);
