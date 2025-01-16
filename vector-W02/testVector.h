@@ -97,13 +97,13 @@ public:
       // test_resize_fourZero();
       // test_resize_fourSixDefault();
       // test_resize_fourSixValue();
-      // test_reserve_emptyZero();
-      // test_reserve_emptyTen();
-      // test_reserve_fourZero();
-      // test_reserve_fourFour();
-      // test_reserve_fourTen();
-      // test_reserve_standardZero();
-      // test_reserve_standardTen();
+      test_reserve_emptyZero();
+      test_reserve_emptyTen();
+      test_reserve_fourZero();
+      test_reserve_fourFour();
+      test_reserve_fourTen();
+      test_reserve_standardZero();
+      test_reserve_standardTen();
       //
       // // Remove
       // test_popback_empty();
@@ -337,10 +337,6 @@ public:
       assertUnit(Spy::numAlloc() == 4);    // allocate [26,49,67,89]
       assertUnit(Spy::numDelete() == 0);
       assertUnit(Spy::numDefault() == 0);
-      std::cout << "C " << Spy::numCopy() << std::endl;
-      std::cout << "A " << Spy::numAlloc() << std::endl;
-      std::cout << "D " << Spy::numDefault() << std::endl;
-      std::cout << "A " << Spy::numAssign() << std::endl;
       assertUnit(Spy::numNondefault() == 0);
       assertUnit(Spy::numCopyMove() == 0);
       assertUnit(Spy::numAssign() == 0);

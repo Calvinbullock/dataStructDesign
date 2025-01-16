@@ -348,7 +348,22 @@ void vector <T, A> :: resize(size_t newElements, const T & t)
 template <typename T, typename A>
 void vector <T, A> :: reserve(size_t newCapacity)
 {
-   numCapacity = 99;
+   if (newCapacity <= numCapacity)
+      return;
+
+   T* newData = alloc.allocate(numCapacity);
+
+   for (auto i = 0; i < numElements; i++)
+      new ((void*)(newData + i)) T(std::move(data[i]));
+
+   for (size_t i = 0; i < numElements; i++)
+   {
+      alloc.destroy(&data[i]);
+   }
+   alloc.deallocate(data, numCapacity);
+
+   data = newData;
+   numCapacity = newCapacity;
 }
 
 /***************************************
