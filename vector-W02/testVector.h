@@ -49,16 +49,16 @@ public:
       test_assign_sameSize();
       test_assign_rightBigger();
       test_assign_leftBigger();
-      // test_assignMove_empty(); // TODO:
-      // test_assignMove_sameSize();
-      // test_assignMove_rightBigger();
-      // test_assignMove_leftBigger();
-      // test_assign_fullToFull();
-      // test_assignMove_fullToFull();
-      // test_swap_empty();
-      // test_swap_sameSize();
-      // test_swap_rightBigger();
-      // test_swap_leftBigger();
+      test_assignMove_empty();
+      test_assignMove_sameSize();
+      test_assignMove_rightBigger();
+      test_assignMove_leftBigger();
+      test_assign_fullToFull();
+      test_assignMove_fullToFull();
+      test_swap_empty();
+      test_swap_sameSize();
+      test_swap_rightBigger();
+      test_swap_leftBigger();
 
       // Iterator
       test_iterator_beginEmpty();
@@ -88,15 +88,15 @@ public:
       test_pushback_empty();
       test_pushback_excessCapacity();
       test_pushback_requireReallocate();
-      // test_pushback_moveEmpty();
-      // test_pushback_moveExcessCapacity();
-      // test_pushback_moveRequireReallocate();
-      // test_resize_emptyZero();
-      // test_resize_emptyFourDefault();
-      // test_resize_emptyFourValue();
-      // test_resize_fourZero();
-      // test_resize_fourSixDefault();
-      // test_resize_fourSixValue();
+      test_pushback_moveEmpty();
+      test_pushback_moveExcessCapacity();
+      test_pushback_moveRequireReallocate();
+      test_resize_emptyZero();
+      test_resize_emptyFourDefault();
+      test_resize_emptyFourValue();
+      test_resize_fourZero();
+      test_resize_fourSixDefault();
+      test_resize_fourSixValue();
       test_reserve_emptyZero();
       test_reserve_emptyTen();
       test_reserve_fourZero();
@@ -113,9 +113,9 @@ public:
       test_clear_full();
       test_clear_partiallyFilled();
       test_shrink_empty();
-      // test_shrink_toEmpty();
+      test_shrink_toEmpty();
       test_shrink_standard();
-      // test_shrink_twoExtraSlots();
+      test_shrink_twoExtraSlots();
 
       // Status
       test_size_empty();

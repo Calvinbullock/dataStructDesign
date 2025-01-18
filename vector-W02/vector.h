@@ -62,6 +62,9 @@ public:
    //
    void swap(vector& rhs)
    {
+      std::swap(numCapacity, rhs.numCapacity);
+      std::swap(numElements, rhs.numElements);
+      std::swap(data, rhs.data);
    }
    vector & operator = (const vector & rhs);
    vector & operator = (vector&& rhs);
@@ -344,13 +347,49 @@ vector <T, A> :: ~vector()
 template <typename T, typename A>
 void vector <T, A> :: resize(size_t newElements)
 {
-   numElements = 3;
+   // decrease the size
+   if (newElements < numElements)
+   {
+      for (size_t i = newElements; i < numElements; i++)
+      {
+         alloc.destroy(&data[i]);
+      }
+   }
+   else if( newElements > numElements )
+   {
+      // increase the capacity
+      if (newElements > numCapacity)
+         reserve(newElements);
+      // add the new elements
+      for (size_t i = numElements; i < newElements; i++)
+         alloc.construct(&data[i]);
+   }
+   numElements = newElements;
+
 }
 
 template <typename T, typename A>
 void vector <T, A> :: resize(size_t newElements, const T & t)
 {
-   numElements = 3;
+   // decrease the size
+   if (newElements < numElements)
+   {
+      for (size_t i = newElements; i < numElements; i++)
+      {
+         alloc.destroy(&data[i]);
+      }
+   }
+   else if (newElements > numElements)
+   {
+      // increase the capacity
+      if (newElements > numCapacity)
+         reserve(newElements);
+      // add the new elements
+      for (size_t i = numElements; i < newElements; i++)
+         alloc.construct(&data[i], t);
+   }
+   numElements = newElements;
+
 }
 
 /***************************************
@@ -367,7 +406,7 @@ void vector <T, A> :: reserve(size_t newCapacity)
    if (newCapacity <= numCapacity)
       return;
 
-   T* newData = alloc.allocate(numCapacity);
+   T* newData = alloc.allocate(newCapacity);
 
    for (auto i = 0; i < numElements; i++)
       new ((void*)(newData + i)) T(std::move(data[i]));
@@ -397,8 +436,7 @@ void vector <T, A> :: shrink_to_fit()
    T* dataNew = alloc.allocate(numElements);
 
    for (size_t i = 0; i < numElements; i++)
-      dataNew[i] = data[i];
-      //alloc.construct(&dataNew[i], &data[i]);
+      alloc.construct(&dataNew[i], data[i]);
 
    for (size_t i = 0; i < numElements; i++)
       alloc.destroy(&data[i]);
@@ -485,16 +523,18 @@ void vector <T, A> :: push_back (const T & t)
       reserve(1);
    if (numElements == numCapacity)
       reserve(numCapacity * 2);
-   alloc.construct(&data[numElements - 1], t);
-   // data[numElements - 1] = t;
+   alloc.construct(&data[numElements], t);
    numElements++;
 }
 
 template <typename T, typename A>
 void vector <T, A> ::push_back(T && t)
 {
-
-
+   if (0 == numElements)
+      reserve(1);
+   if (numElements == numCapacity)
+      reserve(numCapacity * 2);
+   new ((void*)(&data[numElements++])) T(std::move(t));
 }
 
 /***************************************
@@ -526,11 +566,12 @@ vector <T, A> & vector <T, A> :: operator = (const vector & rhs)
    {
       if (rhs.size() <= numCapacity)
       {
-         for (size_t i = 0; i < rhs.size(); i++)
+         for (size_t i = 0; i < size(); i++)
             data[i] = rhs.data[i];
 
          for (size_t i = size(); i < rhs.size(); i++)
             alloc.construct(&data[i], rhs.data[i]);
+         numElements = rhs.size();
       }
       else // LHS is smaller then RHS with not not enough capacity
       {
@@ -550,9 +591,9 @@ vector <T, A> & vector <T, A> :: operator = (const vector & rhs)
 template <typename T, typename A>
 vector <T, A>& vector <T, A> :: operator = (vector&& rhs)
 {
-   data = rhs.data;
-   numElements = rhs.numElements;
-   numCapacity = rhs.numCapacity;
+   swap(rhs);
+   rhs.clear();
+   rhs.shrink_to_fit();
    return *this;
 }
 
