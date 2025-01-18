@@ -103,6 +103,9 @@ public:
    //
    void clear()
    {
+      for (size_t i = 0; i < numElements; ++i)
+         alloc.destroy(&data[i]);
+      numElements = 0;
    }
    void pop_back()
    {
@@ -375,7 +378,21 @@ void vector <T, A> :: reserve(size_t newCapacity)
 template <typename T, typename A>
 void vector <T, A> :: shrink_to_fit()
 {
+   if (numElements == numCapacity)
+      return;
 
+   T* dataNew = alloc.allocate(numElements);
+
+   for (size_t i = 0; i < numElements; i++)
+      dataNew[i] = data[i];
+      //alloc.construct(&dataNew[i], &data[i]);
+
+   for (size_t i = 0; i < numElements; i++)
+      alloc.destroy(&data[i]);
+
+   alloc.deallocate(data, numCapacity);
+   data = dataNew;
+   numCapacity = numElements;
 }
 
 
@@ -387,8 +404,7 @@ void vector <T, A> :: shrink_to_fit()
 template <typename T, typename A>
 T & vector <T, A> :: operator [] (size_t index)
 {
-   return *(new T);
-   //return data[index];
+   return (data[index]);
 }
 
 /******************************************
@@ -399,7 +415,6 @@ template <typename T, typename A>
 const T & vector <T, A> :: operator [] (size_t index) const
 {
    return (data[index]);
-   //return *(new T);
 }
 
 /*****************************************
@@ -409,7 +424,7 @@ const T & vector <T, A> :: operator [] (size_t index) const
 template <typename T, typename A>
 T & vector <T, A> :: front ()
 {
-   return data[0];
+   return *(data + 0);
 }
 
 /******************************************
@@ -419,27 +434,27 @@ T & vector <T, A> :: front ()
 template <typename T, typename A>
 const T & vector <T, A> :: front () const
 {
-   return data[0];
+   return *(data + 0);
 }
 
 /*****************************************
- * VECTOR :: FRONT
+ * VECTOR :: BACK
  * Read-Write access
  ****************************************/
 template <typename T, typename A>
 T & vector <T, A> :: back()
 {
-   return *(new T);
+   return *(data + numElements - 1);
 }
 
 /******************************************
- * VECTOR :: FRONT
+ * VECTOR :: BACK
  * Read-Write access
  *****************************************/
 template <typename T, typename A>
 const T & vector <T, A> :: back() const
 {
-   return *(new T);
+   return *(data + numElements - 1);
 }
 
 /***************************************
@@ -473,9 +488,44 @@ void vector <T, A> ::push_back(T && t)
 template <typename T, typename A>
 vector <T, A> & vector <T, A> :: operator = (const vector & rhs)
 {
-   data = rhs.data;
-   numElements = rhs.numElements;
-   numCapacity = rhs.numCapacity;
+   if (rhs.size() == size())
+   {
+      for (size_t i = 0; i < numElements; i++)
+         data[i] = rhs.data[i];
+   }
+   else if (rhs.size() < size()) // left bigger
+   {
+      for (size_t i = 0; i < rhs.size(); i++)
+         data[i] = rhs.data[i];
+
+      for (size_t i = rhs.size(); i < size(); i++)
+         alloc.destroy(&data[i]);
+
+      numElements = rhs.size();
+   }
+   else if (rhs.size() > size()) // right bigger
+   {
+      if (rhs.size() <= numCapacity)
+      {
+         for (size_t i = 0; i < rhs.size(); i++)
+            data[i] = rhs.data[i];
+
+         for (size_t i = size(); i < rhs.size(); i++)
+            alloc.construct(&data[i], rhs.data[i]);
+      }
+      else // LHS is smaller then RHS with not not enough capacity
+      {
+         T* dataNew = alloc.allocate(rhs.size());
+         for (size_t i = 0; i < rhs.size(); i++)
+            alloc.construct(&dataNew[i], rhs.data[i]);
+
+         clear();
+         alloc.destroy(&data);
+         data = dataNew;
+         numCapacity = rhs.size();
+         numElements = rhs.size();
+      }
+   }
    return *this;
 }
 template <typename T, typename A>
