@@ -144,10 +144,10 @@ class vector <T, A> ::iterator
    friend class ::TestHash;
 public:
    // constructors, destructors, and assignment operator
-   iterator()                           {  }
-   iterator(T* p)                       {  }
-   iterator(const iterator& rhs)        {  }
-   iterator(size_t index, vector<T>& v) {  }
+   iterator()                           { this->p = nullptr; }
+   iterator(T* p)                       { this->p = p;       }
+   iterator(const iterator& rhs)        { this->p = rhs.p;   }
+   iterator(size_t index, vector<T>& v) {         }
    iterator& operator = (const iterator& rhs)
    {
       return *this;
