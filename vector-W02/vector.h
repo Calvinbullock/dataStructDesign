@@ -147,47 +147,53 @@ class vector <T, A> ::iterator
    friend class ::TestHash;
 public:
    // constructors, destructors, and assignment operator
-   iterator()                           { this->p = nullptr; }
-   iterator(T* p)                       { this->p = p;       }
-   iterator(const iterator& rhs)        { this->p = rhs.p;   }
-   iterator(size_t index, vector<T>& v) {         }
+   iterator()                           { this->p = nullptr;        }
+   iterator(T* p)                       { this->p = p;              }
+   iterator(const iterator& rhs)        { this->p = rhs.p;          }
+   iterator(size_t index, vector<T>& v) { this->p = v.data + index; }
    iterator& operator = (const iterator& rhs)
    {
       return *this;
    }
 
    // equals, not equals operator
-   bool operator != (const iterator& rhs) const { return true; }
-   bool operator == (const iterator& rhs) const { return true; }
+   bool operator != (const iterator& rhs) const { return !(this->p == rhs.p); }
+   bool operator == (const iterator& rhs) const { return rhs.p == this->p;    }
 
    // dereference operator
    T& operator * ()
    {
-      return *(new T);
+      return *p;
    }
 
    // prefix increment
    iterator& operator ++ ()
    {
+      p++;
       return *this;
    }
 
    // postfix increment
    iterator operator ++ (int postfix)
    {
-      return *this;
+      iterator temp = *this;
+      p++;
+      return temp;
    }
 
    // prefix decrement
    iterator& operator -- ()
    {
+      p--;
       return *this;
    }
 
    // postfix decrement
    iterator operator -- (int postfix)
    {
-      return *this;
+      iterator temp = *this;
+      p--;
+      return temp;
    }
 
 private:
