@@ -85,9 +85,9 @@ public:
       test_back_partiallyfilled();
 
       // // Insert
-      // test_pushback_empty();
-      // test_pushback_excessCapacity();
-      // test_pushback_requireReallocate();
+      test_pushback_empty();
+      test_pushback_excessCapacity();
+      test_pushback_requireReallocate();
       // test_pushback_moveEmpty();
       // test_pushback_moveExcessCapacity();
       // test_pushback_moveRequireReallocate();
@@ -106,9 +106,9 @@ public:
       test_reserve_standardTen();
 
       // // Remove
-      // test_popback_empty();
-      // test_popback_full();
-      // test_popback_partiallyFilled();
+      test_popback_empty();
+      test_popback_full();
+      test_popback_partiallyFilled();
       test_clear_empty();
       test_clear_full();
       test_clear_partiallyFilled();

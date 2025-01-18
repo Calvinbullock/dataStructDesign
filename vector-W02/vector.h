@@ -109,6 +109,13 @@ public:
    }
    void pop_back()
    {
+      if (numElements > 0)
+      {
+         alloc.destroy(&data[numElements - 1]);
+         numElements--;
+      }
+
+      return;
    }
    void shrink_to_fit();
 
@@ -474,7 +481,13 @@ const T & vector <T, A> :: back() const
 template <typename T, typename A>
 void vector <T, A> :: push_back (const T & t)
 {
-
+   if (0 == numElements)
+      reserve(1);
+   if (numElements == numCapacity)
+      reserve(numCapacity * 2);
+   alloc.construct(&data[numElements - 1], t);
+   // data[numElements - 1] = t;
+   numElements++;
 }
 
 template <typename T, typename A>
