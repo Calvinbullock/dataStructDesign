@@ -234,7 +234,7 @@ template <typename T, typename A>
 vector <T, A> :: vector(size_t num, const T & t, const A & a)
 {
    data = alloc.allocate(num);
-   
+
    for (size_t i = 0; i < num; i++)
    {
       alloc.construct(&data[i], t);
@@ -254,12 +254,12 @@ vector <T, A> :: vector(const std::initializer_list<T> & l, const A & a)
    data = alloc.allocate(l.size());
 
    int i = 0;
-   for (auto it = l.begin(); it != l.end(); ++it) 
+   for (auto it = l.begin(); it != l.end(); ++it)
    {
       alloc.construct(&data[i], *it);
       i++;
    }
-   
+
    numElements = l.size();
    numCapacity = l.size();
 }
