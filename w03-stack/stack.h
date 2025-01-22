@@ -13,7 +13,7 @@
  *    This will contain the class definition of:
  *       stack             : similar to std::stack
  * Author
- *    <your names here>
+ *    Daniel Malasky, Calvin Bullock
  ************************************************************************/
 
 #pragma once
@@ -40,27 +40,30 @@ public:
    // Construct
    //
    
-   stack()                       { container.resize(7); }
-   stack(const stack <T> &  rhs) { container.resize(7); }
-   stack(      stack <T> && rhs) { container.resize(7); }
-   stack(const Container &  rhs) { container.resize(7); }
-   stack(      Container && rhs) { container.resize(7); }
-   ~stack()                      {                      }     
+   stack() : container()         {                                   }
+   stack(const stack <T> &  rhs) { *this = rhs;                      }
+   stack(      stack <T> && rhs) { *this = std::move(rhs);           }
+   stack(const Container &  rhs) { this->container = rhs;            }
+   stack(      Container && rhs) { this->container = std::move(rhs); }
+   ~stack()                      {                                   }
    
+
    //
    // Assign
    //
    stack <T> & operator = (const stack <T> & rhs)
    {
+      this->container = rhs.container;
       return *this;
    }
    stack <T>& operator = (stack <T> && rhs)
    {
+      this->container = std::move(rhs.container);
       return *this;
    }
    void swap(stack <T>& rhs)
    {
-
+      this->container.swap(rhs.container);
    }
 
    //
@@ -69,11 +72,11 @@ public:
    
    T & top()       
    { 
-      return *(new T); 
+      return this->container.back();
    }
    const T & top() const 
    { 
-      return *(new T); 
+      return this->container.back();
    }
 
    //
@@ -82,11 +85,11 @@ public:
    
    void push(const T &  t) 
    {  
-   
+      this->container.push_back(t);
    }
    void push(      T && t) 
    {  
-   
+      this->container.push_back(std::move(t));
    }
 
    //
@@ -102,8 +105,8 @@ public:
    // Status
    //
    
-   size_t size () const { return 99;   }
-   bool   empty() const { return true; }
+   size_t size () const { return this->container.size();  }
+   bool   empty() const { return this->container.empty(); }
    
 private:
    
