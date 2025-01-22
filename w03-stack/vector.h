@@ -20,6 +20,7 @@
 #pragma once
 
 #include <cassert>  // because I am paranoid
+#include <initializer_list>
 #include <new>      // std::bad_alloc
 #include <memory>   // for std::allocator
 
