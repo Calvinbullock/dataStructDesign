@@ -79,8 +79,8 @@ public:
 
       // Delete
       test_pop_empty();
-      test_pop_full();
-      test_pop_partiallyFilled();
+      test_pop_standard();
+      test_pop_standardList();
 
       // Status
       test_size_empty();
@@ -1504,48 +1504,97 @@ public:
       //    +----+----+----+----+
       //    |    |    |    |    |
       //    +----+----+----+----+
-      custom::stack<Spy, std::list<Spy>> s;
+      custom::stack<Spy, custom::vector<Spy>> s; // TODO: why is this useing a list?????
+      Spy::reset();
+      // exercise
+      s.pop();
+      // verify
+      assertUnit(Spy::numAlloc() == 0);
+      assertUnit(Spy::numDelete() == 0);
+      assertUnit(Spy::numDefault() == 0);
+      assertUnit(Spy::numNondefault() == 0);
+      assertUnit(Spy::numCopy() == 0);
+      assertUnit(Spy::numCopyMove() == 0);
+      assertUnit(Spy::numAssign() == 0);
+      assertUnit(Spy::numAssignMove() == 0);
+      assertUnit(Spy::numDestructor() == 0);
+   } // teardown
+
+   void test_pop_standard()
+   {  // setup
+      //    +----+----+----+----+
+      //    | 26 | 49 | 67 | 89 |
+      //    +----+----+----+----+
+      custom::stack<Spy> s;
+      setupStandardFixture(s);
       Spy value(99);
       Spy::reset();
       // exercise
       s.pop();
       // verify
-      assertUnit(Spy::numCopyMove() == 1);  // copy-constructor of [99]
-      assertUnit(Spy::numCopy() == 0);
-      assertUnit(Spy::numAlloc() == 0);
-      assertUnit(Spy::numAssign() == 0);
-      assertUnit(Spy::numDelete() == 0);
+      assertUnit(Spy::numDelete() == 1);
+      assertUnit(Spy::numDestructor() == 1);
       assertUnit(Spy::numDefault() == 0);
+      assertUnit(Spy::numAlloc() == 0);
       assertUnit(Spy::numNondefault() == 0);
+      assertUnit(Spy::numCopy() == 0);
+      assertUnit(Spy::numCopyMove() == 0);
+      assertUnit(Spy::numAssign() == 0);
       assertUnit(Spy::numAssignMove() == 0);
-      assertUnit(Spy::numDestructor() == 0);
-      assertUnit(value.empty());
-      //    +----+----+----+----+----+
-      //    | 26 | 49 | 67 | 89 | 99 |
-      //    +----+----+----+----+----+
-      assertUnit(s.container.size() == 5);
+      assertUnit(value == Spy(99));
+      //    +----+----+----+----+
+      //    | 26 | 49 | 67 |    |
+      //    +----+----+----+----+
+      assertUnit(s.container.size() == 3);
+      if (s.container.size() >= 3)
+      {
+         assertUnit(s.container[0] == Spy(26));
+         assertUnit(s.container[1] == Spy(49));
+         assertUnit(s.container[2] == Spy(67));
+      }
+      // teardown
+      teardownStandardFixture(s);
+   }
+
+   void test_pop_standardList()
+   {  // setup
+      //    +----+----+----+----+
+      //    | 26 | 49 | 67 | 89 |
+      //    +----+----+----+----+
+      custom::stack<Spy, std::list<Spy>> s;
+      s.container.push_back(Spy(26));
+      s.container.push_back(Spy(49));
+      s.container.push_back(Spy(67));
+      s.container.push_back(Spy(89));
+      Spy value(99);
+      Spy::reset();
+      // exercise
+      s.pop();
+      // verify
+      assertUnit(Spy::numDelete() == 1);
+      assertUnit(Spy::numDestructor() == 1);
+      assertUnit(Spy::numDefault() == 0);
+      assertUnit(Spy::numAlloc() == 0);
+      assertUnit(Spy::numNondefault() == 0);
+      assertUnit(Spy::numCopy() == 0);
+      assertUnit(Spy::numCopyMove() == 0);
+      assertUnit(Spy::numAssign() == 0);
+      assertUnit(Spy::numAssignMove() == 0);
+      assertUnit(value == Spy(99));
+      //    +----+----+----+----+
+      //    | 26 | 49 | 67 |    |
+      //    +----+----+----+----+
+      assertUnit(s.container.size() == 3);
       if (s.container.size() >= 5)
       {
          auto it = s.container.begin();
          assertUnit(*(it++) == Spy(26));
          assertUnit(*(it++) == Spy(49));
          assertUnit(*(it++) == Spy(67));
-         assertUnit(*(it++) == Spy(89));
-         assertUnit(*(it++) == Spy(99));
          assertUnit(it == s.container.end());
       }
       // teardown
       s.container.clear();
-   }
-
-   void test_pop_full()
-   {
-
-   }
-
-   void test_pop_partiallyFilled()
-   {
-
    }
 
    
