@@ -78,7 +78,9 @@ public:
       test_pushMove_standardList();
 
       // Delete
-
+      test_pop_empty();
+      test_pop_full();
+      test_pop_partiallyFilled();
 
       // Status
       test_size_empty();
@@ -1496,7 +1498,55 @@ public:
    /***************************************
     * POP
     ***************************************/
+   void test_pop_empty()
+   {
+      // setup
+      //    +----+----+----+----+
+      //    |    |    |    |    |
+      //    +----+----+----+----+
+      custom::stack<Spy, std::list<Spy>> s;
+      Spy value(99);
+      Spy::reset();
+      // exercise
+      s.pop();
+      // verify
+      assertUnit(Spy::numCopyMove() == 1);  // copy-constructor of [99]
+      assertUnit(Spy::numCopy() == 0);
+      assertUnit(Spy::numAlloc() == 0);
+      assertUnit(Spy::numAssign() == 0);
+      assertUnit(Spy::numDelete() == 0);
+      assertUnit(Spy::numDefault() == 0);
+      assertUnit(Spy::numNondefault() == 0);
+      assertUnit(Spy::numAssignMove() == 0);
+      assertUnit(Spy::numDestructor() == 0);
+      assertUnit(value.empty());
+      //    +----+----+----+----+----+
+      //    | 26 | 49 | 67 | 89 | 99 |
+      //    +----+----+----+----+----+
+      assertUnit(s.container.size() == 5);
+      if (s.container.size() >= 5)
+      {
+         auto it = s.container.begin();
+         assertUnit(*(it++) == Spy(26));
+         assertUnit(*(it++) == Spy(49));
+         assertUnit(*(it++) == Spy(67));
+         assertUnit(*(it++) == Spy(89));
+         assertUnit(*(it++) == Spy(99));
+         assertUnit(it == s.container.end());
+      }
+      // teardown
+      s.container.clear();
+   }
 
+   void test_pop_full()
+   {
+
+   }
+
+   void test_pop_partiallyFilled()
+   {
+
+   }
 
    
    /*************************************************************
