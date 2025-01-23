@@ -98,7 +98,7 @@ public:
    
    void pop() 
    {  
-   
+      this->container.pop_back();
    }
 
    //
