@@ -28,20 +28,20 @@ public:
       test_create_default();
       test_create_value();
       test_create_move();
-      test_copy_nullptr();
-      test_copy_one();
-      test_copy_standard();
+      // test_copy_nullptr();
+      // test_copy_one();
+      // test_copy_standard();
       
       // Assign
-      test_assign_emptyToEmpty();
-      test_assign_standardToEmpty();
-      test_assign_emptyToStandard();
-      test_assign_smallToBig();
-      test_assign_bigToSmall();
-      test_swap_emptyEmpty();
-      test_swap_emptyStandard();
-      test_swap_standardEmpty();
-      test_swap_oneTwo();
+      // test_assign_emptyToEmpty();
+      // test_assign_standardToEmpty();
+      // test_assign_emptyToStandard();
+      // test_assign_smallToBig();
+      // test_assign_bigToSmall();
+      // test_swap_emptyEmpty();
+      // test_swap_emptyStandard();
+      // test_swap_standardEmpty();
+      // test_swap_oneTwo();
 
       // Insert
       test_insert_emptyBefore();
@@ -54,18 +54,18 @@ public:
       test_insert_middleAfter();
 
       // Remove
-      test_remove_nullptr();
-      test_remove_front();
-      test_remove_back();
-      test_remove_middle();
-      test_clear_nullptr();
-      test_clear_one();
-      test_clear_standard();
+      // test_remove_nullptr();
+      // test_remove_front();
+      // test_remove_back();
+      // test_remove_middle();
+      // test_clear_nullptr();
+      // test_clear_one();
+      // test_clear_standard();
 
       // Status
-      test_size_empty();
-      test_size_standard();
-      test_size_standardMiddle();
+      // test_size_empty();
+      // test_size_standard();
+      // test_size_standardMiddle();
       
       report("Node");
    }

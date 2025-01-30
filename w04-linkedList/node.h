@@ -14,7 +14,7 @@
  *        Node         : A class representing a Node
  *    Additionally, it will contain a few functions working on Node
  * Author
- *    <your names here>
+ *    Calvin Bullock, Daniel Malasky
  ************************************************************************/
 
 #pragma once
@@ -40,18 +40,18 @@ public:
    // Construct
    //
 
-   Node() 
-   { 
-      pNext = pPrev = this;
-   }
-   Node(const T& data) 
+   Node()
    {
-      pNext = pPrev = this;
+      pNext = pPrev = nullptr;
+   }
+   Node(const T& data) : data(data)
+   {
+      pNext = pPrev = nullptr;
    }
 
-   Node(T&& data) 
+   Node(T&& data) : data(std::move(data))
    {
-      pNext = pPrev = this;
+      pNext = pPrev = nullptr;
    }
 
    //
@@ -72,9 +72,20 @@ public:
  *   COST   : O(n)
  **********************************************/
 template <class T>
-inline Node <T> * copy(const Node <T> * pSource) 
+inline Node <T> * copy(const Node <T> * pSource)
 {
-   return new Node<T>;
+   /*
+   Node <T> * pDestination = new Node<T>(pSource->data);
+   Node <T> * pSrc = *pSource;
+   Node <T> * pDst = *pDestination;
+
+   for (; pSrc != nullptr; pSrc = pSrc->pNext)
+   {
+      //pDst->pNext
+   }
+   return pDestination;
+   */
+   return new Node<T>;;
 }
 
 /***********************************************
@@ -88,7 +99,7 @@ inline Node <T> * copy(const Node <T> * pSource)
 template <class T>
 inline void assign(Node <T> * & pDestination, const Node <T> * pSource)
 {
-   
+
 }
 
 /***********************************************
@@ -99,7 +110,7 @@ inline void assign(Node <T> * & pDestination, const Node <T> * pSource)
 template <class T>
 inline void swap(Node <T>* &pLHS, Node <T>* &pRHS)
 {
-   
+
 }
 
 /***********************************************
@@ -110,15 +121,15 @@ inline void swap(Node <T>* &pLHS, Node <T>* &pRHS)
  *   COST   : O(1)
  **********************************************/
 template <class T>
-inline Node <T> * remove(const Node <T> * pRemove) 
+inline Node <T> * remove(const Node <T> * pRemove)
 {
-   
+
    return new Node<T>;
 }
 
 
 /**********************************************
- * INSERT 
+ * INSERT
  * Insert a new node the the value in "t" into a linked
  * list immediately before the current position.
  *   INPUT   : t - the value to be used for the new node
@@ -133,12 +144,50 @@ inline Node <T> * insert(Node <T> * pCurrent,
                   const T & t,
                   bool after = false)
 {
-   return new Node<T>();
+   Node<T> * pNew = new Node<T>(t);
+
+   // if there is a current add the new node before it
+   if (pCurrent != nullptr && !after)
+   {
+      pNew->pNext = pCurrent;
+      pNew->pPrev = pCurrent->pPrev;
+      pCurrent->pPrev = pNew;
+
+      // if reached the end of the list add nullptr
+      if (pNew->pPrev)
+      {
+         pNew->pPrev->pNext = pNew;
+      }
+      // else
+      // {
+      //    pNew->pPrev->pNext = nullptr;
+      // }
+   }
+
+   // if there is a current add the new node after it
+   if (pCurrent != nullptr && after)
+   {
+      pNew->pNext = pCurrent->pNext;
+      pNew->pPrev = pCurrent;
+      pCurrent->pNext = pNew;
+
+      // if reached the front of list add nullptr
+      if (pNew->pNext)
+      {
+         pNew->pNext->pPrev = pNew;
+      }
+      // else
+      // {
+      //    pNew->pNext->pPrev = nullptr;
+      // }
+   }
+
+   return pNew;
 }
 
 /******************************************************
  * SIZE
- * Find the size an unsorted linked list.  
+ * Find the size an unsorted linked list.
  *  INPUT   : a pointer to the head of the linked list
  *            the value to be found
  *  OUTPUT  : number of nodes
@@ -174,7 +223,7 @@ inline std::ostream & operator << (std::ostream & out, const Node <T> * pHead)
 template <class T>
 inline void clear(Node <T> * & pHead)
 {
-   
+
 }
 
 
