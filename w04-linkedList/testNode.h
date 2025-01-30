@@ -63,9 +63,9 @@ public:
       // test_clear_standard();
 
       // Status
-      // test_size_empty();
-      // test_size_standard();
-      // test_size_standardMiddle();
+      test_size_empty();
+      test_size_standard();
+      test_size_standardMiddle();
       
       report("Node");
    }

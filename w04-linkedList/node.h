@@ -75,14 +75,17 @@ template <class T>
 inline Node <T> * copy(const Node <T> * pSource)
 {
    /*
-   Node <T> * pDestination = new Node<T>(pSource->data);
-   Node <T> * pSrc = *pSource;
-   Node <T> * pDst = *pDestination;
+   if (pSource == nullptr)
+      return new Node<T>;;
 
-   for (; pSrc != nullptr; pSrc = pSrc->pNext)
-   {
-      //pDst->pNext
-   }
+   Node<T> *pDestination = new Node<T>(pSource->data);
+   //Node <T> * pSrc = new Node<T>(pSource->data);
+   //Node <T> * pDst= new Node<T>(pDestination->data);
+
+   // for (; pSrc != nullptr; pSrc = pSrc->pNext)
+   // {
+   //    pDst = insert(pDst, pSrc->data, true);
+   // }
    return pDestination;
    */
    return new Node<T>;;
@@ -158,10 +161,6 @@ inline Node <T> * insert(Node <T> * pCurrent,
       {
          pNew->pPrev->pNext = pNew;
       }
-      // else
-      // {
-      //    pNew->pPrev->pNext = nullptr;
-      // }
    }
 
    // if there is a current add the new node after it
@@ -176,10 +175,6 @@ inline Node <T> * insert(Node <T> * pCurrent,
       {
          pNew->pNext->pPrev = pNew;
       }
-      // else
-      // {
-      //    pNew->pNext->pPrev = nullptr;
-      // }
    }
 
    return pNew;
@@ -196,7 +191,11 @@ inline Node <T> * insert(Node <T> * pCurrent,
 template <class T>
 inline size_t size(const Node <T> * pHead)
 {
-   return 99;
+   int count = 0;
+   for (auto p = pHead; p; p = p->pNext)
+      count++;
+
+   return count;
 }
 
 /***********************************************
