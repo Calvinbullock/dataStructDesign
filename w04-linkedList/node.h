@@ -64,21 +64,36 @@ public:
 template <class T>
 inline Node <T> * copy(const Node <T> * pSource)
 {
-   
-   if (pSource == nullptr)
-      return new Node<T>;
+   // TRY 1
+   //
+   //if (pSource == nullptr)
+   //   return new Node<T>;
 
-   Node <T> *pDestination = new Node<T>(pSource->data);
-   Node <T> * pSrc = new Node<T>(pSource->data);
-   Node <T> * pDst = new Node<T>(pDestination->data);
+   //Node <T> *pDestination = new Node<T>(pSource->data);
+   //Node <T> * pSrc = new Node<T>(pSource->data);
+   //Node <T> * pDst = new Node<T>(pDestination->data);
 
-   for (; pSrc != nullptr; pSrc = pSrc->pNext)
-   {
-      pDst = insert(pDst, pSrc->data, true);
-   }
-   return pDestination;
+   //for (; pSrc != nullptr; pSrc = pSrc->pNext)
+   //{
+   //   pDst = insert(pDst, pSrc->data, true);
+   //}
+
+   //return pDestination;
+
+
+   // TRY 2
+   //Node <T> *pNew = new Node<T>(pSource->data);
+   //Node <T> *pCurrent = new Node<T>(pSource->data);
+   //while (pCurrent->pNext != nullptr)
+   //{
+   //   pNew->pNext = new Node<T>(pCurrent->data);
+   //   pCurrent = pCurrent->pNext;
+   //}
+
+   //return pNew;
+
+
    
-   return new Node<T>;;
 }
 
 /***********************************************
@@ -92,6 +107,53 @@ inline Node <T> * copy(const Node <T> * pSource)
 template <class T>
 inline void assign(Node <T> * & pDestination, const Node <T> * pSource)
 {
+   //Node <T>* pSrc = pSource;
+   //Node <T>* pDes = pDestination;
+
+   //while (pSrc != nullptr and pDes != nullptr)
+   //{
+   //   pDes->data = pSrc->data;
+   //   pDes = pDes->pNext;
+   //   pSrc = pSrc->pNext;
+   //}
+
+   //if (pSrc != nullptr)
+   //{
+   //   Node <T>* pDesPrevious;
+   //   
+   //   while (pSrc != nullptr)
+   //   {
+   //      pDes = insert(pSrc->data, pDes, true);
+   //      if (pDestination = nullptr)
+   //      {
+   //         pDestination = pDes;
+   //      }
+   //      pSrc = pSrc->pNext;
+   //   }
+   //}
+
+   //bool setToNull;
+
+   //if (pSrc == nullptr && pDes != nullptr)
+   //{
+   //   setToNull = false;
+
+   //   if (pDes->pPrev != nullptr)
+   //   {
+   //      pDes->pPrev->pNext = nullptr;
+   //   }
+   //   else
+   //   {
+   //      setToNull = true;
+   //   }
+
+   //   //freeData(pDes);
+
+   //   if (setToNull)
+   //   {
+   //      pDestination = nullptr;
+   //   }
+   //}
 
 }
 
@@ -103,7 +165,8 @@ inline void assign(Node <T> * & pDestination, const Node <T> * pSource)
 template <class T>
 inline void swap(Node <T>* &pLHS, Node <T>* &pRHS)
 {
-
+   //Node <T>* pHold = new Node<T>();
+   std::swap(pLHS, pRHS);
 }
 
 /***********************************************

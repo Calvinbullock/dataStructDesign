@@ -38,10 +38,10 @@ public:
       // test_assign_emptyToStandard();
       // test_assign_smallToBig();
       // test_assign_bigToSmall();
-      // test_swap_emptyEmpty();
-      // test_swap_emptyStandard();
-      // test_swap_standardEmpty();
-      // test_swap_oneTwo();
+      test_swap_emptyEmpty();
+      test_swap_emptyStandard();
+      test_swap_standardEmpty();
+      test_swap_oneTwo();
 
       // Insert
       test_insert_emptyBefore();
