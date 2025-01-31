@@ -40,19 +40,9 @@ public:
    // Construct
    //
 
-   Node()
-   {
-      pNext = pPrev = nullptr;
-   }
-   Node(const T& data) : data(data)
-   {
-      pNext = pPrev = nullptr;
-   }
-
-   Node(T&& data) : data(std::move(data))
-   {
-      pNext = pPrev = nullptr;
-   }
+   Node(             ) : pNext(nullptr), pPrev(nullptr), data(               ) { }
+   Node(const T& data) : pNext(nullptr), pPrev(nullptr), data(data           ) { }
+   Node(     T&& data) : pNext(nullptr), pPrev(nullptr), data(std::move(data)) { }
 
    //
    // Member variables
@@ -74,20 +64,20 @@ public:
 template <class T>
 inline Node <T> * copy(const Node <T> * pSource)
 {
-   /*
+   
    if (pSource == nullptr)
-      return new Node<T>;;
+      return new Node<T>;
 
-   Node<T> *pDestination = new Node<T>(pSource->data);
-   //Node <T> * pSrc = new Node<T>(pSource->data);
-   //Node <T> * pDst= new Node<T>(pDestination->data);
+   Node <T> *pDestination = new Node<T>(pSource->data);
+   Node <T> * pSrc = new Node<T>(pSource->data);
+   Node <T> * pDst = new Node<T>(pDestination->data);
 
-   // for (; pSrc != nullptr; pSrc = pSrc->pNext)
-   // {
-   //    pDst = insert(pDst, pSrc->data, true);
-   // }
+   for (; pSrc != nullptr; pSrc = pSrc->pNext)
+   {
+      pDst = insert(pDst, pSrc->data, true);
+   }
    return pDestination;
-   */
+   
    return new Node<T>;;
 }
 
@@ -127,7 +117,28 @@ template <class T>
 inline Node <T> * remove(const Node <T> * pRemove)
 {
 
-   return new Node<T>;
+   Node <T>* pReturn;
+
+   // if it doesn't exist
+   if (pRemove == nullptr)
+      return nullptr;
+
+   // pPrev is not null
+   if (pRemove->pPrev)
+      pRemove->pPrev->pNext = pRemove->pNext;
+
+   // pNext is not null
+   if (pRemove->pNext)
+      pRemove->pNext->pPrev = pRemove->pPrev;
+
+   // return pointer to parent
+   if (pRemove->pPrev)
+      pReturn = pRemove->pPrev;
+   else
+      pReturn = pRemove->pNext;
+
+   delete pRemove;
+   return pReturn;
 }
 
 
@@ -222,7 +233,12 @@ inline std::ostream & operator << (std::ostream & out, const Node <T> * pHead)
 template <class T>
 inline void clear(Node <T> * & pHead)
 {
-
+   while (pHead != nullptr)
+   {
+      Node <T>* pDelete = pHead;
+      pHead = pHead->pNext;
+      delete pDelete;
+   }
 }
 
 
