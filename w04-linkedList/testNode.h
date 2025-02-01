@@ -28,16 +28,16 @@ public:
       test_create_default();
       test_create_value();
       test_create_move();
-      // test_copy_nullptr();
-      // test_copy_one();
-      // test_copy_standard();
+      test_copy_nullptr();
+      test_copy_one();
+      test_copy_standard();
       
       // Assign
-      // test_assign_emptyToEmpty();
-      // test_assign_standardToEmpty();
-      // test_assign_emptyToStandard();
-      // test_assign_smallToBig();
-      // test_assign_bigToSmall();
+      test_assign_emptyToEmpty();
+      test_assign_standardToEmpty();
+      test_assign_emptyToStandard();
+      test_assign_smallToBig();
+      test_assign_bigToSmall();
       test_swap_emptyEmpty();
       test_swap_emptyStandard();
       test_swap_standardEmpty();

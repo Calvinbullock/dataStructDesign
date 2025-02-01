@@ -65,20 +65,21 @@ template <class T>
 inline Node <T> * copy(const Node <T> * pSource)
 {
    // TRY 1
-   //
-   //if (pSource == nullptr)
-   //   return new Node<T>;
+   
+   if (pSource == nullptr)
+      return nullptr;
 
-   //Node <T> *pDestination = new Node<T>(pSource->data);
-   //Node <T> * pSrc = new Node<T>(pSource->data);
-   //Node <T> * pDst = new Node<T>(pDestination->data);
+   Node <T> *pDestination = new Node<T>(pSource->data);
+   const Node <T>* pSrc = pSource->pNext;
+   Node <T> * pDes = pDestination;
 
-   //for (; pSrc != nullptr; pSrc = pSrc->pNext)
-   //{
-   //   pDst = insert(pDst, pSrc->data, true);
-   //}
+   // start at the second value
+   for (; pSrc != nullptr; pSrc = pSrc->pNext)
+   {
+      pDes = insert(pDes, pSrc->data, true);
+   }
 
-   //return pDestination;
+   return pDestination;
 
 
    // TRY 2
@@ -107,53 +108,55 @@ inline Node <T> * copy(const Node <T> * pSource)
 template <class T>
 inline void assign(Node <T> * & pDestination, const Node <T> * pSource)
 {
-   //Node <T>* pSrc = pSource;
-   //Node <T>* pDes = pDestination;
+   const Node<T> * pSrc = pSource;
+   Node<T> * pDes = pDestination;
+   Node<T> * pDesPrevious = nullptr;
 
-   //while (pSrc != nullptr and pDes != nullptr)
-   //{
-   //   pDes->data = pSrc->data;
-   //   pDes = pDes->pNext;
-   //   pSrc = pSrc->pNext;
-   //}
+   // Copy source values into data values
+   while (pSrc != nullptr and pDes != nullptr)
+   {
+      pDes->data = pSrc->data;
+      pDesPrevious = pDes; // Save the last position of pDes
+      pDes = pDes->pNext;
+      pSrc = pSrc->pNext;
+   }
 
-   //if (pSrc != nullptr)
-   //{
-   //   Node <T>* pDesPrevious;
-   //   
-   //   while (pSrc != nullptr)
-   //   {
-   //      pDes = insert(pSrc->data, pDes, true);
-   //      if (pDestination = nullptr)
-   //      {
-   //         pDestination = pDes;
-   //      }
-   //      pSrc = pSrc->pNext;
-   //   }
-   //}
+   // pDestination is empty
+   if (pSrc != nullptr)
+   {
+      pDes = pDesPrevious;
+      
+      while (pSrc != nullptr)
+      {
+         pDes = insert(pDes, pSrc->data, true);
+         // Set pHead
+         if (pDestination == nullptr)
+         {
+            pDestination = pDes;
+         }
+         pSrc = pSrc->pNext;
+      }
+   }
+   else if (pDes != nullptr)
+   {
+      bool setToNull = false;
 
-   //bool setToNull;
+      if (pDes->pPrev != nullptr)
+      {
+         pDes->pPrev->pNext = nullptr;
+      }
+      else
+      {
+         setToNull = true;
+      }
 
-   //if (pSrc == nullptr && pDes != nullptr)
-   //{
-   //   setToNull = false;
+      clear(pDes);
 
-   //   if (pDes->pPrev != nullptr)
-   //   {
-   //      pDes->pPrev->pNext = nullptr;
-   //   }
-   //   else
-   //   {
-   //      setToNull = true;
-   //   }
-
-   //   //freeData(pDes);
-
-   //   if (setToNull)
-   //   {
-   //      pDestination = nullptr;
-   //   }
-   //}
+      if (setToNull)
+      {
+         pDestination = nullptr;
+      }
+   }
 
 }
 
