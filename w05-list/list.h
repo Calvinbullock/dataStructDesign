@@ -47,9 +47,8 @@ public:
    
    list(const A& a = A())  
    {
-      numElements = 99;
-      pHead = pTail = new list <T, A> ::Node();
-      pHead->pNext = pTail->pNext = pHead->pPrev = pTail->pPrev = nullptr;
+      numElements = 0;
+      pHead = pTail = nullptr;
    }
    list(list <T, A> & rhs, const A& a = A())
    {
@@ -127,8 +126,8 @@ public:
    // Status
    //
    
-   bool empty()  const { return true; }
-   size_t size() const { return 98;   }
+   bool empty()  const { return size() == 0; }
+   size_t size() const { return numElements;   }
 
 private:
    // nested linked list class
