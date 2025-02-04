@@ -409,27 +409,33 @@ void list <T, A> ::pop_front()
 /*********************************************
  * LIST :: FRONT
  * retrieves the first element in the list
- *     INPUT  : 
+ *     INPUT  :
  *     OUTPUT : data to be displayed
  *     COST   : O(1)
  *********************************************/
 template <typename T, typename A>
 T & list <T, A> :: front()
 {
-   return *(new T);
+   if (pHead)
+      return pHead->data;
+
+   throw "ERROR: unable to access data from an empty list";
 }
 
 /*********************************************
  * LIST :: BACK
  * retrieves the last element in the list
- *     INPUT  : 
+ *     INPUT  :
  *     OUTPUT : data to be displayed
  *     COST   : O(1)
  *********************************************/
 template <typename T, typename A>
 T & list <T, A> :: back()
 {
-   return *(new T);
+   if (pTail)
+      return pTail->data;
+
+   throw "ERROR: unable to access data from an empty list";
 }
 
 
