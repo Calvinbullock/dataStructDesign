@@ -14,7 +14,7 @@
  *        List         : A class that represents a List
  *        ListIterator : An iterator through List
  * Author
- *    <your names here>
+ *    Daniel Malasky, Calvin Bullock
  ************************************************************************/
 
 #pragma once
@@ -154,20 +154,10 @@ public:
    //
    // Construct
    //
-   Node()
-   {
-      pNext = pPrev = nullptr;
-   }
-   Node(const T& data)
-   {
-      pNext = pPrev = nullptr;
-      this->data = data;
-   }
-   Node(T&& data)
-   {
-      pNext = pPrev = nullptr;
-      this->data = std::move(data);
-   }
+
+   Node()              : pNext(nullptr), pPrev(nullptr), data()                { }
+   Node(const T& data) : pNext(nullptr), pPrev(nullptr), data(data)            { }
+   Node(T&& data)      : pNext(nullptr), pPrev(nullptr), data(std::move(data)) { }
 
    //
    // Member Variables
@@ -198,14 +188,15 @@ public:
    }
    iterator(Node * pRHS)
    {
-      p = new list <T, A> ::Node;
+      p = pRHS;
    }
    iterator(const iterator  & rhs) 
    {
-      p = new list <T, A> ::Node;
+      p = rhs.p;
    }
    iterator & operator = (const iterator & rhs)
    {
+      this->p = rhs.p;
       return *this;
    }
    
@@ -216,30 +207,40 @@ public:
    // dereference operator, fetch a node
    T & operator * ()
    {
-      return *(new T);
+      return this->p->data;
    }
 
    // postfix increment
    iterator operator ++ (int postfix)
    {
-      return *this;
+      iterator temp = *this;
+      if (this->p->pNext)
+         this->p = p->pNext;
+      return temp;
    }
 
    // prefix increment
    iterator & operator ++ ()
    {
+      if (this->p->pNext)
+         this->p = p->pNext;
       return *this;
    }
    
    // postfix decrement
    iterator operator -- (int postfix)
    {
-      return *this;
+      iterator temp = *this;
+      if (this->p->pPrev)
+         this->p = p->pPrev;
+      return temp;
    }
 
    // prefix decrement
    iterator & operator -- ()
    {
+      if (this->p->pPrev)
+         this->p = p->pPrev;
       return *this;
    } 
 
@@ -351,13 +352,37 @@ void list <T, A> :: clear()
 template <typename T, typename A>
 void list <T, A> :: push_back(const T & data)
 {
+   Node* pNew = new Node(data);
 
+   pNew->pPrev = pTail;
+
+   // if list is not empty
+   if (pTail)
+      pTail->pNext = pNew;
+   else
+      pHead = pNew;
+
+   pTail = pNew;
+
+   numElements++;
 }
 
 template <typename T, typename A>
 void list <T, A> ::push_back(T && data)
 {
+   Node* pNew = new Node(std::move(data));
 
+   pNew->pPrev = pTail;
+
+   // if list is not empty
+   if (pTail)
+      pTail->pNext = pNew;
+   else
+      pHead = pNew;
+
+   pTail = pNew;
+
+   numElements++;
 }
 
 /*********************************************
@@ -370,13 +395,37 @@ void list <T, A> ::push_back(T && data)
 template <typename T, typename A>
 void list <T, A> :: push_front(const T & data)
 {
+   Node* pNew = new Node(data);
 
+   pNew->pNext = pHead;
+
+   // if list is not empty
+   if (pHead)
+      pHead->pPrev = pNew;
+   else
+      pTail = pNew;
+
+   pHead = pNew;
+
+   numElements++;
 }
 
 template <typename T, typename A>
 void list <T, A> ::push_front(T && data)
 {
+   Node* pNew = new Node(std::move(data));
 
+   pNew->pNext = pHead;
+
+   // if list is not empty
+   if (pHead)
+      pHead->pPrev = pNew;
+   else
+      pTail = pNew;
+
+   pHead = pNew;
+
+   numElements++;
 }
 
 
@@ -461,9 +510,57 @@ typename list <T, A> :: iterator  list <T, A> :: erase(const list <T, A> :: iter
  *     COST   : O(1)
  ******************************************/
 template <typename T, typename A>
-typename list <T, A> :: iterator list <T, A> :: insert(list <T, A> :: iterator it,
-                                                 const T & data) 
+typename list <T, A> :: iterator list <T, A> :: insert(list <T, A> :: iterator it,                                                 const T & data) 
 {
+   //// Insert into empty list
+   //if (this->empty())
+   //{
+   //   Node* pHead = new Node(data);
+   //   Node* pTail = pHead;
+   //   numElements = 1;
+   //   return this->begin();
+   //}
+   //// Insert onto the end of list
+   //else if (it == this->end())
+   //{
+   //   Node* pNew = new Node(data);
+   //   pTail->pNext = pNew;
+   //   pNew->pPrev = pTail;
+   //   pTail = pNew;
+   //   numElements++;
+   //   return iterator(pNew);
+   //}
+   //// Insert anywhere else
+   //else if (it != this->end())
+   //{
+   //   // Create the new node
+   //   Node* pNew = new Node(data);
+
+   //   // Hook up pNew
+   //   pNew->pPrev = it.p.pPrev;
+   //   pNew->pNext = it.p;
+
+   //   // Make old list aware of pNew
+   //   // if not beginning
+   //   if (pNew->pPrev)
+   //      pNew->pPrev.pNext = pNew;
+   //   else
+   //      pHead = pNew;
+
+   //   // if not end
+   //   if (pNew->pNext)
+   //      pNew->pNext->pPrev = pNew;
+   //   else
+   //      pTail = pNew;
+
+   //   numElements++;
+
+   //   return iterator(pNew);
+
+
+   //}
+
+
    return end();
 }
 
