@@ -58,24 +58,22 @@ public:
 
       for (auto it = rhs.begin(); it != rhs.end(); ++it)
       {
-         // push_back(*it);
+         push_back(*it);
       }
    }
    list(list <T, A>&& rhs, const A& a = A());
-   list(size_t num, const T & t, const A& a = A());
+   list(size_t num, const T & t, const A& a = A()); // NO TESTS
    list(size_t num, const A& a = A());
    list(const std::initializer_list<T>& il, const A& a = A()) 
    {
-      numElements = 99;
-      pHead = pTail = new list <T, A> ::Node();
-      pHead->pNext = pTail->pNext = pHead->pPrev = pTail->pPrev = nullptr;
+      for (auto it = il.begin(); it != il.end(); it++)
+         push_back(*it);
    }
    template <class Iterator>
    list(Iterator first, Iterator last, const A& a = A())
    {
-      numElements = 99;
-      pHead = pTail = new list <T, A> ::Node();
-      pHead->pNext = pTail->pNext = pHead->pPrev = pTail->pPrev = nullptr;
+      for (auto it = first; it != last; it++)
+         push_back(*it);
    }
    ~list()
    { 
@@ -278,9 +276,25 @@ private:
 template <typename T, typename A>
 list <T, A> ::list(size_t num, const T & t, const A& a) 
 {
+   if(num)
+   {
+      Node* pHead = new Node(t);
+      Node* pPrevious = pHead;
+      Node* pNew = pHead;
+
+      pHead->pPrev = nullptr;
+
+      for (size_t i = 1; i < num; i++) // - 1?
+      {
+         pNew = new Node(t);
+         pNew->pPrev = pPrevious;
+         pNew->pPrev->pNext = pNew;
+         pPrevious = pNew;
+      }
+      pNew->pNext = nullptr;
+      pTail = pNew;
+   }
    numElements = num;
-   pHead = pTail = nullptr;
-   pHead->pNext = pTail->pNext = pHead->pPrev = pTail->pPrev = nullptr;
 }
 
 /*****************************************
@@ -290,19 +304,13 @@ list <T, A> ::list(size_t num, const T & t, const A& a)
 template <typename T, typename A>
 list <T, A> ::list(size_t num, const A& a) 
 {
-
-   numElements = num;
-   pHead = pTail = nullptr;
-
+   pHead = nullptr;
+   pTail = nullptr;
+   numElements = 0;
    for (size_t i = 0; i < num; i++)
    {
-
+      push_back(T());
    }
-
-   // pHead->pNext = nullptr;
-   // pTail->pNext = nullptr;
-   // pHead->pPrev = nullptr;
-   // pTail->pPrev = nullptr;
 }
 
 /*****************************************
