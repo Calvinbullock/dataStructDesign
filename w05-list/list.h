@@ -52,9 +52,9 @@ public:
    }
    list(list <T, A> & rhs, const A& a = A())
    {
-      numElements = rhs.numElements;
-      pHead = rhs.pHead;
-      pTail = rhs.pTail;
+      numElements = 0;
+      pHead = nullptr;
+      pTail = nullptr;
 
       for (auto it = rhs.begin(); it != rhs.end(); ++it)
       {
@@ -62,7 +62,7 @@ public:
       }
    }
    list(list <T, A>&& rhs, const A& a = A());
-   list(size_t num, const T & t, const A& a = A()); // NO TESTS
+   list(size_t num, const T & t, const A& a = A());
    list(size_t num, const A& a = A());
    list(const std::initializer_list<T>& il, const A& a = A()) 
    {
@@ -278,19 +278,22 @@ list <T, A> ::list(size_t num, const T & t, const A& a)
 {
    if(num)
    {
-      Node* pHead = new Node(t);
+      // Set the begining
+      pHead = new Node(t);
       Node* pPrevious = pHead;
       Node* pNew = pHead;
 
       pHead->pPrev = nullptr;
 
-      for (size_t i = 1; i < num; i++) // - 1?
+      // Add new nodes
+      for (size_t i = 1; i < num; i++)
       {
          pNew = new Node(t);
          pNew->pPrev = pPrevious;
          pNew->pPrev->pNext = pNew;
          pPrevious = pNew;
       }
+      // Set the end
       pNew->pNext = nullptr;
       pTail = pNew;
    }
@@ -304,12 +307,25 @@ list <T, A> ::list(size_t num, const T & t, const A& a)
 template <typename T, typename A>
 list <T, A> ::list(size_t num, const A& a) 
 {
+
    pHead = nullptr;
    pTail = nullptr;
    numElements = 0;
    for (size_t i = 0; i < num; i++)
    {
-      push_back(T());
+      Node* pNew = new Node();
+
+      pNew->pPrev = pTail;
+
+      // if list is not empty
+      if (pTail)
+         pTail->pNext = pNew;
+      else
+         pHead = pNew;
+
+      pTail = pNew;
+
+      numElements++;
    }
 }
 
@@ -355,13 +371,11 @@ list <T, A>& list <T, A> :: operator = (list <T, A> && rhs)
 template <typename T, typename A>
 list <T, A> & list <T, A> :: operator = (list <T, A> & rhs)
 {
-
-   
    // Fill lhs data with rhs data until one reaches the end
    auto itRHS = rhs.begin();
    auto itLHS = begin();
 
-
+   // Assign rhs data until on list is over
    while (itRHS != rhs.end() && itLHS != end())
    {
       *itLHS = *itRHS;
@@ -591,6 +605,7 @@ void list <T, A> ::pop_back()
       return;
    }
 
+   // Unhook the back
    Node* pBack = this->pTail;
    pTail = pBack->pPrev;
    pTail->pNext = nullptr;
@@ -618,6 +633,7 @@ void list <T, A> ::pop_front()
       return;
    }
 
+   // Unhook front element
    Node* pFront = this->pHead;
    pHead = pFront->pNext;
    pHead->pPrev = nullptr;
@@ -658,7 +674,6 @@ T & list <T, A> :: back()
    throw "ERROR: unable to access data from an empty list";
 }
 
-
 /******************************************
  * LIST :: REMOVE
  * remove an item from the middle of the list
@@ -685,7 +700,7 @@ typename list <T, A> :: iterator  list <T, A> :: erase(const list <T, A> :: iter
    else
       pTail = pTail->pPrev;
 
-
+   // if it-- is not beginning of list
    if (it.p->pPrev)
       it.p->pPrev->pNext = it.p->pNext; // unhook it.p
    else
