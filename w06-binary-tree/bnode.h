@@ -14,7 +14,7 @@
  *        BNode         : A class representing a BNode
  *    Additionally, it will contain a few functions working on Node
  * Author
- *    <your names here>
+ *       Calvin Bullock, Daniel Malasky
  ************************************************************************/
 
 #pragma once
@@ -34,18 +34,12 @@ public:
    // 
    // Construct
    //
-   BNode()
+   BNode() : pLeft(nullptr), pRight(nullptr), pParent(nullptr), data() { }
+   BNode(const T &  t) : pLeft(nullptr), pRight(nullptr), pParent(nullptr), data(t)
    {
-      pLeft = pRight = this;
+      // data = t;
    }
-   BNode(const T &  t) 
-   {
-      pLeft = pRight = this;
-   }
-   BNode(T && t) 
-   {
-      pLeft = pRight = this;
-   }
+   BNode(T && t) : pLeft(nullptr), pRight(nullptr), pParent(nullptr), data(std::move(t)) { }
 
    //
    // Data
@@ -63,7 +57,10 @@ public:
 template <class T>
 inline size_t size(const BNode <T> * p)
 {
-   return 99;
+   if (p == nullptr)
+      return 0;
+   else
+      return 1 + size(p->pLeft) + size(p->pRight);
 }
 
 
@@ -127,7 +124,13 @@ void addRight(BNode <T>* pNode, T && t)
 template <class T>
 void clear(BNode <T> * & pThis)
 {
+   if (pThis == nullptr)
+      return;
 
+   clear(pThis->pLeft);
+   clear(pThis->pRight);
+   delete pThis;
+   pThis = nullptr;
 }
 
 /***********************************************
@@ -149,7 +152,22 @@ inline void swap(BNode <T>*& pLHS, BNode <T>*& pRHS)
 template <class T>
 BNode <T> * copy(const BNode <T> * pSrc) 
 {
-   return new BNode<T>;
+   if (pSrc == nullptr)
+      return nullptr;
+
+   BNode <T> * pDest = new BNode<T>(pSrc->data);
+
+   // connect pDest left child to parent (pDest)
+   pDest->pLeft = copy(pSrc->pLeft);
+   if (pDest->pLeft != nullptr)
+      pDest->pLeft->pParent = pDest;
+
+   // connect pDest right child to parent (pDest)
+   pDest->pRight = copy(pSrc->pRight);
+   if (pDest->pRight != nullptr)
+      pDest->pRight->pParent = pDest;
+
+   return pDest;
 }
 
 /**********************************************
@@ -160,5 +178,30 @@ BNode <T> * copy(const BNode <T> * pSrc)
 template <class T>
 void assign(BNode <T> * & pDest, const BNode <T>* pSrc)
 {
+   // src is empty
+   if (pSrc == nullptr)
+   {
+      clear(pDest);
+      return;
+   }
 
+   // TODO: combine nether and dest
+   // dest is empty
+   if (pDest == nullptr && pSrc != nullptr)
+   {
+      BNode<T>* pDestPrev = pDest->pParent;
+      pDest = new BNode<T>(pSrc->data);
+      pDest->pParent = pDestPrev;
+
+      assign(pDest->pRight, pSrc->pRight);
+      assign(pDest->pLeft,  pSrc->pLeft);
+   }
+
+   // neither src nor dest is empty
+   if (pDest != nullptr && pSrc != nullptr)
+   {
+      pDest->data = pSrc->data;
+      assign(pDest->pRight, pSrc->pRight);
+      assign(pDest->pLeft,  pSrc->pLeft);
+   }
 }
