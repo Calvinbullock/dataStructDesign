@@ -38,9 +38,9 @@ public:
 
       // Assign
       test_assign_emptyToEmpty();
-      test_assign_standardToEmpty(); // this
+      test_assign_standardToEmpty();
       test_assign_emptyToStandard();
-      test_assign_oneToStandard(); //this
+      test_assign_oneToStandard();
       test_assign_standardToOne();
       test_assign_standardToStandard();
       test_swap_emptyEmpty();

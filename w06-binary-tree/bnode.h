@@ -197,29 +197,21 @@ void assign(BNode <T> * & pDest, const BNode <T>* pSrc)
       return;
    }
 
-   // TODO: combine nether and dest
-   // dest is empty
-   if (pDest == nullptr && pSrc != nullptr)
-   {
+   // dest is empty, create a new node
+   if (pDest == nullptr)
       pDest = new BNode<T>(pSrc->data);
 
-      assign(pDest->pRight, pSrc->pRight);
-      if (pDest->pRight)
-         pDest->pRight->pParent = pDest;
-      assign(pDest->pLeft,  pSrc->pLeft);
-      if (pDest->pRight)
-         pDest->pLeft->pParent = pDest;
-   }
-
-   // neither src nor dest is empty
-   if (pDest != nullptr && pSrc != nullptr)
-   {
+   // Neither src nor dest is empty, update the node
+   else
       pDest->data = pSrc->data;
-      assign(pDest->pRight, pSrc->pRight);
-      if (pDest->pRight)
-         pDest->pRight->pParent = pDest;
-      assign(pDest->pLeft, pSrc->pLeft);
-      if (pDest->pRight)
-         pDest->pLeft->pParent = pDest;
-   }
+
+   // Recursively loop through tree
+   assign(pDest->pRight, pSrc->pRight);
+   assign(pDest->pLeft, pSrc->pLeft);
+
+   // Hookup parents
+   if (pDest->pRight)
+      pDest->pRight->pParent = pDest;
+   if (pDest->pLeft)
+      pDest->pLeft->pParent = pDest;
 }
