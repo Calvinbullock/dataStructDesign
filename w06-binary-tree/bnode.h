@@ -201,28 +201,14 @@ void assign(BNode <T> * & pDest, const BNode <T>* pSrc)
    // dest is empty
    if (pDest == nullptr && pSrc != nullptr)
    {
-
-      //pDest = new BNode<T>(pSrc->pRight->data);
-      //pDest->pParent = pDestPrev;
-
-      // REFERENCE
-      //BNode <T>* pAdd = new BNode<T>(t);
-      //pAdd->pParent = pNode;
-      //pNode->pRight = pAdd;
-
-
-      //BNode<T>* pDestPrev = pDest;
       pDest = new BNode<T>(pSrc->data);
 
-
-
-
-      //addRight(pDest, pSrc->data);
-      //addLeft(pDest, pSrc->data);
-
       assign(pDest->pRight, pSrc->pRight);
+      if (pDest->pRight)
+         pDest->pRight->pParent = pDest;
       assign(pDest->pLeft,  pSrc->pLeft);
-
+      if (pDest->pRight)
+         pDest->pLeft->pParent = pDest;
    }
 
    // neither src nor dest is empty
@@ -230,6 +216,10 @@ void assign(BNode <T> * & pDest, const BNode <T>* pSrc)
    {
       pDest->data = pSrc->data;
       assign(pDest->pRight, pSrc->pRight);
-      assign(pDest->pLeft,  pSrc->pLeft);
+      if (pDest->pRight)
+         pDest->pRight->pParent = pDest;
+      assign(pDest->pLeft, pSrc->pLeft);
+      if (pDest->pRight)
+         pDest->pLeft->pParent = pDest;
    }
 }
