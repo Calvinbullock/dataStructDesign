@@ -111,8 +111,8 @@ public:
    // Status
    //
 
-   bool   empty() const noexcept { return true; }
-   size_t size()  const noexcept { return 99;   }
+   bool   empty() const noexcept { return size() == 0; }
+   size_t size()  const noexcept { return numElements; }
 
 private:
 
