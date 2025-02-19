@@ -9,6 +9,7 @@
 
 #pragma once
 
+#define DEBUG
 #ifdef DEBUG
 
 #include "bst.h"
@@ -130,7 +131,7 @@ public:
 
       report("BST");
    }
-   
+
    /***************************************
     * CREATE
     *     BST::BST()
@@ -147,7 +148,7 @@ public:
       // exercise
       alloc.construct(&bst);  // just call the constructor by itself
       // verify
-      assertUnit(Spy::numDefault() == 0);    
+      assertUnit(Spy::numDefault() == 0);
       assertUnit(Spy::numAlloc() == 0);
       assertUnit(Spy::numDelete() == 0);
       assertUnit(Spy::numNondefault() == 0);
@@ -319,8 +320,8 @@ public:
       // exercise
       custom::BST <Spy> bstDest(std::move(bstSrc));
       // verify
-      assertUnit(Spy::numCopy() == 0);     
-      assertUnit(Spy::numAlloc() == 0);     
+      assertUnit(Spy::numCopy() == 0);
+      assertUnit(Spy::numAlloc() == 0);
       assertUnit(Spy::numDefault() == 0);
       assertUnit(Spy::numDelete() == 0);
       assertUnit(Spy::numNondefault() == 0);
@@ -330,7 +331,7 @@ public:
       assertUnit(Spy::numEquals() == 0);
       assertUnit(Spy::numLessthan() == 0);
       assertUnit(bstSrc.root != bstDest.root);
-      //           
+      //
       assertEmptyFixture(bstSrc);
       assertUnit(bstSrc.numElements == 0);
       assertUnit(bstSrc.root == nullptr);
@@ -367,7 +368,7 @@ public:
       // exercise
       custom::BST <Spy> bstDest(std::move(bstSrc));
       // verify
-      assertUnit(Spy::numCopy() == 0); 
+      assertUnit(Spy::numCopy() == 0);
       assertUnit(Spy::numAlloc() == 0);
       assertUnit(Spy::numDefault() == 0);
       assertUnit(Spy::numDelete() == 0);
@@ -408,7 +409,7 @@ public:
       assertUnit(Spy::numLessthan() == 0);
       assertEmptyFixture(bstDest);
    }  // teardown
-   
+
    // create a standard fixture from an initializer list
    void test_constructInitializer_standard()
    {  // setup
@@ -443,7 +444,7 @@ public:
 
     // destroy an already empty fixture
    void test_destruct_empty()
-   {  
+   {
       {
          // setup
          custom::BST<Spy> bst;
@@ -725,7 +726,7 @@ public:
       assertUnit(Spy::numCopy() == 6);        // copy     [20][30][40]    [60][70][80]
       assertUnit(Spy::numAlloc() == 6);       // allocate [20][30][40]    [60][70][80]
       assertUnit(Spy::numDestructor() == 0);
-      assertUnit(Spy::numDelete() == 0);   
+      assertUnit(Spy::numDelete() == 0);
       assertUnit(Spy::numDefault() == 0);
       assertUnit(Spy::numNondefault() == 0);
       assertUnit(Spy::numCopyMove() == 0);
@@ -830,7 +831,7 @@ public:
       // verify
       assertUnit(Spy::numAssign() == 7);      // assign [2][30][40][50][60][70][80]
       assertUnit(Spy::numDestructor() == 0);
-      assertUnit(Spy::numDelete() == 0);    
+      assertUnit(Spy::numDelete() == 0);
       assertUnit(Spy::numCopy() == 0);
       assertUnit(Spy::numAlloc() == 0);
       assertUnit(Spy::numDefault() == 0);
@@ -901,8 +902,8 @@ public:
       // exercise
       bstDest = std::move(bstSrc);
       // verify
-      assertUnit(Spy::numCopy() == 0);  
-      assertUnit(Spy::numAlloc() == 0); 
+      assertUnit(Spy::numCopy() == 0);
+      assertUnit(Spy::numAlloc() == 0);
       assertUnit(Spy::numDefault() == 0);
       assertUnit(Spy::numDelete() == 0);
       assertUnit(Spy::numNondefault() == 0);
@@ -970,8 +971,8 @@ public:
       assertUnit(Spy::numDestructor() == 1);  // destroy [99]
       assertUnit(Spy::numDelete() == 1);      // delete  [99]
       assertUnit(Spy::numAssign() == 0);
-      assertUnit(Spy::numCopy() == 0);  
-      assertUnit(Spy::numAlloc() == 0); 
+      assertUnit(Spy::numCopy() == 0);
+      assertUnit(Spy::numAlloc() == 0);
       assertUnit(Spy::numDefault() == 0);
       assertUnit(Spy::numNondefault() == 0);
       assertUnit(Spy::numCopyMove() == 0);
@@ -1348,7 +1349,7 @@ public:
       assertUnit(Spy::numLessthan() == 0);    // does not look at any element
       assertUnit(Spy::numEquals() == 0);      // does not look at any element
       assertUnit(Spy::numDestructor() == 0);
-      assertUnit(Spy::numDelete() == 0);     
+      assertUnit(Spy::numDelete() == 0);
       assertUnit(Spy::numAssign() == 0);
       assertUnit(Spy::numCopy() == 0);
       assertUnit(Spy::numAlloc() == 0);
@@ -1364,11 +1365,11 @@ public:
    // begin() from the standard fixture
    void test_begin_standard()
    {  // setup
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //         30              70  
+      //         30              70
       //     +----+----+     +----+----+
-      //    20        40    60        80  
+      //    20        40    60        80
       custom::BST <Spy> bst;
       setupStandardFixture(bst);
       custom::BST<Spy>::iterator it;
@@ -1401,11 +1402,11 @@ public:
    // end() from the standard fixture.
    void test_end_standard()
    {  // setup
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //         30              70  
+      //         30              70
       //     +----+----+     +----+----+
-      //    20        40    60        80  
+      //    20        40    60        80
       custom::BST <Spy> bst;
       setupStandardFixture(bst);
       custom::BST<Spy>::iterator it;
@@ -1433,11 +1434,11 @@ public:
    // increment where the next node is the parent
    void test_iterator_increment_standardToParent()
    {  // setup
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //         30              70  
+      //         30              70
       //     +----+----+     +----+----+
-      //  [[20]]      40    60        80  
+      //  [[20]]      40    60        80
       custom::BST <Spy> bst;
       setupStandardFixture(bst);
       custom::BST<Spy>::iterator it;
@@ -1457,11 +1458,11 @@ public:
       assertUnit(Spy::numNondefault() == 0);
       assertUnit(Spy::numCopyMove() == 0);
       assertUnit(Spy::numAssignMove() == 0);
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //       [[30]]            70  
+      //       [[30]]            70
       //     +----+----+     +----+----+
-      //    20        40    60        80  
+      //    20        40    60        80
       assertUnit(it.pNode != nullptr);
       assertUnit(bst.root != nullptr);
       if (bst.root)
@@ -1477,11 +1478,11 @@ public:
    // increment where the next node is the right child
    void test_iterator_increment_standardToChild()
    {  // setup
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //       [[30]]            70  
+      //       [[30]]            70
       //     +----+----+     +----+----+
-      //    20        40    60        80  
+      //    20        40    60        80
       custom::BST <Spy> bst;
       setupStandardFixture(bst);
       custom::BST<Spy>::iterator it;
@@ -1501,11 +1502,11 @@ public:
       assertUnit(Spy::numNondefault() == 0);
       assertUnit(Spy::numCopyMove() == 0);
       assertUnit(Spy::numAssignMove() == 0);
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //         30              70  
+      //         30              70
       //     +----+----+     +----+----+
-      //    20      [[40]]  60        80  
+      //    20      [[40]]  60        80
       assertUnit(it.pNode != nullptr);
       assertUnit(bst.root != nullptr && bst.root->pLeft != nullptr);
       if (bst.root && bst.root->pLeft)
@@ -1520,11 +1521,11 @@ public:
    // increment where the next node is grandma
    void test_iterator_increment_standardToGrandma()
    {  // setup
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //         30              70  
+      //         30              70
       //     +----+----+     +----+----+
-      //    20      [[40]]  60        80  
+      //    20      [[40]]  60        80
       custom::BST <Spy> bst;
       setupStandardFixture(bst);
       custom::BST<Spy>::iterator it;
@@ -1544,11 +1545,11 @@ public:
       assertUnit(Spy::numNondefault() == 0);
       assertUnit(Spy::numCopyMove() == 0);
       assertUnit(Spy::numAssignMove() == 0);
-      //               [[50]] 
+      //               [[50]]
       //          +-------+-------+
-      //         30              70  
+      //         30              70
       //     +----+----+     +----+----+
-      //    20        40    60        80  
+      //    20        40    60        80
       assertUnit(it.pNode == bst.root);
       if (it.pNode)
          assertUnit(it.pNode->data == Spy(50));
@@ -1560,11 +1561,11 @@ public:
    // increment where the next node is the right grandchild
    void test_iterator_increment_standardToGrandchild()
    {  // setup
-      //               [[50]] 
+      //               [[50]]
       //          +-------+-------+
-      //         30              70  
+      //         30              70
       //     +----+----+     +----+----+
-      //    20        40    60        80  
+      //    20        40    60        80
       custom::BST <Spy> bst;
       setupStandardFixture(bst);
       custom::BST<Spy>::iterator it;
@@ -1584,11 +1585,11 @@ public:
       assertUnit(Spy::numNondefault() == 0);
       assertUnit(Spy::numCopyMove() == 0);
       assertUnit(Spy::numAssignMove() == 0);
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //         30              70  
+      //         30              70
       //     +----+----+     +----+----+
-      //    20        40  [[60]]      80  
+      //    20        40  [[60]]      80
       assertUnit(it.pNode != nullptr);
       assertUnit(bst.root != nullptr && bst.root->pRight != nullptr);
       if (bst.root && bst.root->pRight)
@@ -1603,11 +1604,11 @@ public:
    // increment where we are already at the last node
    void test_iterator_increment_standardToDone()
    {  // setup
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //         30              70  
+      //         30              70
       //     +----+----+     +----+----+
-      //    20        40    60      [[80]]  
+      //    20        40    60      [[80]]
       custom::BST <Spy> bst;
       setupStandardFixture(bst);
       custom::BST<Spy>::iterator it;
@@ -1627,11 +1628,11 @@ public:
       assertUnit(Spy::numNondefault() == 0);
       assertUnit(Spy::numCopyMove() == 0);
       assertUnit(Spy::numAssignMove() == 0);
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //         30              70  
+      //         30              70
       //     +----+----+     +----+----+
-      //    20        40    60        80  
+      //    20        40    60        80
       assertUnit(it.pNode == nullptr);
       assertUnit(it == bst.end());
       assertStandardFixture(bst);
@@ -1642,15 +1643,15 @@ public:
    // increment where we are already at the end
    void test_iterator_increment_standardEnd()
    {  // setup
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //         30              70  
+      //         30              70
       //     +----+----+     +----+----+
-      //    20        40    60        80  
+      //    20        40    60        80
       custom::BST <Spy> bst;
       setupStandardFixture(bst);
       custom::BST<Spy>::iterator it;
-      it.pNode = nullptr; 
+      it.pNode = nullptr;
       Spy::reset();
       // exercise
       ++it;
@@ -1666,11 +1667,11 @@ public:
       assertUnit(Spy::numNondefault() == 0);
       assertUnit(Spy::numCopyMove() == 0);
       assertUnit(Spy::numAssignMove() == 0);
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //         30              70  
+      //         30              70
       //     +----+----+     +----+----+
-      //    20        40    60        80  
+      //    20        40    60        80
       assertUnit(it.pNode == nullptr);
       assertUnit(it == bst.end());
       assertStandardFixture(bst);
@@ -1681,11 +1682,11 @@ public:
    // decrement where the next node is the parent
    void test_iterator_decrement_standardToParent()
    {  // setup
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //         30              70  
+      //         30              70
       //     +----+----+     +----+----+
-      //    20      [[40]]  60        80  
+      //    20      [[40]]  60        80
       custom::BST <Spy> bst;
       setupStandardFixture(bst);
       custom::BST<Spy>::iterator it;
@@ -1705,11 +1706,11 @@ public:
       assertUnit(Spy::numNondefault() == 0);
       assertUnit(Spy::numCopyMove() == 0);
       assertUnit(Spy::numAssignMove() == 0);
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //       [[30]]            70  
+      //       [[30]]            70
       //     +----+----+     +----+----+
-      //    20        40    60        80  
+      //    20        40    60        80
       assertUnit(it.pNode != nullptr);
       assertUnit(bst.root != nullptr);
       if (bst.root)
@@ -1725,11 +1726,11 @@ public:
    // decrement where the next node is the left child
    void test_iterator_decrement_standardToChild()
    {  // setup
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //       [[30]]            70  
+      //       [[30]]            70
       //     +----+----+     +----+----+
-      //    20        40    60        80  
+      //    20        40    60        80
       custom::BST <Spy> bst;
       setupStandardFixture(bst);
       custom::BST<Spy>::iterator it;
@@ -1749,11 +1750,11 @@ public:
       assertUnit(Spy::numNondefault() == 0);
       assertUnit(Spy::numCopyMove() == 0);
       assertUnit(Spy::numAssignMove() == 0);
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //         30              70  
+      //         30              70
       //     +----+----+     +----+----+
-      //  [[20]]      40    60        80  
+      //  [[20]]      40    60        80
       assertUnit(it.pNode != nullptr);
       assertUnit(bst.root != nullptr && bst.root->pLeft != nullptr);
       if (bst.root && bst.root->pLeft)
@@ -1768,11 +1769,11 @@ public:
    // decrement where the next node is grandma
    void test_iterator_decrement_standardToGrandma()
    {  // setup
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //         30              70  
+      //         30              70
       //     +----+----+     +----+----+
-      //    20        40  [[60]]      80  
+      //    20        40  [[60]]      80
       custom::BST <Spy> bst;
       setupStandardFixture(bst);
       custom::BST<Spy>::iterator it;
@@ -1792,11 +1793,11 @@ public:
       assertUnit(Spy::numNondefault() == 0);
       assertUnit(Spy::numCopyMove() == 0);
       assertUnit(Spy::numAssignMove() == 0);
-      //               [[50]] 
+      //               [[50]]
       //          +-------+-------+
-      //         30              70  
+      //         30              70
       //     +----+----+     +----+----+
-      //    20        40    60        80  
+      //    20        40    60        80
       assertUnit(it.pNode == bst.root);
       if (it.pNode)
          assertUnit(it.pNode->data == Spy(50));
@@ -1808,11 +1809,11 @@ public:
    // decrement where the next node is the right grandchild
    void test_iterator_decrement_standardToGrandchild()
    {  // setup
-      //               [[50]] 
+      //               [[50]]
       //          +-------+-------+
-      //         30              70  
+      //         30              70
       //     +----+----+     +----+----+
-      //    20        40    60        80  
+      //    20        40    60        80
       custom::BST <Spy> bst;
       setupStandardFixture(bst);
       custom::BST<Spy>::iterator it;
@@ -1832,11 +1833,11 @@ public:
       assertUnit(Spy::numNondefault() == 0);
       assertUnit(Spy::numCopyMove() == 0);
       assertUnit(Spy::numAssignMove() == 0);
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //         30              70  
+      //         30              70
       //     +----+----+     +----+----+
-      //    20      [[40]]  60        80  
+      //    20      [[40]]  60        80
       assertUnit(it.pNode != nullptr);
       assertUnit(bst.root != nullptr && bst.root->pLeft != nullptr);
       if (bst.root && bst.root->pLeft)
@@ -1851,11 +1852,11 @@ public:
    // decrement where we are already at the last node
    void test_iterator_decrement_standardToDone()
    {  // setup
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //         30              70  
+      //         30              70
       //     +----+----+     +----+----+
-      //  [[20]]      40    60        80    
+      //  [[20]]      40    60        80
       custom::BST <Spy> bst;
       setupStandardFixture(bst);
       custom::BST<Spy>::iterator it;
@@ -1875,11 +1876,11 @@ public:
       assertUnit(Spy::numNondefault() == 0);
       assertUnit(Spy::numCopyMove() == 0);
       assertUnit(Spy::numAssignMove() == 0);
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //         30              70  
+      //         30              70
       //     +----+----+     +----+----+
-      //    20        40    60        80  
+      //    20        40    60        80
       assertUnit(it.pNode == nullptr);
       assertUnit(it == bst.end());
       assertStandardFixture(bst);
@@ -1890,11 +1891,11 @@ public:
    // increment where we are already at the end
    void test_iterator_decrement_standardEnd()
    {  // setup
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //         30              70  
+      //         30              70
       //     +----+----+     +----+----+
-      //    20        40    60        80  
+      //    20        40    60        80
       custom::BST <Spy> bst;
       setupStandardFixture(bst);
       custom::BST<Spy>::iterator it;
@@ -1914,11 +1915,11 @@ public:
       assertUnit(Spy::numNondefault() == 0);
       assertUnit(Spy::numCopyMove() == 0);
       assertUnit(Spy::numAssignMove() == 0);
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //         30              70  
+      //         30              70
       //     +----+----+     +----+----+
-      //    20        40    60        80  
+      //    20        40    60        80
       assertUnit(it.pNode == nullptr);
       assertUnit(it == bst.end());
       assertStandardFixture(bst);
@@ -1929,11 +1930,11 @@ public:
    // itereator dereference were we just read
    void test_iterator_dereference_standardRead()
    {  // setup
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //         30              70  
+      //         30              70
       //     +----+----+     +----+----+
-      //    20      [[40]]  60        80  
+      //    20      [[40]]  60        80
       custom::BST <Spy> bst;
       setupStandardFixture(bst);
       custom::BST<Spy>::iterator it;
@@ -1989,15 +1990,15 @@ public:
       assertUnit(it == bst.end());
       assertEmptyFixture(bst);
    }  // teardown
-   
+
    // attemp to find something where it is at the beginning
    void test_find_standardBegin()
    {  // setup
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //         30              70  
+      //         30              70
       //     +----+----+     +----+----+
-      //    20        40    60        80  
+      //    20        40    60        80
       custom::BST <Spy> bst;
       setupStandardFixture(bst);
       custom::BST<Spy>::iterator it;
@@ -2017,11 +2018,11 @@ public:
       assertUnit(Spy::numNondefault() == 0);
       assertUnit(Spy::numCopyMove() == 0);
       assertUnit(Spy::numAssignMove() == 0);
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //         30              70  
+      //         30              70
       //     +----+----+     +----+----+
-      //  [[20]]      40    60        80  
+      //  [[20]]      40    60        80
       assertUnit(it.pNode != nullptr);
       if (it.pNode)
          assertUnit(*it == Spy(20));
@@ -2032,15 +2033,15 @@ public:
       // teardown
       teardownStandardFixture(bst);
    }
-   
+
    // attempt to find something where it is the last element
    void test_find_standardLast()
    {  // setup
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //         30              70  
+      //         30              70
       //     +----+----+     +----+----+
-      //    20        40    60        80  
+      //    20        40    60        80
       custom::BST <Spy> bst;
       setupStandardFixture(bst);
       custom::BST<Spy>::iterator it;
@@ -2060,9 +2061,9 @@ public:
       assertUnit(Spy::numNondefault() == 0);
       assertUnit(Spy::numCopyMove() == 0);
       assertUnit(Spy::numAssignMove() == 0);
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //         30              70  
+      //         30              70
       //     +----+----+     +----+----+
       //    20        40    60      [[80]]
       assertUnit(it.pNode != nullptr);
@@ -2079,11 +2080,11 @@ public:
    // attempt to find something where it is not there
    void test_find_standardMissing()
    {  // setup
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //         30              70  
+      //         30              70
       //     +----+----+     +----+----+
-      //    20        40    60        80  
+      //    20        40    60        80
       custom::BST <Spy> bst;
       setupStandardFixture(bst);
       custom::BST<Spy>::iterator it;
@@ -2310,11 +2311,11 @@ public:
    // insert an item when it already exists
    void test_insert_keepUnique()
    {  // setup
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //         30              70  
+      //         30              70
       //     +----+----+     +----+----+
-      //    20        40    60        80  
+      //    20        40    60        80
       custom::BST <Spy> bst;
       setupStandardFixture(bst);
       Spy s(40);
@@ -2337,11 +2338,11 @@ public:
       assertUnit(pairBST.second == false);
       if (pairBST.first != bst.end())
          assertUnit(*(pairBST.first) == Spy(40));
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //         30              70  
+      //         30              70
       //     +----+----+     +----+----+
-      //    20        40    60        80  
+      //    20        40    60        80
       assertStandardFixture(bst);
       // teardown
       teardownStandardFixture(bst);
@@ -2433,7 +2434,7 @@ public:
       assertUnit(Spy::numCopyMove() == 1);    // assign move [40]
       assertUnit(Spy::numAssignMove() == 0);
       assertUnit(Spy::numCopy() == 0);
-      assertUnit(Spy::numAlloc() == 0);   
+      assertUnit(Spy::numAlloc() == 0);
       assertUnit(Spy::numEquals() == 0);
       assertUnit(Spy::numDestructor() == 0);
       assertUnit(Spy::numDelete() == 0);
@@ -2549,11 +2550,11 @@ public:
    // insert an item when it already exists
    void test_insertMove_keepUnique()
    {  // setup
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //         30              70  
+      //         30              70
       //     +----+----+     +----+----+
-      //    20        40    60        80  
+      //    20        40    60        80
       custom::BST <Spy> bst;
       setupStandardFixture(bst);
       Spy s(40);
@@ -2577,11 +2578,11 @@ public:
       assertUnit(pairBST.second == false);
       if (pairBST.first != bst.end())
          assertUnit(*(pairBST.first) == Spy(40));
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //         30              70  
+      //         30              70
       //     +----+----+     +----+----+
-      //    20        40    60        80  
+      //    20        40    60        80
       assertStandardFixture(bst);
       // teardown
       teardownStandardFixture(bst);
@@ -2591,7 +2592,7 @@ public:
    /***************************************
     * Insert Balancing
     ***************************************/
-   
+
    // Red/Black balancing - Case 1
    void test_insert_case1()
    {  // setup
@@ -2603,7 +2604,7 @@ public:
       // verify
       assertUnit(Spy::numCopy() == 1);        // copy-create [50]
       assertUnit(Spy::numAlloc() == 1);       // allocate [50]
-      assertUnit(Spy::numLessthan() == 0); 
+      assertUnit(Spy::numLessthan() == 0);
       assertUnit(Spy::numEquals() == 0);
       assertUnit(Spy::numDestructor() == 0);
       assertUnit(Spy::numDelete() == 0);
@@ -2617,7 +2618,7 @@ public:
       assertUnit(bst.numElements == 1);
 
       if (bst.root)
-      { 
+      {
          assertUnit(bst.root->data == Spy(50));
          assertUnit(bst.root->isRed == false);
          assertUnit(bst.root->pLeft == nullptr);
@@ -2659,7 +2660,7 @@ public:
       //            +---+
       //          (30r)
       assertUnit(bst.empty() == false);
-      assertUnit(bst.size() == 2);        
+      assertUnit(bst.size() == 2);
       assertUnit(bst.root == p50);
       assertUnit(bst.numElements == 2);
 
@@ -2792,7 +2793,7 @@ public:
    {  // setup
       //              (50b)
       //           +----+
-      //         (30r)    
+      //         (30r)
       custom::BST<Spy>::BNode* p30 = new custom::BST<Spy>::BNode(Spy(30));
       custom::BST<Spy>::BNode* p50 = new custom::BST<Spy>::BNode(Spy(50));
 
@@ -2875,7 +2876,7 @@ public:
    {  // setup
       //              (50b)
       //                +----+
-      //                   (70r)    
+      //                   (70r)
       custom::BST<Spy>::BNode* p50 = new custom::BST<Spy>::BNode(Spy(50));
       custom::BST<Spy>::BNode* p70 = new custom::BST<Spy>::BNode(Spy(70));
 
@@ -2941,7 +2942,7 @@ public:
          assertUnit(p50->pRight == nullptr);
          assertUnit(p50->pParent == p70);
       }
-      
+
       // teardown
       if (p70->pRight && p70->pRight != p70)
          delete p70->pRight;
@@ -2958,7 +2959,7 @@ public:
    {  // setup
       //                   (50b)
       //           +---------+
-      //         (30r)     
+      //         (30r)
       custom::BST<Spy>::BNode* p30 = new custom::BST<Spy>::BNode(Spy(30));
       custom::BST<Spy>::BNode* p50 = new custom::BST<Spy>::BNode(Spy(50));
 
@@ -3039,7 +3040,7 @@ public:
    {  // setup
       //         (50b)
       //           +---------+
-      //                   (70r)     
+      //                   (70r)
       custom::BST<Spy>::BNode* p50 = new custom::BST<Spy>::BNode(Spy(50));
       custom::BST<Spy>::BNode* p70 = new custom::BST<Spy>::BNode(Spy(70));
 
@@ -3122,7 +3123,7 @@ public:
       //           +----+----+
       //         (30b)     (70b)
       //       +---+
-      //     (20r)    
+      //     (20r)
       custom::BST<Spy>::BNode* p20 = new custom::BST<Spy>::BNode(Spy(20));
       custom::BST<Spy>::BNode* p30 = new custom::BST<Spy>::BNode(Spy(30));
       custom::BST<Spy>::BNode* p50 = new custom::BST<Spy>::BNode(Spy(50));
@@ -3236,7 +3237,7 @@ public:
       //           +----+----+
       //         (30b)     (70b)
       //                     +---+
-      //                       (80r)    
+      //                       (80r)
       custom::BST<Spy>::BNode* p30 = new custom::BST<Spy>::BNode(Spy(30));
       custom::BST<Spy>::BNode* p50 = new custom::BST<Spy>::BNode(Spy(50));
       custom::BST<Spy>::BNode* p70 = new custom::BST<Spy>::BNode(Spy(70));
@@ -3348,7 +3349,7 @@ public:
    {  // setup
       //                   (70b)
       //           +---------+---------+
-      //         (20r)               (80b)  
+      //         (20r)               (80b)
       //     +-----+-----+
       //   (10b)       (50b)
       //            +----+----+
@@ -3398,7 +3399,7 @@ public:
       assertUnit(Spy::numAssignMove() == 0);
       //                   (50b)
       //           +---------+---------+
-      //         (20r)               (70r)  
+      //         (20r)               (70r)
       //     +-----+-----+       +-----+-----+
       //   (10b)       (30b)   (60b)       (80b)
       //                 +--+
@@ -3505,7 +3506,7 @@ public:
    {  // setup
       //                   (30b)
       //           +---------+---------+
-      //         (20b)               (80r)  
+      //         (20b)               (80r)
       //                         +-----+-----+
       //                       (50b)       (90b)
       //                    +----+----+
@@ -3555,7 +3556,7 @@ public:
       assertUnit(Spy::numAssignMove() == 0);
       //                   (50b)
       //           +---------+---------+
-      //         (30r)               (80r)  
+      //         (30r)               (80r)
       //     +-----+-----+       +-----+-----+
       //   (20b)       (40b)   (70b)       (90b)
       //                      +--+
@@ -3672,9 +3673,9 @@ public:
       // exercise
       auto itReturn = bst.erase(it);
       // verify
-      assertUnit(Spy::numLessthan() == 0);   
-      assertUnit(Spy::numCopy() == 0);       
-      assertUnit(Spy::numAlloc() == 0);      
+      assertUnit(Spy::numLessthan() == 0);
+      assertUnit(Spy::numCopy() == 0);
+      assertUnit(Spy::numAlloc() == 0);
       assertUnit(Spy::numEquals() == 0);
       assertUnit(Spy::numDestructor() == 0);
       assertUnit(Spy::numDelete() == 0);
@@ -3690,11 +3691,11 @@ public:
    // erase with an empty iterator
    void test_erase_standardMissing()
    {  // setup
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //         30              70  
+      //         30              70
       //     +----+----+     +----+----+
-      //    20        40    60        80  
+      //    20        40    60        80
       custom::BST <Spy> bst;
       setupStandardFixture(bst);
       auto it = bst.end();
@@ -3722,11 +3723,11 @@ public:
    // remove a leaf node from the standard fixture
    void test_erase_noChildren()
    {  // setup
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //         30              70  
+      //         30              70
       //     +----+----+     +----+----+
-      //    20        40  [[60]]      80  
+      //    20        40  [[60]]      80
       custom::BST <Spy> bst;
       setupStandardFixture(bst);
       auto it = custom::BST <Spy> :: iterator(bst.root->pRight->pLeft);
@@ -3745,11 +3746,11 @@ public:
       assertUnit(Spy::numNondefault() == 0);
       assertUnit(Spy::numCopyMove() == 0);
       assertUnit(Spy::numAssignMove() == 0);
-      //                 50 
+      //                 50
       //          +-------+-------+
       //         30            [[70]]
       //     +----+----+          +----+
-      //    20        40              80  
+      //    20        40              80
       assertUnit(itReturn == custom::BST <Spy> ::iterator(bst.root->pRight));
       assertUnit(bst.root->pRight->pLeft == nullptr);
       assertUnit(bst.numElements == 6);
@@ -3760,14 +3761,14 @@ public:
       // teardown
       teardownStandardFixture(bst);
    }  // teardown
-   
+
    void test_erase_oneChild()
    {  // setup
-      //                 50 
+      //                 50
       //          +-------+-------+
       //       [[10]]            60
-      //          +----+     
-      //              30          
+      //          +----+
+      //              30
       //            +--+--+
       //           20    40
       custom :: BST <int> bst;
@@ -3821,15 +3822,15 @@ public:
 
    void test_erase_twoChildren()
    {  // setup
-      //                 70 
+      //                 70
       //          +-------+-------+
       //       [[20]]            80
-      //     +----+----+     
-      //    10        50          
+      //     +----+----+
+      //    10        50
       //            +--+--+
       //           30    60
       //            +-+
-      //              40 
+      //              40
       custom::BST <int> bst;
       auto p10 = new custom::BST<int>::BNode(10);
       auto p20 = new custom::BST<int>::BNode(20);
@@ -3855,8 +3856,8 @@ public:
       //                 70
       //          +-------+-------+
       //       [[30]]            80
-      //     +----+----+     
-      //    10        50    
+      //     +----+----+
+      //    10        50
       //            +--+--+
       //           40    60
       assertUnit(itReturn == custom::BST <int> ::iterator(p30));
@@ -3895,11 +3896,11 @@ public:
 
    void test_erase_twoChildrenSpecial()
    {  // setup
-      //                 50 
+      //                 50
       //          +-------+-------+
-      //       [[30]]            70  
+      //       [[30]]            70
       //     +----+----+     +----+----+
-      //    20        40    60        80  
+      //    20        40    60        80
       custom::BST <Spy> bst;
       setupStandardFixture(bst);
       auto it = custom::BST <Spy> ::iterator(bst.root->pLeft);
@@ -3907,11 +3908,11 @@ public:
       // exercise
       auto itReturn = bst.erase(it);
       // verify
-      //                 50  
+      //                 50
       //          +-------+-------+
-      //       [[40]]            70  
+      //       [[40]]            70
       //     +----+          +----+----+
-      //    20              60        80  
+      //    20              60        80
       assertUnit(Spy::numDestructor() == 1);  // destroy [30]
       assertUnit(Spy::numDelete() == 1);      // delete [30]
       assertUnit(Spy::numLessthan() == 0);
@@ -4138,7 +4139,7 @@ public:
       bst.numElements = 0;
    }
 
-  
+
 };
 
 #endif // DEBUG

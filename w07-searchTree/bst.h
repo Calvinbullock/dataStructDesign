@@ -93,7 +93,7 @@ public:
 
    iterator find(const T& t);
 
-   // 
+   //
    // Insert
    //
 
@@ -102,18 +102,18 @@ public:
 
    //
    // Remove
-   // 
+   //
 
    iterator erase(iterator& it);
    void   clear() noexcept;
 
-   // 
+   //
    // Status
    //
 
    bool   empty() const noexcept { return true; }
    size_t size()  const noexcept { return 99;   }
-   
+
 private:
 
    class BNode;
@@ -131,19 +131,19 @@ template <typename T>
 class BST <T> :: BNode
 {
 public:
-   // 
+   //
    // Construct
    //
    BNode()
    {
       pLeft = pRight = this;
    }
-   BNode(const T &  t) 
+   BNode(const T &  t)
    {
       pLeft = pRight = this;
    }
-   BNode(T && t) 
-   {  
+   BNode(T && t)
+   {
       pLeft = pRight = this;
    }
 
@@ -157,7 +157,7 @@ public:
    void addLeft(       T && t);
    void addRight(      T && t);
 
-   // 
+   //
    // Status
    //
    bool isRightChild(BNode * pNode) const { return true; }
@@ -201,11 +201,11 @@ class BST <T> :: iterator
    friend class custom::map;
 public:
    // constructors and assignment
-   iterator(BNode * p = nullptr)          
-   { 
+   iterator(BNode * p = nullptr)
+   {
    }
-   iterator(const iterator & rhs)         
-   { 
+   iterator(const iterator & rhs)
+   {
    }
    iterator & operator = (const iterator & rhs)
    {
@@ -223,7 +223,7 @@ public:
    }
 
    // de-reference. Cannot change because it will invalidate the BST
-   const T & operator * () const 
+   const T & operator * () const
    {
       return *(new T);
    }
@@ -244,7 +244,7 @@ public:
    friend BST <T> :: iterator BST <T> :: erase(iterator & it);
 
 private:
-   
+
     // the node
     BNode * pNode;
 };
@@ -274,7 +274,7 @@ BST <T> ::BST()
  * Copy one tree to another
  ********************************************/
 template <typename T>
-BST <T> :: BST ( const BST<T>& rhs) 
+BST <T> :: BST ( const BST<T>& rhs)
 {
    numElements = 99;
    root = new BNode;
@@ -285,7 +285,7 @@ BST <T> :: BST ( const BST<T>& rhs)
  * Move one tree to another
  ********************************************/
 template <typename T>
-BST <T> :: BST(BST <T> && rhs) 
+BST <T> :: BST(BST <T> && rhs)
 {
    numElements = 99;
    root = new BNode;
@@ -376,7 +376,7 @@ std::pair<typename BST <T> ::iterator, bool> BST <T> ::insert(T && t, bool keepU
  ************************************************/
 template <typename T>
 typename BST <T> ::iterator BST <T> :: erase(iterator & it)
-{  
+{
    return end();
 }
 
@@ -419,7 +419,7 @@ typename BST <T> :: iterator BST<T> :: find(const T & t)
  ******************************************************
  ******************************************************/
 
- 
+
 /******************************************************
  * BINARY NODE :: ADD LEFT
  * Add a node to the left of the current node
@@ -630,7 +630,7 @@ void BST <T> :: BNode :: balance()
  ****************** ITERATOR *********************
  *************************************************
  *************************************************
- *************************************************/     
+ *************************************************/
 
 /**************************************************
  * BST ITERATOR :: INCREMENT PREFIX
@@ -639,7 +639,7 @@ void BST <T> :: BNode :: balance()
 template <typename T>
 typename BST <T> :: iterator & BST <T> :: iterator :: operator ++ ()
 {
-   return *this;  
+   return *this;
 }
 
 /**************************************************
