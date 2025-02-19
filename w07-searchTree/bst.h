@@ -263,10 +263,10 @@ private:
   * BST :: DEFAULT CONSTRUCTOR
   ********************************************/
 template <typename T>
-BST <T> ::BST()
+BST <T> ::BST() : root(), numElements()
 {
-   numElements = 99;
-   root = new BNode;
+   numElements = 0;
+   root = nullptr;
 }
 
 /*********************************************
@@ -276,8 +276,8 @@ BST <T> ::BST()
 template <typename T>
 BST <T> :: BST ( const BST<T>& rhs)
 {
-   numElements = 99;
-   root = new BNode;
+   numElements = 0;
+   root = nullptr;
 }
 
 /*********************************************
