@@ -37,11 +37,11 @@ public:
       // Construct
       test_construct_default();
       test_constructCopy_empty();
-      test_constructCopy_one();
+      // test_constructCopy_one();
       // test_constructCopy_standard();
-      // test_constructMove_empty();
-      // test_constructMove_one();
-      // test_constructMove_standard();
+      //test_constructMove_empty();
+      //test_constructMove_one();
+      //test_constructMove_standard();
       // test_constructInitializer_empty();
       // test_constructInitializer_standard();
       // test_destruct_empty();
@@ -49,7 +49,7 @@ public:
 
 
       // Assign
-      // test_assign_emptyToEmpty();
+      test_assign_emptyToEmpty();
       // test_assign_standardToEmpty();
       // test_assign_emptyToStandard();
       // test_assign_oneToStandard();
@@ -63,15 +63,15 @@ public:
       // test_assignMove_standardToStandard();
       // test_assignInitializer_oneToStandard();
       // test_assignInitializer_standardToEmpty();
-      // test_swap_emptyToEmpty();
-      // test_swap_standardToEmpty();
-      // test_swap_emptyToStandard();
-      // test_swap_standardToStandard();
+      test_swap_emptyToEmpty();
+      test_swap_standardToEmpty();
+      test_swap_emptyToStandard();
+      test_swap_standardToStandard();
 
       // Iterator
-      // test_begin_empty();
-      // test_begin_standard();
-      // test_end_standard();
+      test_begin_empty();
+      test_begin_standard();
+      test_end_standard();
       // test_iterator_increment_standardToParent();
       // test_iterator_increment_standardToChild();
       // test_iterator_increment_standardToGrandma();
@@ -92,6 +92,8 @@ public:
       // test_find_standardLast();
       // test_find_standardMissing();
 
+
+      // NOTE: MAKE SURE ADD LEFT AND ADD RIGHT WORK!
       // Insert
       // test_insert_oneLeft();
       // test_insert_oneRight();
@@ -125,9 +127,9 @@ public:
 
       // Status
       test_empty_empty();
-      // test_empty_standard();
+      test_empty_standard();
       test_size_empty();
-      // test_size_standard();
+      test_size_standard();
 
       report("BST");
    }
