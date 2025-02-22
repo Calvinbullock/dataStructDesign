@@ -39,18 +39,18 @@ public:
       test_constructCopy_empty();
       // test_constructCopy_one();
       // test_constructCopy_standard();
-      //test_constructMove_empty();
-      //test_constructMove_one();
-      //test_constructMove_standard();
+      test_constructMove_empty();
+      test_constructMove_one();
+      test_constructMove_standard();
       // test_constructInitializer_empty();
       // test_constructInitializer_standard();
-      // test_destruct_empty();
-      // test_destruct_standard();
+      test_destruct_empty();
+      test_destruct_standard();
 
 
       // Assign
       test_assign_emptyToEmpty();
-      test_assign_standardToEmpty(); // TODO: here!!! need to use the isRed
+      // test_assign_standardToEmpty(); // TODO: here!!! need to use the isRed
       // test_assign_emptyToStandard();
       // test_assign_oneToStandard();
       // test_assign_standardToOne();
@@ -87,10 +87,10 @@ public:
       test_iterator_dereference_standardRead();
 
       // Find
-      // test_find_empty();
-      // test_find_standardBegin();
-      // test_find_standardLast();
-      // test_find_standardMissing();
+      test_find_empty();
+      test_find_standardBegin();
+      test_find_standardLast();
+      test_find_standardMissing();
 
 
       // NOTE: MAKE SURE ADD LEFT AND ADD RIGHT WORK!

@@ -172,8 +172,16 @@ public:
 
    // balance the tree
    void balance();
-
+   
+   //
+   // Remove
+   //
    void clear(BNode * pNode);
+
+   //
+   // Swap
+   //
+   void swap(BNode*& pRHS);
 
 #ifdef DEBUG
    //
@@ -300,11 +308,11 @@ BST <T> :: BST ( const BST<T>& rhs)
 template <typename T>
 BST <T> :: BST(BST <T> && rhs)
 {
-   //numElements = rhs.numElements;
-   //root = rhs.root;
+   numElements = rhs.numElements;
+   root = rhs.root;
 
-   //rhs.numElements = 0;
-   //rhs.root = nullptr;
+   rhs.numElements = 0;
+   rhs.root = nullptr;
 
    //this = std::move(rhs);
 }
@@ -326,7 +334,7 @@ BST <T> ::BST(const std::initializer_list<T>& il)
 template <typename T>
 BST <T> :: ~BST()
 {
-
+   clear();
 }
 
 
@@ -450,6 +458,18 @@ typename BST <T> :: iterator custom :: BST <T> :: begin() const noexcept
 template <typename T>
 typename BST <T> :: iterator BST<T> :: find(const T & t)
 {
+   BNode * p = this->root;
+
+   while (p)
+   {
+      if (p->data == t)
+         return iterator(p);
+      else if (t < p->data)
+         p = p->pLeft;
+      else
+         p = p->pRight;
+   }
+   
    return end();
 }
 
@@ -698,21 +718,88 @@ int BST <T> :: BNode :: computeSize() const
 template <typename T>
 void BST <T> :: BNode :: balance()
 {
-   // Case 1: if we are the root, then color ourselves black and call it a day.
+   //// Case 1: if we are the root, then color ourselves black and call it a day.
+   //if (pParent == nullptr)
+   //   isRed = false;
 
+   //// Case 2: if the parent is black, then there is nothing left to do
+   //if (!pParent->isRed)
+   //   return;
 
-   // Case 2: if the parent is black, then there is nothing left to do
+   //// Case 3: if the aunt and parent are red, then just recolor
+   //if (pParent->pParent->pLeft->isRed && pParent->pParent->pRight->isRed)
+   //{
+   //   pParent->pParent->pLeft->isRed  == false; // parent
+   //   pParent->pParent->pRight->isRed == false; // aunt
+   //   pParent->pParent->isRed         == true;  // gma
+   //}
+ 
+   //// Case 4: if the aunt is black or non-existant, then we need to rotate
+   //if (pParent->isRed && !pParent->pParent->isRed)
+   //{
+   //   // if parent is left child
+   //   if (pParent->pParent->pLeft == this->pParent)
+   //   {
+   //      // aunt is right child, check if black or nullptr
+   //      if (!pParent->pParent->pRight->isRed || !pParent->pParent->pRight)
+   //      {
 
-   // Case 3: if the aunt is red, then just recolor
+   //      }
+   //   }
+   //   // if parent is right child
+   //   else if (pParent->pParent->pRight == this->pParent)
+   //   {
+   //      // aunt is left child, check if black or nullptr
+   //      if (!pParent->pParent->pLeft->isRed || !pParent->pParent->pLeft)
+   //      {
 
-   // Case 4: if the aunt is black or non-existant, then we need to rotate
+   //      }
+   //   }
+   //}
+   ////                (30r) P
+   ////          +-------+-------+
+   ////        (20r) N         (50b) G
+   ////     +----+----+     
+   ////    10        (40r) 
 
-   // Case 4a: We are mom's left and mom is granny's left
-   // case 4b: We are mom's right and mom is granny's right
-   // Case 4c: We are mom's right and mom is granny's left
-   // case 4d: we are mom's left and mom is granny's right
+   //// Case 4a: We are parent's left and mom is granny's left
+   //if (pParent->pLeft == this && pParent->pParent->pLeft == pParent)
+   //{
+   //   // if no aunt
+   //   if (!pParent->pParent->pRight)
+   //   {
+   //      
+   //      pParent->pParent->addRight(pParent->pParent->data); // Shift granny right
+   //      pParent->pParent->data = pParent->data;             // Shift parent right
+   //      pParent->pParent->pLeft = this;                     // hook up parent to new node
+   //      pParent = std::move(this);                          // Shift new node right
+   //      // move sibling over
+   //      // move aunt over if exists
+   //      // change colors
+   //   }
+   //}
+   //// case 4b: We are parent's right and mom is granny's right
+   //if (pParent->pRight == this && pParent->pParent->pRight == pParent)
+   //{
+
+   //}
+   //// Case 4c: We are parents's right and mom is granny's left
+   //if (pParent->pRight == this && pParent->pParent->pLeft == pParent)
+   //{
+
+   //}
+   //// case 4d: we are parent's left and mom is granny's right
+   //if (pParent->pLeft == this && pParent->pParent->pRight == pParent)
+   //{
+
+   //}
 }
 
+/*****************************************************
+ * DELETE BINARY TREE
+ * Delete all the nodes below pThis including pThis
+ * using postfix traverse: LRV
+ ****************************************************/
 template <typename T>
 void BST <T> :: BNode :: clear(BNode * pNode)
 {
@@ -723,6 +810,17 @@ void BST <T> :: BNode :: clear(BNode * pNode)
    clear(pNode->pRight);
    delete pNode;
    pNode = nullptr;
+}
+
+/***********************************************
+ * SWAP
+ * Swap the list from LHS to RHS
+ *   COST   : O(1)
+ **********************************************/
+template <typename T>
+void BST <T> ::BNode:: swap(BNode *& pRHS)
+{
+   std::swap(this, pRHS);
 }
 
 /*************************************************
