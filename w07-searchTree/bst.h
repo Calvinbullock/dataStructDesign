@@ -168,6 +168,8 @@ public:
    // balance the tree
    void balance();
 
+   void clear(BNode * pNode);
+
 #ifdef DEBUG
    //
    // Verify
@@ -406,7 +408,9 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
 template <typename T>
 void BST <T> ::clear() noexcept
 {
-
+   root->clear(root);
+   root = nullptr;
+   numElements = 0;
 }
 
 /*****************************************************
@@ -660,6 +664,18 @@ void BST <T> :: BNode :: balance()
    // case 4b: We are mom's right and mom is granny's right
    // Case 4c: We are mom's right and mom is granny's left
    // case 4d: we are mom's left and mom is granny's right
+}
+
+template <typename T>
+void BST <T> :: BNode :: clear(BNode * pNode)
+{
+   if (!pNode)
+      return;
+
+   clear(pNode->pLeft);
+   clear(pNode->pRight);
+   delete pNode;
+   pNode = nullptr;
 }
 
 /*************************************************
