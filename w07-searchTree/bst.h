@@ -150,6 +150,11 @@ public:
    }
 
    //
+   // assign
+   //
+   void assign(BNode *& pDest, const BNode * pSrc);
+
+   //
    // Insert
    //
    void addLeft (BNode * pNode);
@@ -222,7 +227,7 @@ public:
    // compare
    bool operator == (const iterator & rhs) const
    {
-      
+
       return this->pNode == rhs.pNode;
    }
    bool operator != (const iterator & rhs) const
@@ -332,6 +337,8 @@ BST <T> :: ~BST()
 template <typename T>
 BST <T> & BST <T> :: operator = (const BST <T> & rhs)
 {
+   root->assign(this->root, rhs.root);
+   this->numElements = rhs.numElements;
    return *this;
 }
 
@@ -342,6 +349,11 @@ BST <T> & BST <T> :: operator = (const BST <T> & rhs)
 template <typename T>
 BST <T> & BST <T> :: operator = (const std::initializer_list<T>& il)
 {
+   clear();
+   for (auto t : il)
+   {
+      insert(t);
+   }
    return *this;
 }
 
@@ -423,10 +435,10 @@ typename BST <T> :: iterator custom :: BST <T> :: begin() const noexcept
    if (empty())
       return end();
    BNode * pNode = root;
-   
+
    while (pNode->pLeft)
       pNode = pNode->pLeft;
-   
+
    return iterator(pNode);
 }
 
@@ -448,6 +460,41 @@ typename BST <T> :: iterator BST<T> :: find(const T & t)
  ******************************************************
  ******************************************************
  ******************************************************/
+
+
+/**********************************************
+ * assign
+ * copy the values from pSrc onto pDest preserving
+ * as many of the nodes as possible.
+ *********************************************/
+template <typename T>
+void BST <T> :: BNode :: assign(BNode * & pDest, const BNode * pSrc)
+{
+   // src is empty
+   if (pSrc == nullptr)
+   {
+      clear(pDest);
+      return;
+   }
+
+   // dest is empty, create a new node
+   if (pDest == nullptr)
+      pDest = new BNode(pSrc->data);
+
+   // Neither src nor dest is empty, update the node
+   else
+      pDest->data = pSrc->data;
+
+   // Recursively loop through tree
+   assign(pDest->pRight, pSrc->pRight);
+   assign(pDest->pLeft, pSrc->pLeft);
+
+   // Hookup parents
+   if (pDest->pRight)
+      pDest->pRight->pParent = pDest;
+   if (pDest->pLeft)
+      pDest->pLeft->pParent = pDest;
+}
 
 
 /******************************************************

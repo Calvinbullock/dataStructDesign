@@ -50,17 +50,17 @@ public:
 
       // Assign
       test_assign_emptyToEmpty();
-      // test_assign_standardToEmpty();
+      test_assign_standardToEmpty(); // TODO: here!!! need to use the isRed
       // test_assign_emptyToStandard();
       // test_assign_oneToStandard();
       // test_assign_standardToOne();
       // test_assign_standardToStandard();
-      // test_assignMove_emptyToEmpty();
-      // test_assignMove_standardToEmpty();
-      // test_assignMove_emptyToStandard();
-      // test_assignMove_oneToStandard();
-      // test_assignMove_standardToOne();
-      // test_assignMove_standardToStandard();
+      test_assignMove_emptyToEmpty();
+      test_assignMove_standardToEmpty();
+      test_assignMove_emptyToStandard();
+      test_assignMove_oneToStandard();
+      test_assignMove_standardToOne();
+      test_assignMove_standardToStandard();
       // test_assignInitializer_oneToStandard();
       // test_assignInitializer_standardToEmpty();
       test_swap_emptyToEmpty();
