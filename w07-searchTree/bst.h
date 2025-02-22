@@ -209,6 +209,7 @@ public:
    }
    iterator(const iterator & rhs)
    {
+      this->pNode = rhs.pNode;
    }
    iterator & operator = (const iterator & rhs)
    {
@@ -230,7 +231,7 @@ public:
    // de-reference. Cannot change because it will invalidate the BST
    const T & operator * () const
    {
-      return *(new T);
+      return this->pNode->data;
    }
 
    // increment and decrement
@@ -676,6 +677,41 @@ void BST <T> :: BNode :: balance()
 template <typename T>
 typename BST <T> :: iterator & BST <T> :: iterator :: operator ++ ()
 {
+   // At the end
+   if (!pNode)
+      return *this;
+
+   // case 1 - Has right child
+   if (this->pNode->pRight)
+   {
+      this->pNode = this->pNode->pRight;
+
+      while (this->pNode->pLeft)
+         this->pNode = this->pNode->pLeft;
+
+      return *this;
+   }
+
+   // case 2 - We have no right child and we are parent left child
+   if (this->pNode->pRight == nullptr &&
+       this->pNode->pParent->pLeft == pNode)
+   {
+      this->pNode = pNode->pParent;
+      return *this;
+   }
+
+   // case 3 - We have no right child and we are parent right child
+   if (this->pNode->pRight == nullptr &&
+       this->pNode->pParent->pRight == this->pNode)
+   {
+      // Parent exists, we are right child
+      while (this->pNode->pParent && this->pNode->pParent->pRight == this->pNode)
+         this->pNode = this->pNode->pParent;
+
+      this->pNode = pNode->pParent;
+      return *this;
+   }
+
    return *this;
 }
 
@@ -684,12 +720,44 @@ typename BST <T> :: iterator & BST <T> :: iterator :: operator ++ ()
  * advance by one
  *************************************************/
 template <typename T>
-typename BST <T> :: iterator & BST <T> :: iterator :: operator -- ()
-{
+typename BST <T> :: iterator & BST <T> :: iterator :: operator -- () {
+   // At the end
+   if (!pNode)
+      return *this;
+
+   // case 1 - Has left child
+   if (this->pNode->pLeft)
+   {
+      this->pNode = this->pNode->pLeft;
+
+      while (this->pNode->pRight)
+         this->pNode = this->pNode->pRight;
+
+      return *this;
+   }
+
+   // case 2 - We have no left child and we are parent right child
+   if (this->pNode->pLeft == nullptr &&
+       this->pNode->pParent->pRight == pNode)
+   {
+      this->pNode = pNode->pParent;
+      return *this;
+   }
+
+   // case 3 - We have no left child and we are parent left child
+   if (this->pNode->pLeft == nullptr &&
+       this->pNode->pParent->pLeft == this->pNode)
+   {
+      // Parent exists, we are left child
+      while (this->pNode->pParent && this->pNode->pParent->pLeft == this->pNode)
+         this->pNode = this->pNode->pParent;
+
+      this->pNode = pNode->pParent;
+      return *this;
+   }
+
    return *this;
-
 }
-
 
 } // namespace custom
 

@@ -72,19 +72,19 @@ public:
       test_begin_empty();
       test_begin_standard();
       test_end_standard();
-      // test_iterator_increment_standardToParent();
-      // test_iterator_increment_standardToChild();
-      // test_iterator_increment_standardToGrandma();
-      // test_iterator_increment_standardToGrandchild();
-      // test_iterator_increment_standardToDone();
-      // test_iterator_increment_standardEnd();
-      // test_iterator_decrement_standardToParent();
-      // test_iterator_decrement_standardToChild();
-      // test_iterator_decrement_standardToGrandma();
-      // test_iterator_decrement_standardToGrandchild();
-      // test_iterator_decrement_standardToDone();
-      // test_iterator_decrement_standardEnd();
-      // test_iterator_dereference_standardRead();
+      test_iterator_increment_standardToParent();
+      test_iterator_increment_standardToChild();
+      test_iterator_increment_standardToGrandma();
+      test_iterator_increment_standardToGrandchild();
+      test_iterator_increment_standardToDone();
+      test_iterator_increment_standardEnd();
+      test_iterator_decrement_standardToParent();
+      test_iterator_decrement_standardToChild();
+      test_iterator_decrement_standardToGrandma();
+      test_iterator_decrement_standardToGrandchild();
+      test_iterator_decrement_standardToDone();
+      test_iterator_decrement_standardEnd();
+      test_iterator_dereference_standardRead();
 
       // Find
       // test_find_empty();
