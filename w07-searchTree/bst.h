@@ -297,8 +297,11 @@ BST <T> ::BST() : root(), numElements()
 template <typename T>
 BST <T> :: BST ( const BST<T>& rhs)
 {
-   numElements = rhs.numElements;
-   root = nullptr;
+   this->root = nullptr;
+   this->numElements = rhs.numElements;
+
+   *this = rhs;
+   // TODO: balance
 }
 
 /*********************************************
@@ -401,6 +404,34 @@ template <typename T>
 std::pair<typename BST <T> :: iterator, bool> BST <T> :: insert(const T & t, bool keepUnique)
 {
    std::pair<iterator, bool> pairReturn(end(), false);
+   BNode * pCurr = this->root;
+
+   while (pCurr != nullptr)
+   {
+      // go left (less than)
+      if (pCurr->data < t)
+         // next node exists
+         if (pCurr->pLeft)
+            pCurr = pCurr->pLeft;
+         else
+         {
+            // create node
+            pCurr->addLeft(t);
+            return pairReturn;
+         }
+
+      // go right (greater than)
+      else
+         // next node exists
+         if (pCurr->pRight)
+            pCurr = pCurr->pRight;
+         else
+         {
+            // create node
+            pCurr->addRight(t);
+            return pairReturn;
+         }
+   }
    return pairReturn;
 }
 
@@ -548,7 +579,7 @@ void BST <T> :: BNode :: addRight (BNode * pAdd)
 template <typename T>
 void BST<T> :: BNode :: addLeft (const T & t)
 {
-   BNode pAdd = new BNode(t);
+   BNode * pAdd = new BNode(t);
    pAdd->pParent = this;
    this->pLeft = pAdd;
 }
@@ -572,7 +603,7 @@ void BST<T> ::BNode::addLeft(T && t)
 template <typename T>
 void BST <T> :: BNode :: addRight (const T & t)
 {
-   BNode pAdd = new BNode(t);
+   BNode * pAdd = new BNode(t);
    pAdd->pParent = this;
    this->pRight = pAdd;
 }
@@ -718,66 +749,55 @@ int BST <T> :: BNode :: computeSize() const
 template <typename T>
 void BST <T> :: BNode :: balance()
 {
-   //// Case 1: if we are the root, then color ourselves black and call it a day.
-   //if (pParent == nullptr)
-   //   isRed = false;
+   // Case 1: if we are the root, then color ourselves black and call it a day.
+   if (pParent == nullptr)
+   {
+      isRed = false;
+      return;
+   }
 
-   //// Case 2: if the parent is black, then there is nothing left to do
-   //if (!pParent->isRed)
-   //   return;
+   // Case 2: if the parent is black, then there is nothing left to do
+   if (!pParent->isRed)
+      return;
 
-   //// Case 3: if the aunt and parent are red, then just recolor
-   //if (pParent->pParent->pLeft->isRed && pParent->pParent->pRight->isRed)
-   //{
-   //   pParent->pParent->pLeft->isRed  == false; // parent
-   //   pParent->pParent->pRight->isRed == false; // aunt
-   //   pParent->pParent->isRed         == true;  // gma
-   //}
+   // Case 3: if the aunt and parent are red, then just recolor
+   if (pParent->pParent->pLeft->isRed && pParent->pParent->pRight->isRed)
+   {
+      pParent->pParent->pLeft->isRed  == false; // parent
+      pParent->pParent->pRight->isRed == false; // aunt
+      pParent->pParent->isRed         == true;  // gma
+      return;
+   }
  
-   //// Case 4: if the aunt is black or non-existant, then we need to rotate
-   //if (pParent->isRed && !pParent->pParent->isRed)
-   //{
-   //   // if parent is left child
-   //   if (pParent->pParent->pLeft == this->pParent)
-   //   {
-   //      // aunt is right child, check if black or nullptr
-   //      if (!pParent->pParent->pRight->isRed || !pParent->pParent->pRight)
-   //      {
+   // Case 4: if the aunt is black or non-existant, then we need to rotate
+   if (pParent->isRed && !pParent->pParent->isRed)
+   {
 
-   //      }
-   //   }
-   //   // if parent is right child
-   //   else if (pParent->pParent->pRight == this->pParent)
-   //   {
-   //      // aunt is left child, check if black or nullptr
-   //      if (!pParent->pParent->pLeft->isRed || !pParent->pParent->pLeft)
-   //      {
+   }
+   //                (30r) P
+   //          +-------+-------+
+   //        (20r) N         (50b) G
+   //     +----+----+
+   //    10        (40r)
 
-   //      }
-   //   }
-   //}
-   ////                (30r) P
-   ////          +-------+-------+
-   ////        (20r) N         (50b) G
-   ////     +----+----+     
-   ////    10        (40r) 
+   // Case 4a: We are parent's left and mom is granny's left
+   if (pParent->pLeft == this && pParent->pParent->pLeft == pParent)
+   {
+      // if no aunt
+      if (!pParent->pParent->pRight)
+      {
+         pParent->isRed = false;
+         pParent->pParent = pParent->pParent->pParent;
+         pParent->pParent->pLeft->pParent = pParent;
+         pParent->pRight = pParent->pParent->pLeft;
+         pParent->pRight->pLeft = nullptr;
+         pParent->pParent->pLeft = pParent;
+         pParent->pRight->isRed = true;
+      }
+      // pParent->pParent->pRight = pParent->pRight;         // move sibling over to granny????
+      // move aunt over if exists
+   }
 
-   //// Case 4a: We are parent's left and mom is granny's left
-   //if (pParent->pLeft == this && pParent->pParent->pLeft == pParent)
-   //{
-   //   // if no aunt
-   //   if (!pParent->pParent->pRight)
-   //   {
-   //      
-   //      pParent->pParent->addRight(pParent->pParent->data); // Shift granny right
-   //      pParent->pParent->data = pParent->data;             // Shift parent right
-   //      pParent->pParent->pLeft = this;                     // hook up parent to new node
-   //      pParent = std::move(this);                          // Shift new node right
-   //      // move sibling over
-   //      // move aunt over if exists
-   //      // change colors
-   //   }
-   //}
    //// case 4b: We are parent's right and mom is granny's right
    //if (pParent->pRight == this && pParent->pParent->pRight == pParent)
    //{

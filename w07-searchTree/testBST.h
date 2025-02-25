@@ -37,11 +37,11 @@ public:
       // Construct
       test_construct_default();
       test_constructCopy_empty();
-      // test_constructCopy_one();
-      // test_constructCopy_standard();
+      test_constructCopy_one();
+      test_constructCopy_standard();
       test_constructMove_empty();
-      test_constructMove_one();
-      test_constructMove_standard();
+      // test_constructMove_one();        // BALANCE
+      // test_constructMove_standard();   // BALANCE
       // test_constructInitializer_empty();
       // test_constructInitializer_standard();
       test_destruct_empty();
@@ -95,7 +95,7 @@ public:
 
       // NOTE: MAKE SURE ADD LEFT AND ADD RIGHT WORK!
       // Insert
-      // test_insert_oneLeft();
+      test_insert_oneLeft();
       // test_insert_oneRight();
       // test_insert_duplicate();
       // test_insert_keepUnique();
