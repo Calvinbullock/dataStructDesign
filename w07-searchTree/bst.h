@@ -172,7 +172,7 @@ public:
 
    // balance the tree
    void balance();
-   
+
    //
    // Remove
    //
@@ -302,6 +302,8 @@ BST <T> :: BST ( const BST<T>& rhs)
 
    *this = rhs;
    // TODO: balance
+   //    This does not balance the whole tree...
+   this->root->balance();
 }
 
 /*********************************************
@@ -417,6 +419,10 @@ std::pair<typename BST <T> :: iterator, bool> BST <T> :: insert(const T & t, boo
          {
             // create node
             pCurr->addLeft(t);
+
+            // set return
+            pairReturn.first = pCurr->pLeft;
+            pairReturn.second = true;
             return pairReturn;
          }
 
@@ -429,6 +435,10 @@ std::pair<typename BST <T> :: iterator, bool> BST <T> :: insert(const T & t, boo
          {
             // create node
             pCurr->addRight(t);
+
+            // set return
+            pairReturn.first = pCurr->pRight;
+            pairReturn.second = true;
             return pairReturn;
          }
    }
@@ -500,7 +510,7 @@ typename BST <T> :: iterator BST<T> :: find(const T & t)
       else
          p = p->pRight;
    }
-   
+
    return end();
 }
 
@@ -749,6 +759,9 @@ int BST <T> :: BNode :: computeSize() const
 template <typename T>
 void BST <T> :: BNode :: balance()
 {
+   if (this == nullptr)
+      return;
+
    // Case 1: if we are the root, then color ourselves black and call it a day.
    if (pParent == nullptr)
    {
@@ -763,12 +776,12 @@ void BST <T> :: BNode :: balance()
    // Case 3: if the aunt and parent are red, then just recolor
    if (pParent->pParent->pLeft->isRed && pParent->pParent->pRight->isRed)
    {
-      pParent->pParent->pLeft->isRed  == false; // parent
-      pParent->pParent->pRight->isRed == false; // aunt
-      pParent->pParent->isRed         == true;  // gma
+      pParent->pParent->pLeft->isRed  = false; // parent
+      pParent->pParent->pRight->isRed = false; // aunt
+      pParent->pParent->isRed         = true;  // gma
       return;
    }
- 
+
    // Case 4: if the aunt is black or non-existant, then we need to rotate
    if (pParent->isRed && !pParent->pParent->isRed)
    {
