@@ -240,7 +240,7 @@ public:
    }
    bool operator != (const iterator & rhs) const
    {
-      return true;
+      return !(this->pNode == rhs.pNode);
    }
 
    // de-reference. Cannot change because it will invalidate the BST
@@ -515,7 +515,18 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
    // case 3 - two kids
    else if (it.pNode->pLeft != nullptr && it.pNode->pRight != nullptr)
    {
-      // TODO:
+      /*
+      // hook up parent
+      it.pNode->pRight->pleft = it.pNode->pParent;
+
+      // hook up child
+      if (it.pNode->pParent != nullptr && it.pNode->pParent->pRight == it.pNode)
+         it.pNode->pParent->pRight = it.pNode->pRight;
+      if (it.pNode->pParent != nullptr && it.pNode->pParent->pLeft == it.pNode)
+         it.pNode->pParent->pLeft = it.pNode->pRight;
+
+      delete it.pNode;
+      */
    }
 
    this->numElements -= 1;
@@ -842,7 +853,7 @@ void BST <T> :: BNode :: balance()
    BNode * pGranny  = nullptr;
    BNode * pAunt    = nullptr;
    BNode * pSibling = nullptr;
-   
+
    // Set the Aunt & Granny
    // If granny exists
    if (pParent->pParent)
@@ -883,7 +894,7 @@ void BST <T> :: BNode :: balance()
    //   {
    //      pParent->addRight(std::move(pGranny)); // move granny to the left
    //      pGranny->addLeft(pParent->pLeft); // move the sibling to granny's right
-   //      
+   //
    //      //root = pParent; // set the root?
 
    //      pParent->pRight->isRed = true; // set granny to red
