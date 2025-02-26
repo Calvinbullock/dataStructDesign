@@ -301,8 +301,6 @@ BST <T> :: BST ( const BST<T>& rhs)
    this->numElements = rhs.numElements;
 
    *this = rhs;
-   // TODO: balance
-   //    This does not balance the whole tree...
    this->root->balance();
 }
 
@@ -313,13 +311,11 @@ BST <T> :: BST ( const BST<T>& rhs)
 template <typename T>
 BST <T> :: BST(BST <T> && rhs)
 {
-   numElements = rhs.numElements;
-   root = rhs.root;
+   this->numElements = rhs.numElements;
+   this->root = rhs.root;
 
    rhs.numElements = 0;
    rhs.root = nullptr;
-
-   //this = std::move(rhs);
 }
 
 /*********************************************
@@ -465,7 +461,62 @@ std::pair<typename BST <T> ::iterator, bool> BST <T> ::insert(T && t, bool keepU
 template <typename T>
 typename BST <T> ::iterator BST <T> :: erase(iterator & it)
 {
-   return end();
+   // it is at the end
+   if (it == end())
+      return end();
+
+   // create temp it to move and return
+   iterator temp = it;
+   ++temp;
+
+   // case 1 - Target has no children
+   if (it.pNode->pRight == nullptr && it.pNode->pLeft == nullptr)
+   {
+      if (it.pNode->pParent != nullptr && it.pNode->pParent->pRight == it.pNode)
+         it.pNode->pParent = nullptr;
+
+      if (it.pNode->pParent != NULL && it.pNode->pParent->pLeft == it.pNode)
+         it.pNode->pParent->pLeft = NULL;
+
+      delete it.pNode;
+   }
+
+   // case 2 - one child, left child.
+   else if (it.pNode->pRight == nullptr && it.pNode->pLeft != nullptr)
+   {
+      // hook up parent
+      it.pNode->pLeft->pParent = it.pNode->pParent;
+
+      // hook up child
+      if (it.pNode->pParent != nullptr && it.pNode->pParent->pRight == it.pNode)
+         it.pNode->pParent->pRight = it.pNode->pLeft;
+      if (it.pNode->pParent != nullptr && it.pNode->pParent->pLeft == it.pNode)
+         it.pNode->pParent->pLeft = it.pNode->pLeft;
+      delete it.pNode;
+   }
+
+   // case 2 - one child, right child.
+   else if (it.pNode->pLeft == nullptr && it.pNode->pRight != nullptr)
+   {
+      // hook up parent
+      it.pNode->pRight->pParent = it.pNode->pParent;
+
+      // hook up child
+      if (it.pNode->pParent != nullptr && it.pNode->pParent->pRight == it.pNode)
+         it.pNode->pParent->pRight = it.pNode->pRight;
+      if (it.pNode->pParent != nullptr && it.pNode->pParent->pLeft == it.pNode)
+         it.pNode->pParent->pLeft = it.pNode->pRight;
+      delete it.pNode;
+   }
+
+   // case 3 - two kids
+   else if (it.pNode->pLeft != nullptr && it.pNode->pRight != nullptr)
+   {
+      // TODO:
+   }
+
+   this->numElements -= 1;
+   return temp;
 }
 
 /*****************************************************
@@ -546,7 +597,10 @@ void BST <T> :: BNode :: assign(BNode * & pDest, const BNode * pSrc)
 
    // dest is empty, create a new node
    if (pDest == nullptr)
+   {
       pDest = new BNode(pSrc->data);
+      pDest->isRed = pSrc->isRed;
+   }
 
    // Neither src nor dest is empty, update the node
    else
