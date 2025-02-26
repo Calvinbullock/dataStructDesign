@@ -401,49 +401,52 @@ void BST <T> :: swap (BST <T>& rhs)
 template <typename T>
 std::pair<typename BST <T> :: iterator, bool> BST <T> :: insert(const T & t, bool keepUnique)
 {
+   //std::pair<iterator, bool> pairReturn(end(), false);
+   //BNode * pCurr = this->root;
+
+   //while (pCurr != nullptr)
+   //{
+   //   // go left (less than)
+   //   if (t < pCurr->data)
+   //      // next node exists
+   //      if (pCurr->pLeft)
+   //         pCurr = pCurr->pLeft;
+   //      else
+   //      {
+   //         // create node
+   //         pCurr->addLeft(t);
+
+   //         // set return
+   //         pairReturn.first = iterator(pCurr->pLeft);
+   //         pairReturn.second = true;
+
+   //         numElements++;
+   //         pCurr->pLeft->balance();
+   //         return pairReturn;
+   //      }
+
+   //   // go right (greater than)
+   //   else
+   //      // next node exists
+   //      if (pCurr->pRight)
+   //         pCurr = pCurr->pRight;
+   //      else
+   //      {
+   //         // create node
+   //         pCurr->addRight(t);
+
+   //         // set return
+   //         pairReturn.first = iterator(pCurr->pRight);
+   //         pairReturn.second = true;
+
+   //         numElements++;
+   //         pCurr->pRight->balance();
+   //         return pairReturn;
+   //      }
+   //}
+   //return pairReturn;
+
    std::pair<iterator, bool> pairReturn(end(), false);
-   BNode * pCurr = this->root;
-
-   while (pCurr != nullptr)
-   {
-      // go left (less than)
-      if (t < pCurr->data)
-         // next node exists
-         if (pCurr->pLeft)
-            pCurr = pCurr->pLeft;
-         else
-         {
-            // create node
-            pCurr->addLeft(t);
-
-            // set return
-            pairReturn.first = iterator(pCurr->pLeft);
-            pairReturn.second = true;
-
-            numElements++;
-            pCurr->pLeft->balance();
-            return pairReturn;
-         }
-
-      // go right (greater than)
-      else
-         // next node exists
-         if (pCurr->pRight)
-            pCurr = pCurr->pRight;
-         else
-         {
-            // create node
-            pCurr->addRight(t);
-
-            // set return
-            pairReturn.first = iterator(pCurr->pRight);
-            pairReturn.second = true;
-
-            numElements++;
-            pCurr->pRight->balance();
-            return pairReturn;
-         }
-   }
    return pairReturn;
 }
 
