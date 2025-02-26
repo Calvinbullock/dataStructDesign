@@ -411,7 +411,7 @@ std::pair<typename BST <T> :: iterator, bool> BST <T> :: insert(const T & t, boo
    while (pCurr != nullptr)
    {
       // go left (less than)
-      if (pCurr->data < t)
+      if (t < pCurr->data)
          // next node exists
          if (pCurr->pLeft)
             pCurr = pCurr->pLeft;
@@ -421,8 +421,11 @@ std::pair<typename BST <T> :: iterator, bool> BST <T> :: insert(const T & t, boo
             pCurr->addLeft(t);
 
             // set return
-            pairReturn.first = pCurr->pLeft;
+            pairReturn.first = iterator(pCurr->pLeft);
             pairReturn.second = true;
+
+            numElements++;
+            pCurr->pLeft->balance();
             return pairReturn;
          }
 
@@ -437,8 +440,11 @@ std::pair<typename BST <T> :: iterator, bool> BST <T> :: insert(const T & t, boo
             pCurr->addRight(t);
 
             // set return
-            pairReturn.first = pCurr->pRight;
+            pairReturn.first = iterator(pCurr->pRight);
             pairReturn.second = true;
+
+            numElements++;
+            pCurr->pRight->balance();
             return pairReturn;
          }
    }
@@ -773,58 +779,72 @@ void BST <T> :: BNode :: balance()
    if (!pParent->isRed)
       return;
 
-   // Case 3: if the aunt and parent are red, then just recolor
-   if (pParent->pParent->pLeft->isRed && pParent->pParent->pRight->isRed)
+   BNode * pGranny  = nullptr;
+   BNode * pAunt    = nullptr;
+   BNode * pSibling = nullptr;
+   
+   // Set the Aunt & Granny
+   // If granny exists
+   if (pParent->pParent)
    {
-      pParent->pParent->pLeft->isRed  = false; // parent
-      pParent->pParent->pRight->isRed = false; // aunt
-      pParent->pParent->isRed         = true;  // gma
+      pGranny = pParent->pParent;
+      // If parent is left child
+      if (pParent == pGranny->pLeft)
+         pAunt = pGranny->pRight; // aunt is right child
+      else
+         pAunt = pGranny->pLeft; // aunt is left child, parent is right
+   }
+
+   // Set the sibling
+   // if we are left child
+   if (this == pParent->pLeft)
+      pSibling = pParent->pRight; // pSibling == right child
+   else
+      pSibling = pParent->pLeft; // pSibling == left child, we are right child
+
+   bool isAuntBlackOrNull = (pAunt == nullptr || !pAunt->isRed);
+
+
+   // Case 3: if the aunt and parent are red, then just recolor
+   if (pAunt && pParent->isRed && pAunt->isRed)
+   {
+      pParent->isRed = false; // parent = black
+      pAunt->isRed   = false; // aunt   = black
+      pGranny->isRed = true;  // gma    = red
+      pGranny->balance();     // recursively balance
       return;
    }
 
-   // Case 4: if the aunt is black or non-existant, then we need to rotate
-   if (pParent->isRed && !pParent->pParent->isRed)
-   {
-
-   }
-   //                (30r) P
-   //          +-------+-------+
-   //        (20r) N         (50b) G
-   //     +----+----+
-   //    10        (40r)
-
-   // Case 4a: We are parent's left and mom is granny's left
-   if (pParent->pLeft == this && pParent->pParent->pLeft == pParent)
-   {
-      // if no aunt
-      if (!pParent->pParent->pRight)
-      {
-         pParent->isRed = false;
-         pParent->pParent = pParent->pParent->pParent;
-         pParent->pParent->pLeft->pParent = pParent;
-         pParent->pRight = pParent->pParent->pLeft;
-         pParent->pRight->pLeft = nullptr;
-         pParent->pParent->pLeft = pParent;
-         pParent->pRight->isRed = true;
-      }
-      // pParent->pParent->pRight = pParent->pRight;         // move sibling over to granny????
-      // move aunt over if exists
-   }
-
-   //// case 4b: We are parent's right and mom is granny's right
-   //if (pParent->pRight == this && pParent->pParent->pRight == pParent)
+   //// Case 4: if the aunt non-existant or black, then we need to rotate
+   //if (isAuntBlackOrNull)
    //{
+   //   // Case 4a: We are parent's left and parent is granny's left
+   //   if (pParent->pLeft == this && pGranny->pLeft == pParent)
+   //   {
+   //      pParent->addRight(std::move(pGranny)); // move granny to the left
+   //      pGranny->addLeft(pParent->pLeft); // move the sibling to granny's right
+   //      
+   //      //root = pParent; // set the root?
 
-   //}
-   //// Case 4c: We are parents's right and mom is granny's left
-   //if (pParent->pRight == this && pParent->pParent->pLeft == pParent)
-   //{
+   //      pParent->pRight->isRed = true; // set granny to red
+   //      pParent->isRed = false;        // set parent to black
+   //      return;
+   //   }
 
-   //}
-   //// case 4d: we are parent's left and mom is granny's right
-   //if (pParent->pLeft == this && pParent->pParent->pRight == pParent)
-   //{
+      // case 4b: We are parent's right and parent is granny's right
+      // parent is red and granny is black
 
+
+      // Case 4c: We are parents's right and mom is granny's left
+      //if (pParent->pRight == this && pParent->pParent->pLeft == pParent)
+      //{
+
+      //}
+      //// case 4d: we are parent's left and mom is granny's right
+      //if (pParent->pLeft == this && pParent->pParent->pRight == pParent)
+      //{
+
+      //}
    //}
 }
 

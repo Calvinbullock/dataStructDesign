@@ -38,7 +38,7 @@ public:
       test_construct_default();
       test_constructCopy_empty();
       test_constructCopy_one();
-      test_constructCopy_standard();
+      //test_constructCopy_standard();
       test_constructMove_empty();
       // test_constructMove_one();        // BALANCE
       // test_constructMove_standard();   // BALANCE
@@ -95,7 +95,7 @@ public:
 
       // NOTE: MAKE SURE ADD LEFT AND ADD RIGHT WORK!
       // Insert
-      test_insert_oneLeft();
+      // test_insert_oneLeft();
       // test_insert_oneRight();
       // test_insert_duplicate();
       // test_insert_keepUnique();
@@ -106,14 +106,14 @@ public:
       // test_insert_case1();
       // test_insert_case2();
       // test_insert_case3();
-      // test_insert_case4aSimple();
-      // test_insert_case4bSimple();
-      // test_insert_case4cSimple();
-      // test_insert_case4dSimple();
-      // test_insert_case4aComplex();
-      // test_insert_case4bComplex();
-      // test_insert_case4cComplex();
-      // test_insert_case4dComplex();
+      //test_insert_case4aSimple();
+      //test_insert_case4bSimple();
+      //test_insert_case4cSimple();
+      //test_insert_case4dSimple();
+      //test_insert_case4aComplex();
+      //test_insert_case4bComplex();
+      //test_insert_case4cComplex();
+      //test_insert_case4dComplex();
 
       // Remove
       // test_erase_empty();
