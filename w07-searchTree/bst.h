@@ -591,7 +591,10 @@ void BST <T> :: BNode :: assign(BNode * & pDest, const BNode * pSrc)
 
    // dest is empty, create a new node
    if (pDest == nullptr)
+   {
       pDest = new BNode(pSrc->data);
+      pDest->isRed = pSrc->isRed;
+   }
 
    // Neither src nor dest is empty, update the node
    else
