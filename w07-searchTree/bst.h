@@ -176,7 +176,7 @@ public:
    //
    // Remove
    //
-   void clear(BNode * pNode);
+   void clear(BNode *& pNode);
 
    //
    // Swap
@@ -526,8 +526,11 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
 template <typename T>
 void BST <T> ::clear() noexcept
 {
-   root->clear(root);
-   root = nullptr;
+   if (root)
+   {
+      root->clear(root);
+   }
+   root = nullptr;  // Prevent dangling pointer
    numElements = 0;
 }
 
@@ -908,7 +911,7 @@ void BST <T> :: BNode :: balance()
  * using postfix traverse: LRV
  ****************************************************/
 template <typename T>
-void BST <T> :: BNode :: clear(BNode * pNode)
+void BST <T> :: BNode :: clear(BNode *& pNode)
 {
    if (!pNode)
       return;

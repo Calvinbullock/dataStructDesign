@@ -38,10 +38,10 @@ public:
       test_construct_default();
       test_constructCopy_empty();
       test_constructCopy_one();
-      //test_constructCopy_standard();
+      test_constructCopy_standard();
       test_constructMove_empty();
-      // test_constructMove_one();        // BALANCE
-      // test_constructMove_standard();   // BALANCE
+      test_constructMove_one();        //// BALANCE
+      test_constructMove_standard();   //// BALANCE
       // test_constructInitializer_empty();
       // test_constructInitializer_standard();
       test_destruct_empty();
@@ -50,11 +50,11 @@ public:
 
       // Assign
       test_assign_emptyToEmpty();
-      // test_assign_standardToEmpty(); // TODO: here!!! need to use the isRed
-      // test_assign_emptyToStandard();
-      // test_assign_oneToStandard();
-      // test_assign_standardToOne();
-      // test_assign_standardToStandard();
+      test_assign_standardToEmpty(); 
+      test_assign_emptyToStandard();
+      test_assign_oneToStandard();
+      test_assign_standardToOne();
+      test_assign_standardToStandard();
       test_assignMove_emptyToEmpty();
       test_assignMove_standardToEmpty();
       test_assignMove_emptyToStandard();
@@ -116,10 +116,10 @@ public:
       //test_insert_case4dComplex();
 
       // Remove
-      // test_erase_empty();
-      // test_erase_standardMissing();
-      // test_erase_noChildren();
-      // test_erase_oneChild();
+      test_erase_empty();
+      test_erase_standardMissing();
+      test_erase_noChildren();
+      test_erase_oneChild();
       // test_erase_twoChildren();
       // test_erase_twoChildrenSpecial();
       test_clear_empty();
