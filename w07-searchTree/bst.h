@@ -301,8 +301,6 @@ BST <T> :: BST ( const BST<T>& rhs)
    this->numElements = rhs.numElements;
 
    *this = rhs;
-   // TODO: balance
-   //    This does not balance the whole tree...
    this->root->balance();
 }
 
@@ -313,13 +311,11 @@ BST <T> :: BST ( const BST<T>& rhs)
 template <typename T>
 BST <T> :: BST(BST <T> && rhs)
 {
-   numElements = rhs.numElements;
-   root = rhs.root;
+   this->numElements = rhs.numElements;
+   this->root = rhs.root;
 
    rhs.numElements = 0;
    rhs.root = nullptr;
-
-   //this = std::move(rhs);
 }
 
 /*********************************************
