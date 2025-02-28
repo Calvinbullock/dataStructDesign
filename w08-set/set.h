@@ -13,7 +13,7 @@
 *        set                 : A class that represents a Set
 *        set::iterator       : An iterator through Set
 * Author
-*    <your names here>
+ *    Daniel Malasky, Calvin Bullock
 ************************************************************************/
 
 #pragma once
@@ -44,14 +44,14 @@ public:
    // 
    // Construct
    //
-   set() 
-   { 
+   set() : bst()
+   {
    }
-   set(const set &  rhs)
-   { 
+   set(const set &  rhs) : bst(rhs.bst)
+   {
    }
-   set(set && rhs) 
-   { 
+   set(set && rhs) : bst(std::move(rhs.bst))
+   {
    }
    set(const std::initializer_list <T> & il) 
    {
@@ -60,7 +60,7 @@ public:
    set(Iterator first, Iterator last) 
    {
    }
-  ~set() { }
+  ~set() { this->bst.clear(); }
 
    //
    // Assign
@@ -68,18 +68,22 @@ public:
 
    set & operator = (const set & rhs)
    {
+      this->bst = rhs.bst;
       return *this;
    }
    set & operator = (set && rhs)
    {
+      this->bst = std::move(rhs.bst);
       return *this;
    }
    set & operator = (const std::initializer_list <T> & il)
    {
+      this->bst = il;
       return *this;
    }
    void swap(set& rhs) noexcept
    {
+      bst.swap(rhs.bst);
    }
 
    //
@@ -89,11 +93,11 @@ public:
    class iterator;
    iterator begin() const noexcept 
    { 
-      return iterator(); 
+      return bst.begin();
    }
    iterator end() const noexcept 
    { 
-      return iterator(); 
+      return bst.end();
    }
 
    //
@@ -101,7 +105,7 @@ public:
    //
    iterator find(const T& t) 
    { 
-      return iterator(); 
+      return bst.find(t);
    }
 
    //
@@ -109,11 +113,11 @@ public:
    //
    bool empty() const noexcept 
    { 
-      return true;    
+      return bst.empty();
    }
    size_t size() const noexcept 
    { 
-      return 99;     
+      return bst.size();
    }
 
    //
@@ -142,7 +146,8 @@ public:
    // Remove
    //
    void clear() noexcept 
-   { 
+   {
+      bst.clear();
    }
    iterator erase(iterator &it)
    { 
@@ -175,33 +180,36 @@ class set <T> :: iterator
 public:
    // constructors, destructors, and assignment operator
    iterator() 
-   { 
+   {
    }
    iterator(const typename custom::BST<T>::iterator& itRHS) 
-   {  
+   {
+      // this->it = itRHS.pNode;
    }
    iterator(const iterator & rhs) 
    { 
+      // this = rhs;
    }
    iterator & operator = (const iterator & rhs)
    {
+      this->it = rhs.it;
       return *this;
    }
 
    // equals, not equals operator
    bool operator != (const iterator & rhs) const 
    { 
-      return true; 
+      return !(this->it == rhs.it);
    }
    bool operator == (const iterator & rhs) const 
    { 
-      return true; 
+      return this->it == rhs.it;
    }
 
    // dereference operator: by-reference so we can modify the Set
    const T & operator * () const 
    { 
-      return *(new T); 
+      return *it;
    }
 
    // prefix increment
