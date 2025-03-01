@@ -140,10 +140,14 @@ public:
    }
    void insert(const std::initializer_list <T>& il)
    {
+      for (auto &&element : il)
+         insert(element);
    }
    template <class Iterator>
    void insert(Iterator first, Iterator last)
    {
+      for (auto it = first; it != last; it++)
+         insert(*it.it);
    }
 
 

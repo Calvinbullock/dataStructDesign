@@ -30,7 +30,7 @@ public:
    {
       reset();
 
-      // // Construct
+      // Construct
       test_construct_default();
       test_constructCopy_empty();
       test_constructCopy_one();
@@ -40,7 +40,7 @@ public:
       test_constructMove_standard();
       test_constructInit_empty();
       test_constructInit_one();
-      // test_constructInit_standard();
+      //test_constructInit_standard();
       //test_constructRange_empty();
       test_constructRange_one();
       //test_constructRange_standard();
@@ -101,16 +101,16 @@ public:
       test_insertMove_standardFront();
       test_insertMove_standardMiddle();
       test_insertMove_standardDuplicate();
-      // test_insertInit_emptyInsertNone();
-      // test_insertInit_emptyInsertMany();
-      // test_insertInit_standardInsertNone();
-      // test_insertInit_standardInsertDuplicates();
-      // test_insertInit_manyInsertMany();
+      test_insertInit_emptyInsertNone();
+      test_insertInit_emptyInsertMany();
+      test_insertInit_standardInsertNone();
+      test_insertInit_standardInsertDuplicates();
+      test_insertInit_manyInsertMany();
 
       // Remove
       test_clear_empty();
       test_clear_standard();
-      test_eraseRange_several();
+      test_eraseRange_several(); // TODO: segfault
       test_eraseIterator_empty();
       test_eraseIterator_standardMissing();
       test_eraseIterator_noChildren();
