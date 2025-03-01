@@ -108,8 +108,9 @@ public:
    // Access
    //
    iterator find(const T& t) 
-   { 
-      return bst.find(t);
+   {
+      iterator itR = bst.find(t);
+      return itR;
    }
 
    //
@@ -155,15 +156,23 @@ public:
    }
    iterator erase(iterator &it)
    { 
-      return iterator(); 
+      return iterator(bst.erase(it.it));
    }
    size_t erase(const T & t) 
    {
-      return 99;
+      iterator it = find(t);
+      if (it == end())
+         return 0;
+
+      erase(it);
+      return 1;
    }
    iterator erase(iterator &itBegin, iterator &itEnd)
    {
-      return iterator();
+      while (itBegin != itEnd)
+         itBegin = erase(itBegin);
+
+      return itEnd;
    }
 
 private:
@@ -188,7 +197,7 @@ public:
    }
    iterator(const typename custom::BST<T>::iterator& itRHS) 
    {
-      // this->it = itRHS.pNode;
+      this->it = itRHS;
    }
    iterator(const iterator & rhs) 
    { 
@@ -219,24 +228,28 @@ public:
    // prefix increment
    iterator & operator ++ ()
    {
+      ++it;
       return *this;
    }
 
    // postfix increment
    iterator operator++ (int postfix)
    {
+      it++;
       return *this;
    }
    
    // prefix decrement
    iterator & operator -- ()
    {
+      --it;
       return *this;
    }
    
    // postfix decrement
    iterator operator-- (int postfix)
    {
+      it--;
       return *this;
    }
    

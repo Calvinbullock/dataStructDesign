@@ -74,20 +74,20 @@ public:
 
       // Iterator
       test_begin_empty();
-      //test_begin_standard();
+      test_begin_standard();
       test_end_standard();
-      // test_iterator_increment_standardToParent();
-      // test_iterator_increment_standardToChild();
-      // test_iterator_increment_standardToGrandma();
-      // test_iterator_increment_standardToGrandchild();
-      // test_iterator_increment_standardToDone();
-      // test_iterator_increment_standardEnd();
+      test_iterator_increment_standardToParent();
+      test_iterator_increment_standardToChild();
+      test_iterator_increment_standardToGrandma();
+      test_iterator_increment_standardToGrandchild();
+      test_iterator_increment_standardToDone();
+      test_iterator_increment_standardEnd();
       test_iterator_dereference_standardRead();
 
       // Access
       test_find_empty();
-      //test_find_standardBegin();
-      //test_find_standardLast();
+      test_find_standardBegin();
+      test_find_standardLast();
       test_find_standardMissing();
 
       // Insert
@@ -111,17 +111,17 @@ public:
       test_clear_empty();
       test_clear_standard();
       // test_eraseRange_several();
-      // test_eraseIterator_empty();
-      // test_eraseIterator_standardMissing();
-      // test_eraseIterator_noChildren();
-      // test_eraseIterator_oneChild();
-      // test_eraseIterator_twoChildren();
-      // test_eraseValue_empty();
-      // test_eraseValue_standardMissing();
-      // test_eraseValue_noChildren();
-      // test_eraseValue_oneChild();
-      // test_eraseValue_twoChildren();
-      // test_eraseRange_standardNone();
+      test_eraseIterator_empty();
+      test_eraseIterator_standardMissing();
+      test_eraseIterator_noChildren();
+      test_eraseIterator_oneChild();
+      test_eraseIterator_twoChildren();
+      test_eraseValue_empty();
+      test_eraseValue_standardMissing();
+      test_eraseValue_noChildren();
+      test_eraseValue_oneChild();
+      test_eraseValue_twoChildren();
+      test_eraseRange_standardNone();
       // test_eraseRange_standardOne();
       // test_eraseRange_standardMany();
       // test_eraseRange_oneChild();
