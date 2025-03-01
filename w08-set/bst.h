@@ -118,6 +118,7 @@ private:
 
    class BNode;
    void deleteNode(BNode*& pDelete, bool toRight);
+   void deleteBinaryTree(BNode*& pDelete) noexcept;
 
    BNode * root;              // root node of the binary search tree
    size_t numElements;        // number of elements currently in the tree
@@ -683,8 +684,9 @@ void BST <T> ::clear() noexcept
    if (root)
    {
       root->clear(root);
+      //deleteBinaryTree(root);
    }
-   root = nullptr;  // Prevent dangling pointer
+   //root = nullptr;  // Prevent dangling pointer
    numElements = 0;
 }
 
@@ -1184,6 +1186,24 @@ void BST <T> :: BNode :: clear(BNode *& pNode)
    clear(pNode->pRight);
    delete pNode;
    pNode = nullptr;
+}
+
+/******************************************
+ * DELETE BINARY TREE
+ * Delete all the nodes below pThis including pThis
+ * using postfix traverse: LRV
+ ******************************************/
+template <typename T>
+void BST<T>::deleteBinaryTree(BNode*& pDelete) noexcept
+{
+   if (pDelete == nullptr)
+      return;
+
+   deleteBinaryTree(pDelete->pLeft);   // L
+   deleteBinaryTree(pDelete->pRight);  // R
+
+   delete pDelete;                     // V
+   pDelete = nullptr;
 }
 
 /***********************************************

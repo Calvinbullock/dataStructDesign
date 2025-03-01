@@ -196,14 +196,14 @@ class set <T> :: iterator
    friend class custom::set<T>;
 public:
    // constructors, destructors, and assignment operator
-   iterator() 
+   iterator() : it()
    {
    }
-   iterator(const typename custom::BST<T>::iterator& itRHS) 
+   iterator(const typename custom::BST<T>::iterator& itRHS) : it()
    {
       this->it = itRHS;
    }
-   iterator(const iterator & rhs) 
+   iterator(const iterator & rhs) : it()
    { 
       *this = rhs;
    }
