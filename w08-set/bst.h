@@ -330,8 +330,9 @@ BST <T> :: BST(BST <T> && rhs)
 template <typename T>
 BST <T> ::BST(const std::initializer_list<T>& il)
 {
-   numElements = 99;
-   root = new BNode;
+   numElements = 0;
+   root = nullptr;
+   *this = il;
 }
 
 /*********************************************
@@ -364,7 +365,9 @@ template <typename T>
 BST <T> & BST <T> :: operator = (const std::initializer_list<T>& il)
 {
    clear();
-   for (auto t : il)
+   numElements = 0;
+
+   for (auto&& t : il)
    {
       insert(t);
    }
