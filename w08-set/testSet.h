@@ -551,7 +551,6 @@ public:
       Spy::reset();
       // exercise
       custom::set <Spy> s(il);
-      std::cout << Spy::numEquals() << std::endl;
       // verify
       assertUnit(Spy::numCopy() == 7);      // copy-construct [50,30,70,20,40,60,80] 
       assertUnit(Spy::numAlloc() == 7);     // allocate [50,30,70,20,40,60,80]

@@ -61,7 +61,7 @@ public:
    {
       for (auto it = first; it != last; it++)
       {
-         bst.insert(*it);
+         bst.insert(*it, true);
       }
    }
   ~set() { this->bst.clear(); }
