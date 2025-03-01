@@ -464,6 +464,8 @@ std::pair<typename BST <T> ::iterator, bool> BST <T> ::insert(T && t, bool keepU
 template <typename T>
 typename BST <T> ::iterator BST <T> :: erase(iterator & it)
 {
+   BNode* pDelete = it.pNode;
+
    // it is at the end
    if (it == end())
       return end();
@@ -515,21 +517,42 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
    // case 3 - two kids
    else if (it.pNode->pLeft != nullptr && it.pNode->pRight != nullptr)
    {
-      /*
-      // hook up parent
-      it.pNode->pRight->pleft = it.pNode->pParent;
+      BNode * pIOS = pDelete->pRight;
+      while (pIOS->pLeft != nullptr)
+         pIOS = pIOS->pLeft;
 
-      // hook up child
-      if (it.pNode->pParent != nullptr && it.pNode->pParent->pRight == it.pNode)
-         it.pNode->pParent->pRight = it.pNode->pRight;
-      if (it.pNode->pParent != nullptr && it.pNode->pParent->pLeft == it.pNode)
-         it.pNode->pParent->pLeft = it.pNode->pRight;
+      // the IOS must not have right node
+      pIOS->pLeft = pDelete->pLeft;
+      if (pDelete->pLeft)
+         pDelete->pLeft->pParent = pIOS;
+
+      // if not direct sib
+      if (pDelete->pRight != pIOS)
+      {
+         if (pIOS->pRight)
+            pIOS->pRight->pParent = pIOS->pParent;
+         pIOS->pParent->pLeft = pIOS->pRight;
+
+         // make IOS's right child pDelete right child
+         pIOS->pRight = pDelete->pRight;
+         pDelete->pRight->pParent = pIOS;
+      }
+
+      // hook up pIOS's successor
+      pIOS->pParent = pDelete->pParent;
+      if (pDelete->pParent && pDelete->pParent->pLeft == pDelete)
+         pDelete->pParent->pLeft = pIOS;
+      if (pDelete->pParent && pDelete->pParent->pRight == pDelete)
+         pDelete->pParent->pRight = pIOS;
+
+      // what if it was root?
+      if (root == pDelete)
+         root = pIOS;
 
       delete it.pNode;
-      */
    }
 
-   this->numElements -= 1;
+   this->numElements--;
    return temp;
 }
 
