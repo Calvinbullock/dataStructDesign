@@ -53,12 +53,16 @@ public:
    set(set && rhs) : bst(std::move(rhs.bst))
    {
    }
-   set(const std::initializer_list <T> & il) 
+   set(const std::initializer_list <T> & il) : bst(il)
    {
    }
    template <class Iterator>
-   set(Iterator first, Iterator last) 
+   set(Iterator first, Iterator last)
    {
+      for (auto it = first; it != last; it++)
+      {
+         bst.insert(*it);
+      }
    }
   ~set() { this->bst.clear(); }
 
@@ -93,11 +97,11 @@ public:
    class iterator;
    iterator begin() const noexcept 
    { 
-      return bst.begin();
+      return iterator(bst.begin());
    }
    iterator end() const noexcept 
    { 
-      return bst.end();
+      return iterator(bst.end());
    }
 
    //

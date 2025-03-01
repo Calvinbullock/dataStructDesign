@@ -141,12 +141,8 @@ public:
    // compare
    bool operator == (const BNode& rhs) const
    {
-      return
-      this->data    == rhs.data    &&                 // Actual data stored in the BNode
-      this->pLeft   == rhs.pLeft   &&         // Left child - smaller
-      this->pRight  == rhs.pRight  &&        // Right child - larger
-      this->pParent == rhs.pParent &&       // Parent
-      this->isRed   == rhs.isRed;
+      return this->data == rhs.data; // Actual data stored in the BNode
+
    }
 
    //
@@ -686,10 +682,10 @@ void BST <T> ::clear() noexcept
 template <typename T>
 typename BST <T> :: iterator custom :: BST <T> :: begin() const noexcept
 {
-   if (empty())
+   if (root == nullptr)
       return end();
+   
    BNode * pNode = root;
-
    while (pNode->pLeft)
       pNode = pNode->pLeft;
 

@@ -38,12 +38,12 @@ public:
       test_constructMove_empty();
       test_constructMove_one();
       test_constructMove_standard();
-      // test_constructInit_empty();
-      // test_constructInit_one();
+      test_constructInit_empty();
+      test_constructInit_one();
       // test_constructInit_standard();
-      // test_constructRange_empty();
-      // test_constructRange_one();
-      // test_constructRange_standard();
+      //test_constructRange_empty();
+      test_constructRange_one();
+      //test_constructRange_standard();
       test_destructor_empty();
       test_destructor_standard();
 
@@ -62,11 +62,11 @@ public:
       test_assignMove_standardToOne();
       test_assignMove_standardToStandard();
       test_assignInit_emptyToEmpty();
-      // test_assignInit_standardToEmpty();
+      //test_assignInit_standardToEmpty();
       test_assignInit_emptyToStandard();
-      // test_assignInit_oneToStandard();
-      // test_assignInit_standardToOne();
-      // test_assignInit_standardToStandard();
+      //test_assignInit_oneToStandard();
+      //test_assignInit_standardToOne();
+      //test_assignInit_standardToStandard();
       test_swap_emptyToEmpty();
       test_swap_standardToEmpty();
       test_swap_emptyToStandard();
@@ -74,7 +74,7 @@ public:
 
       // Iterator
       test_begin_empty();
-      // test_begin_standard();
+      //test_begin_standard();
       test_end_standard();
       // test_iterator_increment_standardToParent();
       // test_iterator_increment_standardToChild();
@@ -86,8 +86,8 @@ public:
 
       // Access
       test_find_empty();
-      // test_find_standardBegin();
-      // test_find_standardLast();
+      //test_find_standardBegin();
+      //test_find_standardLast();
       test_find_standardMissing();
 
       // Insert
@@ -551,6 +551,7 @@ public:
       Spy::reset();
       // exercise
       custom::set <Spy> s(il);
+      std::cout << Spy::numEquals() << std::endl;
       // verify
       assertUnit(Spy::numCopy() == 7);      // copy-construct [50,30,70,20,40,60,80] 
       assertUnit(Spy::numAlloc() == 7);     // allocate [50,30,70,20,40,60,80]
