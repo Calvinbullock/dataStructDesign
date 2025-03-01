@@ -117,6 +117,8 @@ public:
 private:
 
    class BNode;
+   void deleteNode(BNode*& pDelete, bool toRight);
+
    BNode * root;              // root node of the binary search tree
    size_t numElements;        // number of elements currently in the tree
 };
@@ -561,88 +563,93 @@ std::pair<typename BST <T> ::iterator, bool> BST <T> ::insert(T&& t, bool keepUn
    return pairReturn;
 }
 
-/*************************************************
- * BST :: ERASE
- * Remove a given node as specified by the iterator
- ************************************************/
+/******************************************
+ * DELETE NODE
+ * Delete a single node (pDelete) from the tree indicated
+ * by a node (pDelete).
+ *    pDelete   the node to be deleted
+ *    toRight   should the right branch inherit our place?
+ ******************************************/
 template <typename T>
-typename BST <T> ::iterator BST <T> :: erase(iterator & it)
+void BST<T>::deleteNode(BNode*& pDelete, bool toRight)
 {
-   BNode* pDelete = it.pNode;
+   // shift everything up
+   BNode* pNext = (toRight ? pDelete->pRight : pDelete->pLeft);
 
-   // it is at the end
+   // if we are not the parent, hook ourselves into the existing tree
+   if (pDelete != root)
+   {
+      if (pDelete->pParent->pLeft == pDelete)
+      {
+         pDelete->pParent->pLeft = nullptr;
+         pDelete->pParent->addLeft(pNext);
+      }
+      else
+      {
+         pDelete->pParent->pRight = nullptr;
+         pDelete->pParent->addRight(pNext);
+      }
+   }
+   // otherwise, the pNext is the new root
+   else
+   {
+      root = pNext;
+      pNext->pParent = nullptr;
+   }
+}
+
+/****************************************************
+ * BST :: ERASE
+ * Remove a given node as specified by the iterator.
+ ****************************************************/
+template <typename T>
+typename BST<T>::iterator BST<T>::erase(iterator& it)
+{
+   // do nothing if there is nothing to do
    if (it == end())
       return end();
 
-   // create temp it to move and return
-   iterator temp = it;
-   ++temp;
+   // remember where we were
+   iterator itNext = it;
+   BNode* pDelete = it.pNode;
 
-   // case 1 - Target has no children
-   if (it.pNode->pRight == nullptr && it.pNode->pLeft == nullptr)
+   // if there is only one child (right) or no children (how sad!)
+   if (pDelete->pLeft == nullptr)
    {
-      if (it.pNode->pParent != nullptr && it.pNode->pParent->pRight == it.pNode)
-         it.pNode->pParent = nullptr;
-
-      if (it.pNode->pParent != nullptr && it.pNode->pParent->pLeft == it.pNode)
-         it.pNode->pParent->pLeft = nullptr;
-
-      delete it.pNode;
-      it.pNode = nullptr;
+      ++itNext;
+      deleteNode(pDelete, true /* goRight */);
    }
-
-   // case 2 - one child, left child.
-   else if (it.pNode->pRight == nullptr && it.pNode->pLeft != nullptr)
+   // if there is only one child (left)
+   else if (pDelete->pRight == nullptr)
    {
-      // hook up parent
-      it.pNode->pLeft->pParent = it.pNode->pParent;
-
-      // hook up child
-      if (it.pNode->pParent != nullptr && it.pNode->pParent->pRight == it.pNode)
-         it.pNode->pParent->pRight = it.pNode->pLeft;
-      if (it.pNode->pParent != nullptr && it.pNode->pParent->pLeft == it.pNode)
-         it.pNode->pParent->pLeft = it.pNode->pLeft;
-
-      delete it.pNode;
-      it.pNode = nullptr;
+      ++itNext;
+      deleteNode(pDelete, false /* goRight */);
    }
-
-   // case 2 - one child, right child.
-   else if (it.pNode->pLeft == nullptr && it.pNode->pRight != nullptr)
+   // otherwise, swap places with the in-order successor
+   else
    {
-      // hook up parent
-      it.pNode->pRight->pParent = it.pNode->pParent;
-
-      // hook up child
-      if (it.pNode->pParent != nullptr && it.pNode->pParent->pRight == it.pNode)
-         it.pNode->pParent->pRight = it.pNode->pRight;
-      if (it.pNode->pParent != nullptr && it.pNode->pParent->pLeft == it.pNode)
-         it.pNode->pParent->pLeft = it.pNode->pRight;
-
-      delete it.pNode;
-      it.pNode = nullptr;
-   }
-
-   // case 3 - two kids
-   else if (it.pNode->pLeft != nullptr && it.pNode->pRight != nullptr)
-   {
-      BNode * pIOS = pDelete->pRight;
+      // find the in-order successor (IOS)
+      BNode* pIOS = pDelete->pRight;
       while (pIOS->pLeft != nullptr)
          pIOS = pIOS->pLeft;
 
-      // the IOS must not have right node
+      // the IOS must not have a right node. Now it will take pDelete's place.
+      assert(pIOS->pLeft == nullptr);
       pIOS->pLeft = pDelete->pLeft;
       if (pDelete->pLeft)
          pDelete->pLeft->pParent = pIOS;
 
-      // if IOS not direct sib
+      // if the IOS is not direct right sibling, then put it in the place of pDelete
       if (pDelete->pRight != pIOS)
       {
+         // if the IOS has a right sibling, then it takes its place
          if (pIOS->pRight)
             pIOS->pRight->pParent = pIOS->pParent;
          pIOS->pParent->pLeft = pIOS->pRight;
 
-         // make IOS's right child pDelete right child
+
+         // make IOS's right child pDelete's right child
+         assert(pDelete->pRight != nullptr);
          pIOS->pRight = pDelete->pRight;
          pDelete->pRight->pParent = pIOS;
       }
@@ -654,17 +661,16 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
       if (pDelete->pParent && pDelete->pParent->pRight == pDelete)
          pDelete->pParent->pRight = pIOS;
 
-      // what if it was root?
+      // what if that was the root?!?!
       if (root == pDelete)
          root = pIOS;
 
-      temp = iterator(pIOS);
-      delete it.pNode;
-      it.pNode = nullptr;
+      itNext = iterator(pIOS);
    }
 
-   this->numElements--;
-   return temp;
+   numElements--;
+   delete pDelete;
+   return itNext;
 }
 
 /*****************************************************
@@ -691,7 +697,7 @@ typename BST <T> :: iterator custom :: BST <T> :: begin() const noexcept
 {
    if (root == nullptr)
       return end();
-   
+
    BNode * pNode = root;
    while (pNode->pLeft)
       pNode = pNode->pLeft;

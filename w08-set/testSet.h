@@ -110,7 +110,7 @@ public:
       // Remove
       test_clear_empty();
       test_clear_standard();
-      test_eraseRange_several(); // TODO: segfault
+      test_eraseRange_several();
       test_eraseIterator_empty();
       test_eraseIterator_standardMissing();
       test_eraseIterator_noChildren();
