@@ -91,16 +91,16 @@ public:
       test_find_standardMissing();
 
       // Insert
-      // test_insert_empty();
-      // test_insert_standardEnd();
-      // test_insert_standardFront();
-      // test_insert_standardMiddle();
-      // test_insert_standardDuplicate();
-      // test_insertMove_empty();
-      // test_insertMove_standardEnd();
-      // test_insertMove_standardFront();
-      // test_insertMove_standardMiddle();
-      // test_insertMove_standardDuplicate();
+      test_insert_empty();
+      test_insert_standardEnd();
+      test_insert_standardFront();
+      test_insert_standardMiddle();
+      test_insert_standardDuplicate();
+      test_insertMove_empty();
+      test_insertMove_standardEnd();
+      test_insertMove_standardFront();
+      test_insertMove_standardMiddle();
+      test_insertMove_standardDuplicate();
       // test_insertInit_emptyInsertNone();
       // test_insertInit_emptyInsertMany();
       // test_insertInit_standardInsertNone();
@@ -110,7 +110,7 @@ public:
       // Remove
       test_clear_empty();
       test_clear_standard();
-      // test_eraseRange_several();
+      test_eraseRange_several();
       test_eraseIterator_empty();
       test_eraseIterator_standardMissing();
       test_eraseIterator_noChildren();
@@ -122,10 +122,10 @@ public:
       test_eraseValue_oneChild();
       test_eraseValue_twoChildren();
       test_eraseRange_standardNone();
-      // test_eraseRange_standardOne();
-      // test_eraseRange_standardMany();
-      // test_eraseRange_oneChild();
-      // test_eraseRange_twoChildren();
+      test_eraseRange_standardOne();
+      test_eraseRange_standardMany();
+      test_eraseRange_oneChild();
+      test_eraseRange_twoChildren();
 
       // Status
       test_empty_empty();

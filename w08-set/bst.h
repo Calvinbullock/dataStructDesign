@@ -584,10 +584,11 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
       if (it.pNode->pParent != nullptr && it.pNode->pParent->pRight == it.pNode)
          it.pNode->pParent = nullptr;
 
-      if (it.pNode->pParent != NULL && it.pNode->pParent->pLeft == it.pNode)
-         it.pNode->pParent->pLeft = NULL;
+      if (it.pNode->pParent != nullptr && it.pNode->pParent->pLeft == it.pNode)
+         it.pNode->pParent->pLeft = nullptr;
 
       delete it.pNode;
+      it.pNode = nullptr;
    }
 
    // case 2 - one child, left child.
@@ -601,7 +602,9 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
          it.pNode->pParent->pRight = it.pNode->pLeft;
       if (it.pNode->pParent != nullptr && it.pNode->pParent->pLeft == it.pNode)
          it.pNode->pParent->pLeft = it.pNode->pLeft;
+
       delete it.pNode;
+      it.pNode = nullptr;
    }
 
    // case 2 - one child, right child.
@@ -615,7 +618,9 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
          it.pNode->pParent->pRight = it.pNode->pRight;
       if (it.pNode->pParent != nullptr && it.pNode->pParent->pLeft == it.pNode)
          it.pNode->pParent->pLeft = it.pNode->pRight;
+
       delete it.pNode;
+      it.pNode = nullptr;
    }
 
    // case 3 - two kids
@@ -630,7 +635,7 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
       if (pDelete->pLeft)
          pDelete->pLeft->pParent = pIOS;
 
-      // if not direct sib
+      // if IOS not direct sib
       if (pDelete->pRight != pIOS)
       {
          if (pIOS->pRight)
@@ -653,7 +658,9 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
       if (root == pDelete)
          root = pIOS;
 
+      temp = iterator(pIOS);
       delete it.pNode;
+      it.pNode = nullptr;
    }
 
    this->numElements--;

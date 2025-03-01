@@ -130,12 +130,12 @@ public:
    //
    std::pair<iterator, bool> insert(const T& t)
    {
-      std::pair<iterator, bool> p(iterator(), true);
+      std::pair<iterator, bool> p = bst.insert(t, true);
       return p;
    }
    std::pair<iterator, bool> insert(T&& t)
    {
-      std::pair<iterator, bool> p(iterator(), true);
+      std::pair<iterator, bool> p = bst.insert(std::move(t), true);
       return p;
    }
    void insert(const std::initializer_list <T>& il)
@@ -201,7 +201,7 @@ public:
    }
    iterator(const iterator & rhs) 
    { 
-      // this = rhs;
+      *this = rhs;
    }
    iterator & operator = (const iterator & rhs)
    {
