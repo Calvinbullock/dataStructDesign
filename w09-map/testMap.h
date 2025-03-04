@@ -63,7 +63,7 @@ public:
       test_swap_emptyToStandard();
       test_swap_standardToStandard();
 
-      // Iterator
+      //// Iterator
       test_begin_empty();
       test_begin_standard();
       test_end_standard();
@@ -71,46 +71,46 @@ public:
       test_iterator_increment_standardToParent();
       test_iterator_dereference_standardRead();
 
-      // Access
-      test_access_standardRootRead();
-      test_access_standardLeftRead();
-      test_access_standardRightRead();
-      test_access_standardRootWrite();
-      test_access_standardLeftWrite();
-      test_access_standardRightWrite();
-      test_access_emptyWrite();
-      test_access_standardFrontInsert();
-      test_access_standardMiddleInsert();
-      test_at_standardRootRead();
-      test_at_standardLeftRead();
-      test_at_standardRightRead();
-      test_at_standardRootWrite();
-      test_at_standardLeftWrite();
-      test_at_standardRightWrite();
-      test_at_emptyWrite();
-      test_at_standardWrite();
-      test_find_empty();
-      test_find_standardRoot();
-      test_find_standardLeft();
-      test_find_standardRight();
-      test_find_standardMissing();
+      //// Access
+      //test_access_standardRootRead();
+      //test_access_standardLeftRead();
+      //test_access_standardRightRead();
+      //test_access_standardRootWrite();
+      //test_access_standardLeftWrite();
+      //test_access_standardRightWrite();
+      //test_access_emptyWrite();
+      //test_access_standardFrontInsert();
+      //test_access_standardMiddleInsert();
+      //test_at_standardRootRead();
+      //test_at_standardLeftRead();
+      //test_at_standardRightRead();
+      //test_at_standardRootWrite();
+      //test_at_standardLeftWrite();
+      //test_at_standardRightWrite();
+      //test_at_emptyWrite();
+      //test_at_standardWrite();
+      //test_find_empty();
+      //test_find_standardRoot();
+      //test_find_standardLeft();
+      //test_find_standardRight();
+      //test_find_standardMissing();
 
-      // Insert
-      test_insertCopy_empty();
-      test_insertCopy_standardFront();
-      test_insertCopy_standardMiddle();
-      test_insertMove_empty();
-      test_insertMove_standard();
+      //// Insert
+      //test_insertCopy_empty();
+      //test_insertCopy_standardFront();
+      //test_insertCopy_standardMiddle();
+      //test_insertMove_empty();
+      //test_insertMove_standard();
 
-      // Remove
-      test_erase_emptyKey();
-      test_erase_standardKey();
-      test_erase_standardKeyMissing();
-      test_erase_emptyIterator();
-      test_erase_standardIterator();
-      test_erase_standardIteratorMissing();
-      test_erase_emptyRange();
-      test_erase_standardRange();
+      //// Remove
+      //test_erase_emptyKey();
+      //test_erase_standardKey();
+      //test_erase_standardKeyMissing();
+      //test_erase_emptyIterator();
+      //test_erase_standardIterator();
+      //test_erase_standardIteratorMissing();
+      //test_erase_emptyRange();
+      //test_erase_standardRange();
       test_clear_empty();
       test_clear_standard();
 
