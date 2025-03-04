@@ -63,7 +63,7 @@ public:
       test_swap_emptyToStandard();
       test_swap_standardToStandard();
 
-      //// Iterator
+      // Iterator
       test_begin_empty();
       test_begin_standard();
       test_end_standard();
