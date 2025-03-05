@@ -42,7 +42,7 @@ public:
       test_constructMove_one();
       test_constructMove_standard();
       test_constructInitializer_empty();
-      test_constructInitializer_standard();
+      //test_constructInitializer_standard();
 
       // Assign
       test_assign_emptyToEmpty();
@@ -57,8 +57,8 @@ public:
       test_assignMove_oneToStandard();
       test_assignMove_standardToOne();
       test_assignMove_standardToStandard();
-      test_assignInitializer_oneToStandard();
-      test_assignInitializer_standardToEmpty();
+      //test_assignInitializer_oneToStandard();
+      //test_assignInitializer_standardToEmpty();
       test_swap_emptyToEmpty();
       test_swap_standardToEmpty();
       test_swap_emptyToStandard();

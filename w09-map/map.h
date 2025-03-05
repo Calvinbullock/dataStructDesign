@@ -117,7 +117,7 @@ public:
          V & at (const K& k);
    iterator find(const K & k)
    {
-      return iterator();
+      return iterator(bst.find(k));
    }
 
    //
@@ -125,19 +125,27 @@ public:
    //
    custom::pair<typename map::iterator, bool> insert(Pairs && rhs)
    {
-      return make_pair(iterator(), true);
+      auto pair = bst.insert(std::move(rhs));
+
+      return { pair.first, pair.second };
    }
    custom::pair<typename map::iterator, bool> insert(const Pairs & rhs)
    {
-      return make_pair(iterator(), true);
+      auto pair = bst.insert(rhs);
+
+      return { pair.first, pair.second };
    }
 
    template <class Iterator>
    void insert(Iterator first, Iterator last)
    {
+      for (auto it = begin(); it != end(); ++it)
+         bst.insert(*it);
    }
    void insert(const std::initializer_list <Pairs>& il)
    {
+      for (auto element : il)
+         bst.insert(element);
    }
 
    //
@@ -265,6 +273,14 @@ private:
 template <typename K, typename V>
 V& map <K, V> :: operator [] (const K& key)
 {
+   //pair <K, V> pair = key, Value();
+   //iterator it = bst.find(pair);
+ 
+   //if (it.it != nullptr)
+   //   return it.*it.data;
+   //else
+   //   bst.insert(pair);
+   //   return bst.find(pair).second;
    return *(new V);
 }
 
@@ -285,6 +301,12 @@ const V& map <K, V> :: operator [] (const K& key) const
 template <typename K, typename V>
 V& map <K, V> ::at(const K& key)
 {
+   //Pairs p = { key, V() };
+   //iterator it = bst.find(pair);
+   //if (it.it != nullptr)
+   //   return it.second;
+   //else
+   //   throw "invalid map<K, T> key";
    return *(new V);
 }
 
@@ -315,7 +337,12 @@ void swap(map <K, V>& lhs, map <K, V>& rhs)
 template <typename K, typename V>
 size_t map<K, V>::erase(const K& k)
 {
-   return size_t(99);
+   //Pairs pair(k, V());
+   iterator it = find(k);
+   if (it == end())
+      return 0;
+   erase(it);
+   return 1;
 }
 
 /*****************************************************
@@ -325,7 +352,9 @@ size_t map<K, V>::erase(const K& k)
 template <typename K, typename V>
 typename map<K, V>::iterator map<K, V>::erase(map<K, V>::iterator first, map<K, V>::iterator last)
 {
-   return iterator();
+   while (first != last)
+      first = erase(first);
+   return last;
 }
 
 /*****************************************************
@@ -335,7 +364,7 @@ typename map<K, V>::iterator map<K, V>::erase(map<K, V>::iterator first, map<K, 
 template <typename K, typename V>
 typename map<K, V>::iterator map<K, V>::erase(map<K, V>::iterator it)
 {
-   return iterator();
+   return iterator(bst.erase(it.it));
 }
 
 }; //  namespace custom
