@@ -290,7 +290,6 @@ namespace custom
    {
    }
 
-   // TODO: fix this
    /*********************************************
     * BST :: COPY CONSTRUCTOR
     * Copy one tree to another
@@ -1038,7 +1037,6 @@ namespace custom
       BNode* pSibling = nullptr;
 
 
-      // TODO: could cause errors;
       // Set the Aunt & Granny
       // If granny exists
       if (pParent->pParent)

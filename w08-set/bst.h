@@ -290,7 +290,6 @@ BST <T> ::BST() : root(nullptr), numElements(0)
 {
 }
 
-// TODO: fix this
 /*********************************************
  * BST :: COPY CONSTRUCTOR
  * Copy one tree to another
@@ -1038,7 +1037,6 @@ void BST <T> ::BNode::balance()
    BNode* pSibling = nullptr;
 
 
-   // TODO: could cause errors;
    // Set the Aunt & Granny
    // If granny exists
    if (pParent->pParent)
