@@ -58,7 +58,7 @@ public:
       test_top_standard();
 
       // Insert
-      test_push_empty();
+      // test_push_empty();
       // test_push_levelZero();
       // test_push_levelOne();
       // test_push_levelTwo();
@@ -82,7 +82,7 @@ public:
       test_empty_standard();
 
       // Utility
-      // test_percolateDown_nothing();
+      test_percolateDown_nothing();
       // test_percolateDown_oneLevel();
       // test_percolateDown_twoLevels();
       // test_percolateDown_nothingReversed();
