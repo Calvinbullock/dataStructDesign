@@ -161,7 +161,7 @@ bool priority_queue <T, Container, Compare> :: percolateDown(size_t indexHeap)
 
    // find witch child is bigger, the right or the left child
    size_t indexBigger = 0;
-   if (indexRight <= size() && container[indexLeft] <= container[indexRight])
+   if (indexRight <= size() && compare(container[indexLeft], container[indexRight]))
       indexBigger = indexRight;
    else
       indexBigger = indexLeft;
