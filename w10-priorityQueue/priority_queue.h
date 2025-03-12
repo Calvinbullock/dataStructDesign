@@ -43,14 +43,17 @@ public:
    //
    // construct
    //
-   priority_queue(const Compare & c = Compare()) 
-   {
-   }
+   priority_queue(const Compare & c = Compare()) { }
    priority_queue(const priority_queue &  rhs, const Compare & c = Compare())  
-   { 
+   {
+      // this = rhs;
+      this->container = rhs.container;
+      this->compare = c;
    }
    priority_queue(priority_queue && rhs, const Compare & c = Compare())  
    { 
+      this->container = std::move(rhs.container);
+      this->compare = c;
    }
    template <class Iterator>
    priority_queue(Iterator first, Iterator last, const Compare & c = Compare()) 
@@ -58,9 +61,13 @@ public:
    }
    explicit priority_queue (const Compare& c, Container && rhs) 
    {
+      this->container = std::move(rhs);
+      this->compare = c;
    }
    explicit priority_queue (const Compare& c, Container & rhs) 
    {
+      this->container = rhs;
+      this->compare = c;
    }
   ~priority_queue() 
    {
@@ -87,11 +94,11 @@ public:
    //
    size_t size()  const 
    { 
-      return 99;   
+      return this->container.size();
    }
    bool empty() const 
    { 
-      return false;  
+      return this->container.empty();
    }
    
 private:
@@ -111,7 +118,10 @@ private:
 template <class T, class Container, class Compare>
 const T & priority_queue <T, Container, Compare> :: top() const
 {
-   return *(new T);
+   if (!container.empty())
+      return container[0];
+
+   throw std::out_of_range("std:out_of_range");
 }
 
 /**********************************************
@@ -165,6 +175,8 @@ template <class T, class Container, class Compare>
 inline void swap(custom::priority_queue <T, Container, Compare> & lhs,
                  custom::priority_queue <T, Container, Compare> & rhs)
 {
+   std::swap(lhs.container, rhs.container);
+   std::swap(lhs.compare, rhs.compare);
 }
 
 }; 
