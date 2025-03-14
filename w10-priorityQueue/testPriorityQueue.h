@@ -82,12 +82,12 @@ public:
       test_empty_standard();
 
       // Utility
-      //test_percolateDown_nothing();
+      test_percolateDown_nothing();
       test_percolateDown_oneLevel();
-      // test_percolateDown_twoLevels();
-      // test_percolateDown_nothingReversed();
-      // test_percolateDown_oneLevelReversed();
-      // test_percolateDown_twoLevelsReversed();
+      test_percolateDown_twoLevels();
+      test_percolateDown_nothingReversed();
+      //test_percolateDown_oneLevelReversed();
+      //test_percolateDown_twoLevelsReversed();
       // test_heapify_nothing();
       // test_heapify_oneLevel();
       // test_heapify_twoLevels();

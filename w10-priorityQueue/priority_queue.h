@@ -155,6 +155,9 @@ void priority_queue <T, Container, Compare> :: push(T && t)
 template <class T, class Container, class Compare>
 bool priority_queue <T, Container, Compare> :: percolateDown(size_t indexHeap)
 {
+   // heap index is base 1
+   using std::swap;
+
    size_t indexPQ = indexHeap - 1;
 
    // find left and right child of indexHeap
@@ -165,15 +168,13 @@ bool priority_queue <T, Container, Compare> :: percolateDown(size_t indexHeap)
    size_t indexBigger = 0;
    if (indexRight <= size() && compare(container[indexLeft - 1], container[indexRight - 1]))
       indexBigger = indexRight;
-   else if (indexLeft <= size())
-      indexBigger = indexLeft;
    else
-      return false;
+      indexBigger = indexLeft;
 
    // if the bigger child is greater than parent, then swap
-   if (container[indexPQ] < container[indexBigger - 1])
+   if (indexBigger <= size() && container[indexPQ] < container[indexBigger - 1])
    {
-      std::swap(container[indexPQ], container[indexBigger - 1]);
+      swap(container[indexPQ], container[indexBigger - 1]);
       percolateDown(indexBigger);
       return true;
    }
