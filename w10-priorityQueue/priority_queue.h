@@ -58,11 +58,15 @@ public:
    template <class Iterator>
    priority_queue(Iterator first, Iterator last, const Compare & c = Compare()) 
    {
+      this->container.reserve(last - first);
+      for (auto element = first; element != last; element++)
+         push(*element);
    }
    explicit priority_queue (const Compare& c, Container && rhs) 
    {
       this->container = std::move(rhs);
       this->compare = c;
+      heapify();
    }
    explicit priority_queue (const Compare& c, Container & rhs) 
    {
@@ -131,6 +135,13 @@ const T & priority_queue <T, Container, Compare> :: top() const
 template <class T, class Container, class Compare>
 void priority_queue <T, Container, Compare> :: pop()
 {
+   if (!empty())
+   {
+      using std::swap;
+      swap(this->container[0], this->container[size() - 1]); // indexArray
+      this->container.pop_back();
+      percolateDown(1); // indexHeap
+   }
 }
 
 /*****************************************
@@ -140,10 +151,18 @@ void priority_queue <T, Container, Compare> :: pop()
 template <class T, class Container, class Compare>
 void priority_queue <T, Container, Compare> :: push(const T & t)
 {
+   this->container.push_back(t);
+   size_t indexHeap = size() / 2;
+   while (indexHeap && percolateDown(indexHeap))
+      indexHeap /= 2;
 }
 template <class T, class Container, class Compare>
 void priority_queue <T, Container, Compare> :: push(T && t)
 {
+   this->container.push_back(std::move(t));
+   size_t indexHeap = size() / 2;
+   while (indexHeap && percolateDown(indexHeap))
+      indexHeap /= 2;
 }
 
 /************************************************
@@ -172,7 +191,7 @@ bool priority_queue <T, Container, Compare> :: percolateDown(size_t indexHeap)
       indexBigger = indexLeft;
 
    // if the bigger child is greater than parent, then swap
-   if (indexBigger <= size() && container[indexPQ] < container[indexBigger - 1])
+   if (indexBigger <= size() && compare(container[indexPQ], container[indexBigger - 1]))
    {
       swap(container[indexPQ], container[indexBigger - 1]);
       percolateDown(indexBigger);
@@ -189,6 +208,10 @@ bool priority_queue <T, Container, Compare> :: percolateDown(size_t indexHeap)
 template <class T, class Container, class Compare>
 void priority_queue <T, Container, Compare> ::heapify()
 {
+   if (!empty())
+      for (size_t indexHeap = size() / 2; indexHeap >= 1; indexHeap--)
+         percolateDown(indexHeap);
+
 }
 
 /************************************************
