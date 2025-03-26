@@ -212,7 +212,7 @@ public:
    //
    T& operator * ()
    {
-      return *d[d.ibFromID(id)][d.icFromID(id)];
+      return *(new T);
    }
 
    // 
