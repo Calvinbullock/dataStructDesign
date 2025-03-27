@@ -66,11 +66,11 @@ public:
    class iterator;
    iterator begin() 
    { 
-      return iterator(); 
+      return iterator(0, this);
    }
    iterator end()   
    { 
-      return iterator(); 
+      return iterator(numElements, this);
    }
 
    // 
@@ -183,14 +183,17 @@ public:
    // 
    // Construct
    //
-   iterator() 
+   iterator() : id(), d()
    {
    }
-   iterator(int id, deque* d) 
+   iterator(int id, deque* d) : id(), d()
    {
+      this->id = id;
+      this->d = d;
    }
    iterator(const iterator& rhs) 
-   { 
+   {
+      *this = rhs;
    }
 
    //
@@ -198,14 +201,22 @@ public:
    //
    iterator& operator = (const iterator& rhs)
    {
+      this->d = rhs.d;
+      this->id = rhs.id;
       return *this;
    }
 
    // 
    // Compare
    //
-   bool operator != (const iterator& rhs) const { return true; }
-   bool operator == (const iterator& rhs) const { return true; }
+   bool operator != (const iterator& rhs) const
+   {
+      return !(this == rhs);
+   }
+   bool operator == (const iterator& rhs) const
+   {
+      return this->d == rhs.d && this->id == rhs.id;
+   }
 
    // 
    // Access
