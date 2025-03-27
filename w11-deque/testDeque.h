@@ -66,12 +66,12 @@ public:
       test_iterator_begin_empty();
       test_iterator_begin_standard();
       test_iterator_end_standard();
-      //test_iterator_increment_standardMiddle();
-      // test_iterator_dereference_read();
-      // test_iterator_dereference_update();
-      //test_iterator_add_withinBlock();
-      //test_iterator_add_betweenBlocks();
-      //test_iterator_difference_standard();
+      test_iterator_increment_standardMiddle();
+      test_iterator_dereference_read();
+      test_iterator_dereference_update();
+      test_iterator_add_withinBlock();
+      test_iterator_add_betweenBlocks();
+      test_iterator_difference_standard();
 
       // Access
       test_back_readStandard();
@@ -104,16 +104,16 @@ public:
       // Remove
       test_clear_empty();
       test_clear_standard();
-      //test_popfront_unwrap();
-      //test_popfront_standard();
-      //test_popfront_lastElement();
-      //test_popfront_lastInBlock(); 
-      //test_popfront_complex();
-      //test_popback_unwrap();
-      //test_popback_standard();
-      //test_popback_lastElement();
-      //test_popback_lastInBlock();
-      //test_popback_complex();
+      test_popfront_unwrap();
+      test_popfront_standard();
+      test_popfront_lastElement();
+      test_popfront_lastInBlock();
+      test_popfront_complex();
+      test_popback_unwrap();
+      test_popback_standard();
+      test_popback_lastElement();
+      test_popback_lastInBlock();
+      test_popback_complex();
 
       // Status
       test_size_empty();

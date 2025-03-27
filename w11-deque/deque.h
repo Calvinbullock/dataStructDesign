@@ -223,7 +223,7 @@ public:
    //
    T& operator * ()
    {
-      return *(new T);
+      return d->data[d->ibFromID(id)][d->icFromID(id)];
    }
 
    // 
@@ -231,27 +231,34 @@ public:
    //
    int operator - (iterator it) const
    {
-      return 99;
+      return this->id - it.id;
    }
    iterator& operator += (int offset)
    {
+      this->id += offset;
       return *this;
    }
    iterator& operator ++ ()
    {
+      ++this->id;
       return *this;
    }
    iterator operator ++ (int postfix)
    {
-      return *this;
+      iterator temp = *this;
+      ++this->id;
+      return temp;
    }
    iterator& operator -- ()
    {
+      ++this->id;
       return *this;
    }
    iterator operator -- (int postfix)
    {
-      return *this;
+      iterator temp = *this;
+      ++this->id;
+      return temp;
    }
 
 private:
@@ -350,6 +357,20 @@ void deque <T, A> ::clear()
 template <typename T, typename A>
 void deque <T, A> :: pop_front()
 {
+   size_t idRemove = 0;
+
+   // call deconsturctor on back element
+   alloc.destroy(&data[ibFromID(idRemove)][icFromID(idRemove)]);
+
+   // delete block as needed
+   if (numElements == 1
+      || (icFromID(idRemove) == (numCells - 1) && ibFromID(idRemove) != ibFromID(numCells - 1)))
+   {
+      alloc.destroy(&data[ibFromID(idRemove)]);
+      data[ibFromID(idRemove)] = nullptr;
+   }
+   numElements--;
+   iaFront = iaFromID(1);
 }
 
 /*****************************************
@@ -359,6 +380,19 @@ void deque <T, A> :: pop_front()
 template <typename T, typename A>
 void deque <T, A> ::pop_back()
 {
+   size_t idRemove = numElements - 1;
+
+   // call deconsturctor on back element
+   alloc.destroy(&data[ibFromID(idRemove)][icFromID(idRemove)]);
+
+   // delete block as needed
+   if (numElements == 1
+      || (icFromID(idRemove) == 0 && ibFromID(idRemove) != ibFromID(0)))
+   {
+      alloc.destroy(&data[ibFromID(idRemove)]);
+      data[ibFromID(idRemove)] = nullptr;
+   }
+   numElements--;
 }
 
 /*****************************************
