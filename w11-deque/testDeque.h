@@ -57,10 +57,10 @@ public:
 
       // Assign
       test_assign_emptyToEmpty();
-      //test_assign_emptyToStandard();
-      //test_assign_standardToStandard();
-      //test_assign_standardToEmpty();
-      //test_assign_wrapped();
+      test_assign_emptyToStandard();
+      test_assign_standardToStandard();
+      // test_assign_standardToEmpty();
+      // test_assign_wrapped();
 
       // Iterator
       test_iterator_begin_empty();
