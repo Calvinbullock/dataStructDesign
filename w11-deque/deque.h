@@ -135,6 +135,8 @@ public:
    bool   empty() const { return numElements == 0; }
    
 private:
+
+   // TODO: fix divide by zero
    // array index from deque index
    int iaFromID(int id) const
    {
@@ -211,7 +213,7 @@ public:
    //
    bool operator != (const iterator& rhs) const
    {
-      return !(this == rhs);
+      return !(*this == rhs);
    }
    bool operator == (const iterator& rhs) const
    {
@@ -285,6 +287,25 @@ deque <T, A> ::deque(deque& rhs)
 template <typename T, typename A>
 deque <T, A> & deque <T, A> :: operator = (deque & rhs)
 {
+   
+   this->clear();
+   for (auto it = rhs.begin(); it != rhs.end(); it++)
+   {
+      this->push_back(*it);
+   }
+   
+   //iterator itLHS = this->begin();
+   //iterator itRHS = rhs.begin();
+
+   //while (itLHS != this->end() && itRHS != rhs.end())
+   //{
+   //   *itLHS = *itRHS;
+   //   ++itLHS;
+   //   ++itRHS;
+   //}
+
+
+
    return *this;
 }
 
@@ -295,6 +316,22 @@ deque <T, A> & deque <T, A> :: operator = (deque & rhs)
 template <typename T, typename A>
 void deque <T, A> ::push_back(const T& t)
 {
+   // Reallocate the array of blocks as needed
+   if (numElements == numBlocks * numCells)
+      reallocate((numBlocks == 0) ? 0 : numBlocks * 2);
+
+   // Allocate a new block as needed
+   size_t ib = ibFromID(numElements);          // Find index of new block
+   if (data[ib] == nullptr)
+   {
+      data[ib] = new T[numCells];   // Use an allocator or new
+      //numBlocks++;
+   }
+      
+   
+   // Assign the value into the block
+   new((void*)(&(data[ib][icFromID(numElements)]))) T(t);
+   numElements++;
 }
 
 /*****************************************
@@ -313,6 +350,24 @@ void deque <T, A> ::push_back(T && t)
 template <typename T, typename A>
 void deque <T, A> ::push_front(const T& t)
 {
+   // Reallocate the array of blocks as needed
+   if (numElements == numBlocks * numCells)
+      reallocate((numBlocks == 0) ? 0 : numBlocks * 2);
+
+   // Adjust the front array index, wrapping as needed
+   if (iaFront != 0)
+      iaFront--;
+   else
+      iaFront = numBlocks * numCells - 1;
+
+   // Allocate a new block as needed
+   size_t ib = ibFromID(0);          // Find index of new block
+   if (data[ib] == nullptr)
+      data[ib] = new T[numCells];   // Use an allocator or new
+
+   // Assign the value into the block
+   data[ib][icFromID(numElements)] = t;
+   numElements++;
 }
 
 /*****************************************
@@ -402,18 +457,49 @@ void deque <T, A> ::pop_back()
 template <typename T, typename A>
 void deque <T, A> :: reallocate(int numBlocksNew)
 {
-   assert(numBlocksNew > 0 && numBlocksNew > numElements);
+   // Allocate a new array of pointers that is the requested size
    T** dataNew = new T * [numBlocksNew];
 
-   for (size_t id = 0; id < numElements; id++)
-      dataNew[id] = std::move(this->data[id]);
+   // Copy over the pointers, unwrapping as we go
+   size_t ibNew = 0;
+   for (size_t ibOld = 0; ibOld < numElements; ibOld+= numCells)
+   {
+      dataNew[ibNew] = data[ibFromID(ibOld)];
+      ibNew++;
+   }
 
-   // TODO: do we need this 
-   //numCapacity
+   // Set all the block pointers to NULL when there are no block to point to
+   while (ibNew < numBlocksNew)
+   {
+      dataNew[ibNew] = nullptr;
+      ibNew++;
+   }
+   
 
-   iaFront = 0;
-   delete data;
-   data = dataNew;
+   // If the back element is in the fron element's block, then move it
+   if (numElements < 0 &&
+      ibFromID(0) == ibFromID(numElements - 1) &&
+      icFromID(0) > icFromID(numElements - 1))
+   {
+      size_t ibFrontOld = ibFromID(0);
+      size_t ibBackOld = ibFromID(numElements - 1);
+      size_t ibBackNew = numElements / numCells;
+      dataNew[ibBackNew] = new T[numCells];
+      for (size_t ic = 0; ic <= icFromID(numElements - 1); ic++) // check <
+      {
+         new((void*)(&(dataNew[ibBackNew][ic]))) T(std::move(data[ibBackOld][ic]));
+      }
+
+      // Change the deque's member variables with the new values
+      if (data)
+         alloc.destroy(&data);
+      data = dataNew;
+      numBlocks = numBlocksNew;
+      iaFront = iaFront % numCells;
+
+
+    
+   }
 
 }
 

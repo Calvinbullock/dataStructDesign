@@ -56,7 +56,7 @@ public:
       test_destruct_standard();
 
       // Assign
-      //test_assign_emptyToEmpty();
+      test_assign_emptyToEmpty();
       //test_assign_emptyToStandard();
       //test_assign_standardToStandard();
       //test_assign_standardToEmpty();
@@ -90,7 +90,7 @@ public:
 
       // Insert
       //test_pushback_empty();
-      //test_pushback_roomNoWrap();
+      test_pushback_roomNoWrap();
       //test_pushback_newBlock();
       //test_pushback_wrap();
       //test_pushback_complex();
