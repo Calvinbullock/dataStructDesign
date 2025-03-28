@@ -242,13 +242,13 @@ public:
    }
    iterator& operator ++ ()
    {
-      ++this->id;
+      ++(this->id);
       return *this;
    }
    iterator operator ++ (int postfix)
    {
       iterator temp = *this;
-      ++this->id;
+      ++(this->id);
       return temp;
    }
    iterator& operator -- ()
@@ -287,9 +287,8 @@ deque <T, A> ::deque(deque& rhs)
 template <typename T, typename A>
 deque <T, A> & deque <T, A> :: operator = (deque & rhs)
 {
-   
    this->clear();
-   for (auto it = rhs.begin(); it != rhs.end(); it++)
+   for (auto it = rhs.begin(); it != rhs.end(); ++it)
    {
       this->push_back(*it);
    }
@@ -327,8 +326,7 @@ void deque <T, A> ::push_back(const T& t)
       data[ib] = new T[numCells];   // Use an allocator or new
       //numBlocks++;
    }
-      
-   
+
    // Assign the value into the block
    new((void*)(&(data[ib][icFromID(numElements)]))) T(t);
    numElements++;
@@ -474,7 +472,6 @@ void deque <T, A> :: reallocate(int numBlocksNew)
       dataNew[ibNew] = nullptr;
       ibNew++;
    }
-   
 
    // If the back element is in the fron element's block, then move it
    if (numElements < 0 &&
@@ -496,11 +493,7 @@ void deque <T, A> :: reallocate(int numBlocksNew)
       data = dataNew;
       numBlocks = numBlocksNew;
       iaFront = iaFront % numCells;
-
-
-    
    }
-
 }
 
 
