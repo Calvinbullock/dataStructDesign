@@ -42,7 +42,7 @@ public:
    {
       reset();
 
-      //// Construct
+      // Construct
       test_construct_default();
       test_construct_nonDefault11();
       //test_construct_nonDefaultIterator();
@@ -65,7 +65,7 @@ public:
       //test_swapNonMember_standardOther();
 
       //// Iterator
-      //test_iterator_begin_empty();
+      test_iterator_begin_empty();
       //test_iterator_begin_standard();
       //test_iterator_end_empty();
       //test_iterator_end_standard();
