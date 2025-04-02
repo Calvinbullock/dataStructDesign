@@ -645,62 +645,6 @@ namespace custom
          numElements = rhs.numElements;
       }
       return *this;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      //if (rhs.size() == size())
-      //{
-      //   for (size_t i = 0; i < numElements; i++)
-      //      data[i] = rhs.data[i];
-      //}
-      //else if (rhs.size() < size()) // left bigger
-      //{
-      //   for (size_t i = 0; i < rhs.size(); i++)
-      //      data[i] = rhs.data[i];
-
-      //   for (size_t i = rhs.size(); i < size(); i++)
-      //      alloc.destroy(&data[i]);
-
-      //   numElements = rhs.size();
-      //}
-      //else if (rhs.size() > size()) // right bigger
-      //{
-      //   if (rhs.size() <= numCapacity)
-      //   {
-      //      for (size_t i = 0; i < size(); i++)
-      //         data[i] = rhs.data[i];
-
-      //      for (size_t i = size(); i < rhs.size(); i++)
-      //         alloc.construct(&data[i], rhs.data[i]);
-      //      numElements = rhs.size();
-      //   }
-      //   else // LHS is smaller then RHS with not not enough capacity
-      //   {
-      //      T* dataNew = alloc.allocate(rhs.size());
-      //      for (size_t i = 0; i < rhs.size(); i++)
-      //         alloc.construct(&dataNew[i], rhs.data[i]);
-
-      //      clear();
-      //      alloc.destroy(&data);
-      //      data = dataNew;
-      //      numCapacity = rhs.size();
-      //      numElements = rhs.size();
-      //   }
-      //}
-      //return *this;
    }
    template <typename T, typename A>
    vector <T, A>& vector <T, A> :: operator = (vector&& rhs)

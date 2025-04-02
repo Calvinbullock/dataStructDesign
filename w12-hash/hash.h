@@ -14,7 +14,7 @@
  *        unordered_set           : A class that represents a hash
  *        unordered_set::iterator : An interator through hash
  * Author
- *    <your names here>
+ *    Daniel Malasky, Calvin Bullock
  ************************************************************************/
 
 #pragma once
@@ -45,21 +45,27 @@ public:
    //
    // Construct
    //
-   unordered_set()
+   unordered_set() : maxLoadFactor(1.0), numElements(0), buckets(8)
    {
    }
-   unordered_set(size_t numBuckets)
+   unordered_set(size_t numBuckets): maxLoadFactor(1.0), numElements(0), buckets(numBuckets)
    {
    }
    unordered_set(const unordered_set&  rhs) 
+      : maxLoadFactor(rhs.maxLoadFactor), numElements(rhs.numElements), buckets(rhs.buckets)
    {
+      *this = rhs;
    }
-   unordered_set(unordered_set&& rhs) 
+   unordered_set(unordered_set&& rhs)
+      : maxLoadFactor(std::move(rhs.maxLoadFactor)),
+      numElements(std::move(rhs.numElements)), buckets(std::move(rhs.buckets))
    {
+      *this = std::move(rhs);
    }
    template <class Iterator>
    unordered_set(Iterator first, Iterator last)
    {
+      //*this = il;
    }
 
    //
@@ -108,7 +114,7 @@ public:
    //
    size_t bucket(const T& t)
    {
-      return (size_t)99;
+      return (size_t)hasher(t) % bucket_count();
    }
    iterator find(const T& t);
 
@@ -135,30 +141,31 @@ public:
    //
    size_t size() const 
    { 
-      return (size_t)99;
+      return (size_t)numElements;
    }
    bool empty() const 
    { 
-      return false; 
+      return size() == 0; 
    }
    size_t bucket_count() const 
    { 
-      return (size_t)99;
+      return (size_t)buckets.size();
    }
    size_t bucket_size(size_t i) const
    {
-      return (size_t)99;
+      return (size_t)buckets[i].size();
    }
    float load_factor() const noexcept 
    { 
-      return (float)99.0; 
+      return (float)size() / bucket_count(); 
    }
    float max_load_factor() const noexcept 
    { 
-      return (float)99.0; 
+      return maxLoadFactor; 
    }
    void  max_load_factor(float m)
    {
+      maxLoadFactor = m;
    }
 
 private:
@@ -168,6 +175,7 @@ private:
       return (size_t)99;
    }
 
+   Hash hasher;
    custom::vector<custom::list<T,A>> buckets;  // each bucket in the hash
    int numElements;                            // number of elements in the Hash
    float maxLoadFactor;                        // the ratio of elements to buckets signifying a rehash
