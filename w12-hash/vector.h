@@ -217,11 +217,9 @@ namespace custom
     * construct each element, and copy the values over
     ****************************************/
    template <typename T, typename A>
-   vector <T, A> ::vector(const A& a)
+   vector <T, A> ::vector(const A& a) : data(nullptr), numElements(0), numCapacity(0), alloc(a)
    {
-      data = nullptr;
-      numElements = 0;
-      numCapacity = 0;
+
    }
 
 
@@ -231,17 +229,19 @@ namespace custom
     * construct each element, and copy the values over
     ****************************************/
    template <typename T, typename A>
-   vector <T, A> ::vector(size_t num, const T& t, const A& a)
+   vector <T, A> ::vector(size_t num, const T& t, const A& a) 
+      : data(nullptr), numElements(0), numCapacity(0), alloc(a)
    {
-      data = alloc.allocate(num);
-
-      for (size_t i = 0; i < num; i++)
+      //do nothing if there is nothing to do
+      if (num > 0)
       {
-         alloc.construct(&data[i], t);
-      }
+         data = alloc.allocate(num);
+         numCapacity = num;
 
-      numElements = num;
-      numCapacity = num;
+         // copy the value
+         std::uninitialized_fill_n(data, num, t);
+         numElements = num;
+      }
    }
 
    /*****************************************
@@ -250,8 +250,10 @@ namespace custom
     ****************************************/
    template <typename T, typename A>
    vector <T, A> ::vector(const std::initializer_list<T>& l, const A& a)
+      : data(nullptr), numElements(0), numCapacity(0), alloc(a)
    {
       data = alloc.allocate(l.size());
+      numCapacity = l.size();
 
       int i = 0;
       for (auto it = l.begin(); it != l.end(); ++it)
@@ -261,7 +263,7 @@ namespace custom
       }
 
       numElements = l.size();
-      numCapacity = l.size();
+
    }
 
    /*****************************************
@@ -271,13 +273,25 @@ namespace custom
     ****************************************/
    template <typename T, typename A>
    vector <T, A> ::vector(size_t num, const A& a)
+      : data(nullptr), numElements(0), numCapacity(0), alloc(a)
    {
-      if (num < 1)
-         data = nullptr;
-      else
-         data = new T[num];
-      numElements = num;
-      numCapacity = num;
+      //if (num < 1)
+      //   data = nullptr;
+      //else
+      //   data = new T[num];
+      //numElements = num;
+      //numCapacity = num;
+
+      if (num > 0)
+      {
+         data = alloc.allocate(num);
+         numCapacity = num;
+
+         for (size_t i = 0; i < num; i++)
+            new (&data[i]) T;
+
+         numElements = num;
+      }
    }
 
    /*****************************************
@@ -287,10 +301,12 @@ namespace custom
     ****************************************/
    template <typename T, typename A>
    vector <T, A> ::vector(const vector& rhs)
+      : data(nullptr), numElements(0), numCapacity(0), alloc(rhs.alloc)
    {
       if (!rhs.empty())
       {
          data = alloc.allocate(rhs.numElements);
+         numCapacity = rhs.numElements;
 
          for (size_t i = 0; i < rhs.numElements; i++)
          {
@@ -298,13 +314,6 @@ namespace custom
          }
 
          numElements = rhs.numElements;
-         numCapacity = rhs.numElements;
-      }
-      else
-      {
-         data = nullptr;
-         numCapacity = 0;
-         numElements = 0;
       }
    }
 
@@ -313,12 +322,14 @@ namespace custom
     * Steal the values from the RHS and set it to zero.
     ****************************************/
    template <typename T, typename A>
-   vector <T, A> ::vector(vector&& rhs)
+   vector <T, A> ::vector(vector&& rhs) : alloc(rhs.alloc)
    {
       data = rhs.data;
       rhs.data = nullptr;
+
       numElements = rhs.numElements;
       rhs.numElements = 0;
+
       numCapacity = rhs.numCapacity;
       rhs.numCapacity = 0;
    }
@@ -331,9 +342,15 @@ namespace custom
    template <typename T, typename A>
    vector <T, A> :: ~vector()
    {
-      for (size_t i = 0; i < numElements; i++)
+      if (numCapacity != 0)
       {
-         alloc.destroy(&data[i]);
+         assert(nullptr != data);
+         // Call the destructor on all elements 
+         for (size_t i = 0; i < numElements; i++)
+            alloc.destroy(&data[i]);
+
+         // then free all the memory
+         alloc.deallocate(data, numCapacity);
       }
    }
 
@@ -350,11 +367,13 @@ namespace custom
       // decrease the size
       if (newElements < numElements)
       {
+         // destroy those off the end
          for (size_t i = newElements; i < numElements; i++)
          {
             alloc.destroy(&data[i]);
          }
       }
+      // grow as necessary
       else if (newElements > numElements)
       {
          // increase the capacity
@@ -403,19 +422,26 @@ namespace custom
    template <typename T, typename A>
    void vector <T, A> ::reserve(size_t newCapacity)
    {
+      // Do nothing if we are big enough
       if (newCapacity <= numCapacity)
          return;
 
+      // allocate new array
       T* newData = alloc.allocate(newCapacity);
 
+      // copy data from old array
       for (auto i = 0; i < numElements; i++)
          new ((void*)(newData + i)) T(std::move(data[i]));
 
-      for (size_t i = 0; i < numElements; i++)
+      // delete the old and assign the new
+      if (nullptr != data)
       {
-         alloc.destroy(&data[i]);
+         for (size_t i = 0; i < numElements; i++)
+         {
+            alloc.destroy(&data[i]);
+         }
+         alloc.deallocate(data, numCapacity);
       }
-      alloc.deallocate(data, numCapacity);
 
       data = newData;
       numCapacity = newCapacity;
@@ -433,15 +459,28 @@ namespace custom
       if (numElements == numCapacity)
          return;
 
-      T* dataNew = alloc.allocate(numElements);
+      T* dataNew;
+      
+      if (numElements != 0)
+      {
+         dataNew = alloc.allocate(numElements);
+         std::uninitialized_copy(data, data + numElements, dataNew);
+      }
+      else
+         dataNew = nullptr;
 
-      for (size_t i = 0; i < numElements; i++)
-         alloc.construct(&dataNew[i], data[i]);
 
-      for (size_t i = 0; i < numElements; i++)
-         alloc.destroy(&data[i]);
+      // delete the old and assign the new
+      if (nullptr != data)
+      {
+         // call the destructor on the elements being destroyed
+         for (size_t i = 0; i < numElements; i++)
+            alloc.destroy(&data[i]);
 
-      alloc.deallocate(data, numCapacity);
+         // actually delete the memory
+         alloc.deallocate(data, numCapacity);
+      }
+
       data = dataNew;
       numCapacity = numElements;
    }
@@ -475,7 +514,7 @@ namespace custom
    template <typename T, typename A>
    T& vector <T, A> ::front()
    {
-      return *(data + 0);
+      return data[0];
    }
 
    /******************************************
@@ -485,7 +524,7 @@ namespace custom
    template <typename T, typename A>
    const T& vector <T, A> ::front() const
    {
-      return *(data + 0);
+      return data[0];
    }
 
    /*****************************************
@@ -495,7 +534,7 @@ namespace custom
    template <typename T, typename A>
    T& vector <T, A> ::back()
    {
-      return *(data + numElements - 1);
+      return data[numElements - 1];
    }
 
    /******************************************
@@ -505,7 +544,7 @@ namespace custom
    template <typename T, typename A>
    const T& vector <T, A> ::back() const
    {
-      return *(data + numElements - 1);
+      return data[numElements - 1];
    }
 
    /***************************************
@@ -519,22 +558,21 @@ namespace custom
    template <typename T, typename A>
    void vector <T, A> ::push_back(const T& t)
    {
-      if (0 == numElements)
+      if (0 == numCapacity)
          reserve(1);
       if (numElements == numCapacity)
          reserve(numCapacity * 2);
-      alloc.construct(&data[numElements], t);
-      numElements++;
+      new ((void*)(data + numElements++)) T(t);
    }
 
    template <typename T, typename A>
    void vector <T, A> ::push_back(T&& t)
    {
-      if (0 == numElements)
+      if (0 == numCapacity)
          reserve(1);
       if (numElements == numCapacity)
          reserve(numCapacity * 2);
-      new ((void*)(&data[numElements++])) T(std::move(t));
+      new ((void*)(data + numElements++)) T(std::move(t));
    }
 
    /***************************************
@@ -547,46 +585,122 @@ namespace custom
    template <typename T, typename A>
    vector <T, A>& vector <T, A> :: operator = (const vector& rhs)
    {
-      if (rhs.size() == size())
+
+
+ 
+      // if this and rhs are the same size
+      if (rhs.numElements == numElements)
       {
-         for (size_t i = 0; i < numElements; i++)
+         // no allocation required. Just call the assignment operator
+         for (size_t i = 0; i < rhs.numElements; i++)
             data[i] = rhs.data[i];
       }
-      else if (rhs.size() < size()) // left bigger
+      // if rhs is bigger than this
+      else if (rhs.numElements > numElements)
       {
-         for (size_t i = 0; i < rhs.size(); i++)
-            data[i] = rhs.data[i];
-
-         for (size_t i = rhs.size(); i < size(); i++)
-            alloc.destroy(&data[i]);
-
-         numElements = rhs.size();
-      }
-      else if (rhs.size() > size()) // right bigger
-      {
-         if (rhs.size() <= numCapacity)
+         // if there is sufficient capacity but we just need to construct
+         if (rhs.numElements <= numCapacity)
          {
-            for (size_t i = 0; i < size(); i++)
+            // copy into the already filled slots
+            for (size_t i = 0; i < numElements; i++)
                data[i] = rhs.data[i];
 
-            for (size_t i = size(); i < rhs.size(); i++)
+            // copy-construct the rest
+            for (size_t i = numElements; i < rhs.numElements; i++)
                alloc.construct(&data[i], rhs.data[i]);
-            numElements = rhs.size();
-         }
-         else // LHS is smaller then RHS with not not enough capacity
-         {
-            T* dataNew = alloc.allocate(rhs.size());
-            for (size_t i = 0; i < rhs.size(); i++)
-               alloc.construct(&dataNew[i], rhs.data[i]);
 
+            numElements = rhs.numElements;
+         }
+         // if there is not sufficient room and we need to grow
+         else
+         {
+            // create enough room
+            T* pNew = alloc.allocate(rhs.numElements);
+
+            // copy-construct the existing elements
+            for (size_t i = 0; i < rhs.numElements; i++)
+               alloc.construct(&pNew[i], rhs.data[i]);
+
+            // get rid of the old buffer
             clear();
-            alloc.destroy(&data);
-            data = dataNew;
-            numCapacity = rhs.size();
-            numElements = rhs.size();
+
+            alloc.deallocate(data, numCapacity);
+
+            // set up the member variables
+            data = pNew;
+            numElements = rhs.numElements;
+            numCapacity = rhs.numElements;
          }
       }
+
+      // if this is bigger than rhs 
+      else
+      {
+         //copy over the elements
+         for (size_t i = 0; i < rhs.numElements; i++)
+            data[i] = rhs.data[i];
+         // destroy other spots
+         for (size_t i = rhs.numElements; i < numElements; i++)
+            alloc.destroy(&data[i]);
+         numElements = rhs.numElements;
+      }
       return *this;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      //if (rhs.size() == size())
+      //{
+      //   for (size_t i = 0; i < numElements; i++)
+      //      data[i] = rhs.data[i];
+      //}
+      //else if (rhs.size() < size()) // left bigger
+      //{
+      //   for (size_t i = 0; i < rhs.size(); i++)
+      //      data[i] = rhs.data[i];
+
+      //   for (size_t i = rhs.size(); i < size(); i++)
+      //      alloc.destroy(&data[i]);
+
+      //   numElements = rhs.size();
+      //}
+      //else if (rhs.size() > size()) // right bigger
+      //{
+      //   if (rhs.size() <= numCapacity)
+      //   {
+      //      for (size_t i = 0; i < size(); i++)
+      //         data[i] = rhs.data[i];
+
+      //      for (size_t i = size(); i < rhs.size(); i++)
+      //         alloc.construct(&data[i], rhs.data[i]);
+      //      numElements = rhs.size();
+      //   }
+      //   else // LHS is smaller then RHS with not not enough capacity
+      //   {
+      //      T* dataNew = alloc.allocate(rhs.size());
+      //      for (size_t i = 0; i < rhs.size(); i++)
+      //         alloc.construct(&dataNew[i], rhs.data[i]);
+
+      //      clear();
+      //      alloc.destroy(&data);
+      //      data = dataNew;
+      //      numCapacity = rhs.size();
+      //      numElements = rhs.size();
+      //   }
+      //}
+      //return *this;
    }
    template <typename T, typename A>
    vector <T, A>& vector <T, A> :: operator = (vector&& rhs)
