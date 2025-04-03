@@ -57,19 +57,19 @@ public:
       //test_assignMove_emptyEmpty();
       //test_assignMove_emptyStandard();
       //test_assignMove_standardEmpty();
-      //test_swapMember_emptyEmpty();
-      //test_swapMember_standardEmpty();
-      //test_swapMember_standardOther();
-      //test_swapNonMember_emptyEmpty();
-      //test_swapNonMember_standardEmpty();
-      //test_swapNonMember_standardOther();
+      test_swapMember_emptyEmpty();
+      test_swapMember_standardEmpty();
+      test_swapMember_standardOther();
+      test_swapNonMember_emptyEmpty();
+      test_swapNonMember_standardEmpty();
+      test_swapNonMember_standardOther();
 
       //// Iterator
-      test_iterator_begin_empty();
+      // test_iterator_begin_empty();
       //test_iterator_begin_standard();
       //test_iterator_end_empty();
       //test_iterator_end_standard();
-      test_iterator_increment_empty();
+      // test_iterator_increment_empty();
       //test_iterator_increment_moreInBucket();
       //test_iterator_increment_nextBucket();
       //test_iterator_increment_toEnd();

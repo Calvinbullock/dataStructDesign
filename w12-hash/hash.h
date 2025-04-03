@@ -41,6 +41,8 @@ template <typename T,
 class unordered_set
 {
    friend class ::TestHash;   // give unit tests access to the privates
+   template <class TT, class HHash, class EEqPred, class AA>
+   friend void swap(unordered_set<TT,HHash,EEqPred,AA>& lhs, unordered_set<TT,HHash,EEqPred,AA>& rhs);
 public:
    //
    // Construct
@@ -85,6 +87,9 @@ public:
    }
    void swap(unordered_set& rhs)
    {
+      std::swap(this->numElements, rhs.numElements);
+      std::swap(this->maxLoadFactor, rhs.maxLoadFactor);
+      std::swap(this->buckets, rhs.buckets);
    }
 
    // 
@@ -403,29 +408,29 @@ typename unordered_set <T, H, E, A> ::iterator unordered_set<T, H, E, A>::find(c
 template <typename T, typename H, typename E, typename A>
 typename unordered_set <T, H, E, A> ::iterator & unordered_set<T, H, E, A>::iterator::operator ++ ()
 {
-   // 1. only advance if we are not already at the end
-   if (itVector == itVectorEnd)
-   {
-      return *this;
-   }
-
-   // 2. advance the list it, if we are not at the end, then we are done
-   ++itList;
-   if (itList != itVector->end())
-   {
-      return *this;
-   }
-
-   // 3. we are at the end of the list. Find the next bucket
-   ++itVector;
-   while (itVector != itVectorEnd && itVector->empty())
-   {
-      ++itVector;
-   }
-   if (itVector != itVectorEnd)
-   {
-      itList = itVector->begin();
-   }
+   // // 1. only advance if we are not already at the end
+   // if (itVector == itVectorEnd)
+   // {
+   //    return *this;
+   // }
+   //
+   // // 2. advance the list it, if we are not at the end, then we are done
+   // ++itList;
+   // if (itList != itVector->end())
+   // {
+   //    return *this;
+   // }
+   //
+   // // 3. we are at the end of the list. Find the next bucket
+   // ++itVector;
+   // while (itVector != itVectorEnd && itVector->empty())
+   // {
+   //    ++itVector;
+   // }
+   // if (itVector != itVectorEnd)
+   // {
+   //    itList = itVector->begin();
+   // }
    return *this;
 }
 
@@ -436,6 +441,9 @@ typename unordered_set <T, H, E, A> ::iterator & unordered_set<T, H, E, A>::iter
 template <typename T, typename H, typename E, typename A>
 void swap(unordered_set<T,H,E,A>& lhs, unordered_set<T,H,E,A>& rhs)
 {
+      std::swap(lhs.numElements, rhs.numElements);
+      std::swap(lhs.maxLoadFactor, rhs.maxLoadFactor);
+      std::swap(lhs.buckets, rhs.buckets);
 }
 
 }
