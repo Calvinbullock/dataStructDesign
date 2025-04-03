@@ -95,6 +95,14 @@ public:
    iterator begin()
    {
       return iterator();
+      //for (auto itBucket = buckets.begin(); itBucket != buckets.end(); ++itBucket)
+
+     /*
+    FOR itBucket  buckets.begin() ... buckets.end()
+       IF NOT itBucket.empty()
+         RETURN iterator(buckets.end(), itBucket, itBucket.begin())
+    RETURN end()
+   */
    }
    iterator end()
    {
@@ -195,16 +203,18 @@ class unordered_set <T, H, E, A> ::iterator
 public:
    // 
    // Construct
-   iterator() 
+   iterator() : itList(), itVector(), itVectorEnd(nullptr)
    {
    }
    iterator(const typename custom::vector<custom::list<T> >::iterator& itVectorEnd,
             const typename custom::vector<custom::list<T> >::iterator& itVector,
             const typename custom::list<T>::iterator &itList)
+            : itList(itList), itVector(itVector), itVectorEnd(itVectorEnd)
    {
    }
-   iterator(const iterator& rhs) 
-   { 
+   iterator(const iterator& rhs) : itList(rhs.itList),
+            itVector(rhs.itVector), itVectorEnd(rhs.itVectorEnd)
+   {
    }
 
    //
@@ -220,11 +230,13 @@ public:
    //
    bool operator != (const iterator& rhs) const 
    { 
-      return true; 
+      return !(*this == rhs);
    }
    bool operator == (const iterator& rhs) const 
    { 
-      return true;
+      return this->itList == rhs.itList
+         && this->itVector == rhs.itVector
+         && this->itVectorEnd == rhs.itVectorEnd;
    }
 
    // 
@@ -241,6 +253,25 @@ public:
    iterator& operator ++ ();
    iterator operator ++ (int postfix)
    {
+      // // 1. only advance if we are not already at the end
+      // if (itVector == itVectorEnd) {
+      //    return *this;
+      // }
+      //
+      // // 2. advance the list it, if we are not at the end, then we are done
+      // ++itList;
+      // if (itList != itVector.end()) {
+      //    return *this;
+      // }
+      //
+      // // 3. we are at the end of the list. Find the next bucket
+      // ++itVector;
+      // while (itVector != itVectorEnd && itVector.empty()) {
+      //    ++itVector;
+      // }
+      // if (itVector != itVectorEnd) {
+      //    itList = itVector.begin();
+      // }
       return *this;
    }
 
@@ -372,6 +403,29 @@ typename unordered_set <T, H, E, A> ::iterator unordered_set<T, H, E, A>::find(c
 template <typename T, typename H, typename E, typename A>
 typename unordered_set <T, H, E, A> ::iterator & unordered_set<T, H, E, A>::iterator::operator ++ ()
 {
+   // 1. only advance if we are not already at the end
+   if (itVector == itVectorEnd)
+   {
+      return *this;
+   }
+
+   // 2. advance the list it, if we are not at the end, then we are done
+   ++itList;
+   if (itList != itVector->end())
+   {
+      return *this;
+   }
+
+   // 3. we are at the end of the list. Find the next bucket
+   ++itVector;
+   while (itVector != itVectorEnd && itVector->empty())
+   {
+      ++itVector;
+   }
+   if (itVector != itVectorEnd)
+   {
+      itList = itVector->begin();
+   }
    return *this;
 }
 

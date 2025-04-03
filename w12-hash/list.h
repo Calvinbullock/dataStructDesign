@@ -58,7 +58,7 @@ namespace custom
          *this = il;
       }
       template <class Iterator>
-      list(Iterator first, Iterator last, const A& a = A())
+      list(Iterator first, Iterator last, const A& a = A()) : numElements()
       {
          for (auto it = first; it != last; it++)
             push_back(*it);
