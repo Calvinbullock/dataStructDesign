@@ -56,7 +56,7 @@ public:
    unordered_set(const unordered_set&  rhs) 
       : maxLoadFactor(rhs.maxLoadFactor), numElements(rhs.numElements), buckets(rhs.buckets)
    {
-      *this = rhs;
+      // *this = rhs;
    }
    unordered_set(unordered_set&& rhs)
       : maxLoadFactor(std::move(rhs.maxLoadFactor)),
@@ -75,10 +75,19 @@ public:
    //
    unordered_set& operator=(const unordered_set& rhs)
    {
+      this->numElements = rhs.numElements;
+      this->maxLoadFactor = rhs.maxLoadFactor;
+      this->buckets = rhs.buckets;
       return *this;
    }
    unordered_set& operator=(unordered_set&& rhs)
    {
+      this->numElements = std::move(rhs.numElements);
+      this->maxLoadFactor = std::move(rhs.maxLoadFactor);
+      this->buckets = std::move(rhs.buckets);
+      rhs.numElements = 0;
+      rhs.maxLoadFactor = 1.0;
+      rhs.buckets.resize(8);
       return *this;
    }
    unordered_set& operator=(const std::initializer_list<T>& il)

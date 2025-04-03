@@ -51,12 +51,12 @@ public:
       test_construct_nonDefaultHash();
 
       //// Assign
-      //test_assign_emptyEmpty();
-      //test_assign_emptyStandard();
-      //test_assign_standardEmpty();
-      //test_assignMove_emptyEmpty();
-      //test_assignMove_emptyStandard();
-      //test_assignMove_standardEmpty();
+      test_assign_emptyEmpty();
+      test_assign_emptyStandard();
+      test_assign_standardEmpty();
+      test_assignMove_emptyEmpty();
+      test_assignMove_emptyStandard();
+      test_assignMove_standardEmpty();
       test_swapMember_emptyEmpty();
       test_swapMember_standardEmpty();
       test_swapMember_standardOther();
