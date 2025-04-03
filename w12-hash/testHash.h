@@ -50,7 +50,7 @@ public:
       test_construct_copyStandard();
       test_construct_nonDefaultHash();
 
-      //// Assign
+      // Assign
       test_assign_emptyEmpty();
       test_assign_emptyStandard();
       test_assign_standardEmpty();
@@ -64,7 +64,7 @@ public:
       test_swapNonMember_standardEmpty();
       test_swapNonMember_standardOther();
 
-      //// Iterator
+      // Iterator
       // test_iterator_begin_empty();
       //test_iterator_begin_standard();
       //test_iterator_end_empty();
@@ -74,13 +74,13 @@ public:
       //test_iterator_increment_nextBucket();
       //test_iterator_increment_toEnd();
       // test_iterator_dereference();
-      //test_localIterator_begin_single();
+      test_localIterator_begin_single();
       //test_localIterator_begin_multiple();
       //test_localIterator_begin_empty();
-      //test_localIterator_increment_single();
-      //test_localIterator_increment_multiple();
+      test_localIterator_increment_single();
+      test_localIterator_increment_multiple();
 
-      //// Access
+      // Access
       test_bucket_empty0();  
       test_bucket_empty7();
       test_bucket_empty58();
@@ -95,7 +95,7 @@ public:
       //test_find_standardMissingEmptyList();
       //test_find_standardMissingFilledList();
 
-      //// Insert
+      // Insert
       //test_rehash_emptySmaller();
       //test_rehash_emptyBigger();
       //test_rehash_standard6();
@@ -111,10 +111,10 @@ public:
       //test_insert_standardDuplicate();
       //test_insert_standardRehash();
 
-      //// Remove
-      //test_clear_empty();
-      //test_clear_standard();
-      //test_erase_empty();
+      // Remove
+      // test_clear_empty();
+      // test_clear_standard();
+      // test_erase_empty();
       //test_erase_standardMissing();
       //test_erase_standardAlone();
       //test_erase_standardFront();

@@ -155,6 +155,11 @@ public:
    //
    void clear() noexcept
    {
+      // for (auto& bucket : buckets)
+      // {
+      //    bucket.clear();
+      // }
+      // numElements = 0;
    }
    iterator erase(const T& t);
 
@@ -236,6 +241,9 @@ public:
    //
    iterator& operator = (const iterator& rhs)
    {
+      this->itList = rhs.itList;
+      this->itVector = rhs.itVector;
+      this->itVectorEnd = rhs.itVectorEnd;
       return *this;
    }
 
@@ -311,14 +319,16 @@ public:
    // 
    // Construct
    //
-   local_iterator()  
+   local_iterator() : itList()
    {
    }
-   local_iterator(const typename custom::list<T>::iterator& itList) 
+   local_iterator(const typename custom::list<T>::iterator& itList) : itList()
    {
+      this->itList = itList;
    }
-   local_iterator(const local_iterator& rhs) 
-   { 
+   local_iterator(const local_iterator& rhs) : itList()
+   {
+      this->itList = rhs.itList;
    }
 
    //
@@ -326,6 +336,7 @@ public:
    //
    local_iterator& operator = (const local_iterator& rhs)
    {
+      this->itList = rhs.itList;
       return *this;
    }
 
@@ -334,11 +345,11 @@ public:
    //
    bool operator != (const local_iterator& rhs) const
    {
-      return true;
+      return !(this == rhs);
    }
    bool operator == (const local_iterator& rhs) const
    {
-      return true;
+      return this->itList == rhs.itList;
    }
 
    // 
@@ -346,7 +357,7 @@ public:
    //
    T& operator * ()
    {
-      return *(new T);
+      return *itList;
    }
 
    // 
@@ -354,11 +365,14 @@ public:
    //
    local_iterator& operator ++ ()
    {
+      ++(this->itList);
       return *this;
    }
    local_iterator operator ++ (int postfix)
    {
-      return *this;
+      auto temp = *this;
+      (this->itList)++;
+      return temp;
    }
 
 private:
