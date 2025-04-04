@@ -24,7 +24,7 @@
 #include <memory>     // for std::allocator
 #include <functional> // for std::hash
 #include <cmath>      // for std::ceil
-   
+
 
 class TestHash;             // forward declaration for Hash unit tests
 
@@ -53,7 +53,7 @@ public:
    unordered_set(size_t numBuckets): maxLoadFactor(1.0), numElements(0), buckets(numBuckets)
    {
    }
-   unordered_set(const unordered_set&  rhs) 
+   unordered_set(const unordered_set&  rhs)
       : maxLoadFactor(rhs.maxLoadFactor), numElements(rhs.numElements), buckets(rhs.buckets)
    {
       // *this = rhs;
@@ -103,7 +103,7 @@ public:
       std::swap(this->buckets, rhs.buckets);
    }
 
-   // 
+   //
    // Iterator
    //
    class iterator;
@@ -138,7 +138,7 @@ public:
    }
    iterator find(const T& t);
 
-   //   
+   //
    // Insert
    //
    custom::pair<iterator, bool> insert(const T& t);
@@ -148,7 +148,7 @@ public:
    {
    }
 
-   // 
+   //
    // Remove
    //
    void clear() noexcept
@@ -164,29 +164,29 @@ public:
    //
    // Status
    //
-   size_t size() const 
-   { 
+   size_t size() const
+   {
       return (size_t)numElements;
    }
-   bool empty() const 
-   { 
-      return size() == 0; 
+   bool empty() const
+   {
+      return size() == 0;
    }
-   size_t bucket_count() const 
-   { 
+   size_t bucket_count() const
+   {
       return (size_t)buckets.size();
    }
    size_t bucket_size(size_t i) const
    {
       return (size_t)buckets[i].size();
    }
-   float load_factor() const noexcept 
-   { 
-      return (float)size() / bucket_count(); 
+   float load_factor() const noexcept
+   {
+      return (float)size() / bucket_count();
    }
-   float max_load_factor() const noexcept 
-   { 
-      return maxLoadFactor; 
+   float max_load_factor() const noexcept
+   {
+      return maxLoadFactor;
    }
    void  max_load_factor(float m)
    {
@@ -219,7 +219,7 @@ class unordered_set <T, H, E, A> ::iterator
    template <typename TT, typename HH, typename EE, typename AA>
    friend class custom::unordered_set;
 public:
-   // 
+   //
    // Construct
    iterator() : itList(), itVector(), itVectorEnd(nullptr)
    {
@@ -249,18 +249,18 @@ public:
    //
    // Compare
    //
-   bool operator != (const iterator& rhs) const 
-   { 
+   bool operator != (const iterator& rhs) const
+   {
       return !(*this == rhs);
    }
-   bool operator == (const iterator& rhs) const 
-   { 
+   bool operator == (const iterator& rhs) const
+   {
       return this->itList == rhs.itList
          && this->itVector == rhs.itVector
          && this->itVectorEnd == rhs.itVectorEnd;
    }
 
-   // 
+   //
    // Access
    //
    T& operator * ()
@@ -315,7 +315,7 @@ class unordered_set <T, H, E, A> ::local_iterator
    template <typename TT, typename HH, typename EE, typename AA>
    friend class custom::unordered_set;
 public:
-   // 
+   //
    // Construct
    //
    local_iterator() : itList()
@@ -339,7 +339,7 @@ public:
       return *this;
    }
 
-   // 
+   //
    // Compare
    //
    bool operator != (const local_iterator& rhs) const
@@ -351,7 +351,7 @@ public:
       return this->itList == rhs.itList;
    }
 
-   // 
+   //
    // Access
    //
    T& operator * ()
@@ -359,7 +359,7 @@ public:
       return *itList;
    }
 
-   // 
+   //
    // Arithmetic
    //
    local_iterator& operator ++ ()
@@ -438,7 +438,6 @@ void unordered_set<T, Hash, E, A>::rehash(size_t numBuckets)
 template <typename T, typename H, typename E, typename A>
 typename unordered_set <T, H, E, A> ::iterator unordered_set<T, H, E, A>::find(const T& t)
 {
-   return iterator();
    for (auto it = begin(); it != end(); ++it)
       if (*it == t)
          return it;
