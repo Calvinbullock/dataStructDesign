@@ -67,7 +67,9 @@ public:
    template <class Iterator>
    unordered_set(Iterator first, Iterator last)
    {
-      //*this = il;
+      // buckets.reserve(last - first);
+      // for (auto it = first; it != last; ++first)
+      //    insert(it);
    }
 
    //
@@ -108,27 +110,23 @@ public:
    class local_iterator;
    iterator begin()
    {
-      return iterator();
-      //for (auto itBucket = buckets.begin(); itBucket != buckets.end(); ++itBucket)
-
-     /*
-    FOR itBucket  buckets.begin() ... buckets.end()
-       IF NOT itBucket.empty()
-         RETURN iterator(buckets.end(), itBucket, itBucket.begin())
-    RETURN end()
-   */
+      //return iterator();
+      for (auto itBucket = buckets.begin(); itBucket != buckets.end(); ++itBucket)
+         if (!(*itBucket).empty())
+            return iterator(buckets.end(), itBucket, (*itBucket).begin());
+      return end();
    }
    iterator end()
    {
-      return iterator();
+      return iterator(buckets.end(), buckets.end(), buckets[0].end());
    }
    local_iterator begin(size_t iBucket)
    {
-      return local_iterator();
+      return local_iterator(buckets[iBucket].begin());
    }
    local_iterator end(size_t iBucket)
    {
-      return local_iterator();
+      return local_iterator(buckets[iBucket].end());
    }
 
    //
@@ -206,6 +204,7 @@ private:
    custom::vector<custom::list<T,A>> buckets;  // each bucket in the hash
    int numElements;                            // number of elements in the Hash
    float maxLoadFactor;                        // the ratio of elements to buckets signifying a rehash
+   A alloc;
 };
 
 
@@ -266,7 +265,7 @@ public:
    //
    T& operator * ()
    {
-      return *(new T);
+      return *itList;
    }
 
    //
@@ -411,6 +410,19 @@ void unordered_set<T, H, E, A>::insert(const std::initializer_list<T> & il)
 template <typename T, typename Hash, typename E, typename A>
 void unordered_set<T, Hash, E, A>::rehash(size_t numBuckets)
 {
+   // If the current bucket count is sufficient, then do nothing.
+   if (numBuckets <= bucket_count())
+      return;
+
+   // Create a new hash bucket.
+   auto bucketsNew = alloc.allocate(numBuckets);
+
+   // Insert the elements into the new hash table, one at a time.
+   for (auto element: buckets)
+      bucketsNew[hasher(element) % numBuckets].push_back(element);
+
+   // Swap the old bucket for the new.
+   swap(buckets, bucketsNew);
 }
 
 
@@ -431,29 +443,29 @@ typename unordered_set <T, H, E, A> ::iterator unordered_set<T, H, E, A>::find(c
 template <typename T, typename H, typename E, typename A>
 typename unordered_set <T, H, E, A> ::iterator & unordered_set<T, H, E, A>::iterator::operator ++ ()
 {
-   // // 1. only advance if we are not already at the end
-   // if (itVector == itVectorEnd)
-   // {
-   //    return *this;
-   // }
-   //
-   // // 2. advance the list it, if we are not at the end, then we are done
-   // ++itList;
-   // if (itList != itVector->end())
-   // {
-   //    return *this;
-   // }
-   //
-   // // 3. we are at the end of the list. Find the next bucket
-   // ++itVector;
-   // while (itVector != itVectorEnd && itVector->empty())
-   // {
-   //    ++itVector;
-   // }
-   // if (itVector != itVectorEnd)
-   // {
-   //    itList = itVector->begin();
-   // }
+   // 1. only advance if we are not already at the end
+   if (itVector == itVectorEnd)
+   {
+      return *this;
+   }
+
+   // 2. advance the list it, if we are not at the end, then we are done
+   ++itList;
+   if (itList != (*itVector).end())
+   {
+      return *this;
+   }
+
+   // 3. we are at the end of the list. Find the next bucket
+   ++itVector;
+   while (itVector != itVectorEnd && (*itVector).empty())
+   {
+      ++itVector;
+   }
+   if (itVector != itVectorEnd)
+   {
+      itList = (*itVector).begin();
+   }
    return *this;
 }
 

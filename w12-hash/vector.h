@@ -163,6 +163,7 @@ namespace custom
       iterator(size_t index, vector<T>& v) { this->p = v.data + index; }
       iterator& operator = (const iterator& rhs)
       {
+         this->p = rhs.p;
          return *this;
       }
 
