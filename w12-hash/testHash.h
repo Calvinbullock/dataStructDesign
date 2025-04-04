@@ -89,11 +89,11 @@ public:
       test_bucket_standard58();
       test_bucket_custom0();
       test_bucket_custom3();
-      //test_find_empty();
-      //test_find_standardFront();
-      //test_find_standardBack();
-      //test_find_standardMissingEmptyList();
-      //test_find_standardMissingFilledList();
+      test_find_empty();
+      test_find_standardFront();
+      test_find_standardBack();
+      test_find_standardMissingEmptyList();
+      test_find_standardMissingFilledList();
 
       // Insert
       //test_rehash_emptySmaller();

@@ -439,6 +439,10 @@ template <typename T, typename H, typename E, typename A>
 typename unordered_set <T, H, E, A> ::iterator unordered_set<T, H, E, A>::find(const T& t)
 {
    return iterator();
+   for (auto it = begin(); it != end(); ++it)
+      if (*it == t)
+         return it;
+   return end();
 }
 
 /*****************************************
