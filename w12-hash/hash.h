@@ -415,14 +415,19 @@ void unordered_set<T, Hash, E, A>::rehash(size_t numBuckets)
       return;
 
    // Create a new hash bucket.
-   auto bucketsNew = alloc.allocate(numBuckets);
+   custom::vector<custom::list<T, A>> bucketsNew;
+   bucketsNew.reserve(numBuckets);
 
    // Insert the elements into the new hash table, one at a time.
-   for (auto element: buckets)
-      bucketsNew[hasher(element) % numBuckets].push_back(element);
+   for (auto bucket : buckets)
+   {
+      for (auto item : bucket)
+         bucketsNew[hasher(item) % numBuckets].push_back(item);
+   }
+
 
    // Swap the old bucket for the new.
-   swap(buckets, bucketsNew);
+   std::swap(buckets, bucketsNew);
 }
 
 
