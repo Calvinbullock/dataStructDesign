@@ -67,9 +67,10 @@ public:
    template <class Iterator>
    unordered_set(Iterator first, Iterator last)
    {
-      // buckets.reserve(last - first);
-      // for (auto it = first; it != last; ++first)
-      //    insert(it);
+      //int x = last - first;
+      //reserve(last - first);
+      //for (auto it = first; it != last; ++first)
+      //   insert(*it);
    }
 
    //
@@ -146,6 +147,8 @@ public:
    void rehash(size_t numBuckets);
    void reserve(size_t num)
    {
+
+      rehash(num / maxLoadFactor);
    }
 
    //
@@ -197,7 +200,7 @@ private:
 
    size_t min_buckets_required(size_t num) const
    {
-      return (size_t)99;
+      return (size_t)num / maxLoadFactor;
    }
 
    Hash hasher;
@@ -412,11 +415,41 @@ typename unordered_set <T, Hash, E, A> ::iterator unordered_set<T,Hash,E,A>::era
 template <typename T, typename H, typename E, typename A>
 custom::pair<typename custom::unordered_set<T, H, E, A>::iterator, bool> unordered_set<T, H, E, A>::insert(const T& t)
 {
-   return custom::pair<custom::unordered_set<T, H, E, A>::iterator, bool>(iterator(), true);
+   // 1. Find the bucket where the new element is to reside.
+   size_t iBucket = bucket(t); // hash it?
+   iterator itHash;
+
+   // 2. See if the element is already there. If so, then return out.
+   for (auto it = buckets[iBucket].begin(); it != buckets[iBucket].end(); ++it)
+   {
+      if (*it == t)
+      {
+         itHash = find(*it);
+         return custom::pair<typename custom::unordered_set<T, H, E, A>::iterator, bool>(itHash, false); // itHash?
+      }
+   }
+
+   // 3. Reserve more space if we are already at the limit.
+   if (min_buckets_required(numElements + 1) > bucket_count())
+   {
+      reserve(numElements * 2);
+      iBucket = bucket(t); // Recalculate bucket since rehashing might have changed it
+   }
+
+   // 4. Actually insert the new element on the back of the bucket.
+   buckets[iBucket].push_back(t);
+   itHash = find(t);
+   numElements++;
+
+   // 5. Return the results.
+   return custom::pair<typename custom::unordered_set<T, H, E, A>::iterator, bool>(itHash, true);
+
+   //return custom::pair<custom::unordered_set<T, H, E, A>::iterator, bool>(iterator(), true);
 }
 template <typename T, typename H, typename E, typename A>
 void unordered_set<T, H, E, A>::insert(const std::initializer_list<T> & il)
 {
+   return custom::pair<custom::unordered_set<T, H, E, A>::iterator, bool>(iterator(), true);
 }
 
 /*****************************************
@@ -434,12 +467,9 @@ void unordered_set<T, Hash, E, A>::rehash(size_t numBuckets)
    custom::vector<custom::list<T, A>> bucketsNew(numBuckets);
 
 
-   // Insert the elements into the new hash table, one at a time.
-   for (auto bucket : buckets)
-   {
-      for (auto item : bucket)
-         bucketsNew[hasher(item) % numBuckets].push_back(std::move(item));
-   }
+   // Insert all elements into the new hash table.
+   for (auto it = begin(); it != end(); ++it)
+      bucketsNew[hasher(*it) % numBuckets].push_back(std::move(*it));
 
 
    // Swap the old bucket for the new.
