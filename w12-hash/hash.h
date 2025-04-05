@@ -56,7 +56,6 @@ public:
    unordered_set(const unordered_set&  rhs)
       : maxLoadFactor(rhs.maxLoadFactor), numElements(rhs.numElements), buckets(rhs.buckets)
    {
-      // *this = rhs;
    }
    unordered_set(unordered_set&& rhs)
       : maxLoadFactor(std::move(rhs.maxLoadFactor)),
@@ -67,7 +66,6 @@ public:
    template <class Iterator>
    unordered_set(Iterator first, Iterator last)
    {
-      //int x = last - first;
       //reserve(last - first);
       //for (auto it = first; it != last; ++first)
       //   insert(*it);
@@ -147,7 +145,6 @@ public:
    void rehash(size_t numBuckets);
    void reserve(size_t num)
    {
-
       rehash(num / maxLoadFactor);
    }
 
@@ -277,25 +274,6 @@ public:
    iterator& operator ++ ();
    iterator operator ++ (int postfix)
    {
-      // // 1. only advance if we are not already at the end
-      // if (itVector == itVectorEnd) {
-      //    return *this;
-      // }
-      //
-      // // 2. advance the list it, if we are not at the end, then we are done
-      // ++itList;
-      // if (itList != itVector.end()) {
-      //    return *this;
-      // }
-      //
-      // // 3. we are at the end of the list. Find the next bucket
-      // ++itVector;
-      // while (itVector != itVectorEnd && itVector.empty()) {
-      //    ++itVector;
-      // }
-      // if (itVector != itVectorEnd) {
-      //    itList = itVector.begin();
-      // }
       return *this;
    }
 
@@ -443,8 +421,6 @@ custom::pair<typename custom::unordered_set<T, H, E, A>::iterator, bool> unorder
 
    // 5. Return the results.
    return custom::pair<typename custom::unordered_set<T, H, E, A>::iterator, bool>(itHash, true);
-
-   //return custom::pair<custom::unordered_set<T, H, E, A>::iterator, bool>(iterator(), true);
 }
 template <typename T, typename H, typename E, typename A>
 void unordered_set<T, H, E, A>::insert(const std::initializer_list<T> & il)
@@ -466,11 +442,9 @@ void unordered_set<T, Hash, E, A>::rehash(size_t numBuckets)
    // Create a new hash bucket.
    custom::vector<custom::list<T, A>> bucketsNew(numBuckets);
 
-
    // Insert all elements into the new hash table.
    for (auto it = begin(); it != end(); ++it)
       bucketsNew[hasher(*it) % numBuckets].push_back(std::move(*it));
-
 
    // Swap the old bucket for the new.
    std::swap(buckets, bucketsNew);
