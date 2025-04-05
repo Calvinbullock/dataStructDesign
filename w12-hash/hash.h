@@ -153,11 +153,11 @@ public:
    //
    void clear() noexcept
    {
-      // for (auto& bucket : buckets)
-      // {
-      //    bucket.clear();
-      // }
-      // numElements = 0;
+       for (auto& bucket : buckets)
+       {
+          bucket.clear();
+       }
+       numElements = 0;
    }
    iterator erase(const T& t);
 
@@ -386,7 +386,23 @@ private:
 template <typename T, typename Hash, typename E, typename A>
 typename unordered_set <T, Hash, E, A> ::iterator unordered_set<T,Hash,E,A>::erase(const T& t)
 {
-   return iterator();
+   // 1. Find element to be erased. Return end() if the element is not present.
+   iterator itErase = find(t);
+   if (itErase == end())
+   {
+      return itErase;
+   }
+
+   // 2. Determine the return value.
+   iterator itReturn = itErase;
+   ++itReturn;
+
+   // 3. Erase the element from the unordered_set.
+   (*itErase.itVector).erase(itErase.itList);
+   numElements--;
+
+   // 4. Return iterator to the next element.
+   return itReturn;
 }
 
 /*****************************************
@@ -415,14 +431,14 @@ void unordered_set<T, Hash, E, A>::rehash(size_t numBuckets)
       return;
 
    // Create a new hash bucket.
-   custom::vector<custom::list<T, A>> bucketsNew;
-   bucketsNew.reserve(numBuckets);
+   custom::vector<custom::list<T, A>> bucketsNew(numBuckets);
+
 
    // Insert the elements into the new hash table, one at a time.
    for (auto bucket : buckets)
    {
       for (auto item : bucket)
-         bucketsNew[hasher(item) % numBuckets].push_back(item);
+         bucketsNew[hasher(item) % numBuckets].push_back(std::move(item));
    }
 
 

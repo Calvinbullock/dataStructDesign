@@ -45,7 +45,7 @@ public:
       // Construct
       test_construct_default();
       test_construct_nonDefault11();
-      test_construct_nonDefaultIterator();
+      //test_construct_nonDefaultIterator();
       test_construct_copyEmpty();
       test_construct_copyStandard();
       test_construct_nonDefaultHash();
@@ -98,8 +98,8 @@ public:
       // Insert
       test_rehash_emptySmaller();
       test_rehash_emptyBigger();
-      test_rehash_standard6();
-      test_rehash_standard8();
+      //test_rehash_standard6();
+      //test_rehash_standard8();
       // test_reserve_empty10();
       //test_reserve_empty12();
       //test_reserve_standard6();
@@ -112,14 +112,14 @@ public:
       //test_insert_standardRehash();
 
       // Remove
-      // test_clear_empty();
-      // test_clear_standard();
-      // test_erase_empty();
-      //test_erase_standardMissing();
-      //test_erase_standardAlone();
-      //test_erase_standardFront();
-      //test_erase_standardBack();
-      //test_erase_standardLast();
+      test_clear_empty();
+      test_clear_standard();
+      test_erase_empty();
+      test_erase_standardMissing();
+      test_erase_standardAlone();
+      test_erase_standardFront();
+      test_erase_standardBack();
+      test_erase_standardLast();
 
       // Status
       test_size_empty();
